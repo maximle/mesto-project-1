@@ -1,0 +1,13 @@
+.photo-grid__items {
+    list-style-type:none;
+    margin: 0;
+    padding: 0;
+    inline-size: 100%;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: repeat(auto-fit, 282px);
+    grid-auto-rows: 361px;
+    column-gap: 17px;
+    row-gap: 20px;
+    color: black;
+}
