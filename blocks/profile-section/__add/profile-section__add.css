@@ -1,0 +1,40 @@
+.profile-section__add {
+    margin-inline-start: auto;
+    min-inline-size: 150px;
+    block-size: 50px;
+    padding: 0;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 2px solid #FFFFFF;
+    border-radius: 2px;
+    box-sizing: border-box;
+    border-radius: 0;
+    background-color: transparent;
+    background-image: url(../../../images/profile-section/icon_add.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 22px 22px;
+    opacity: 1;
+    transition: opacity 0.1s linear;
+}
+
+.profile-section__add:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+    .profile-section__add {
+        inline-size: 100%;
+        margin-inline-start: 0;
+        max-inline-size: 400px;
+        margin-block-start: 36px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .profile-section__add {
+        background-size: 16px 16px;   
+     }
+}

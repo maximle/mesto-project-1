@@ -1,0 +1,9 @@
+.photo-grid__info {
+    margin-block-start: 25px;
+    margin-inline-start: auto;
+    margin-inline-end: auto;
+    display: flex;
+    inline-size: 246px;
+    justify-content: space-between;
+    align-items: center;
+}

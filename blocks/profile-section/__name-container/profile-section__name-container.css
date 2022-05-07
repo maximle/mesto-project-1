@@ -1,0 +1,6 @@
+.profile-section__name-container {
+    margin-block-end: 16px;
+    display: flex;
+    align-items: baseline;
+    justify-content: center;
+}

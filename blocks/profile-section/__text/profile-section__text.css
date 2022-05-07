@@ -1,0 +1,14 @@
+.profile-section__text {
+    margin: 0;
+    font-weight: 400;
+    font-size: 18px;
+    line-height: 22px;
+    max-inline-size: 336px;
+}
+
+@media screen and (max-width: 425px) {
+    .profile-section__text {
+        font-size: 14px;
+        line-height: 17px;
+    }
+}

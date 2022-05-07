@@ -1,0 +1,16 @@
+.header {
+    inline-size: 100%;
+    max-inline-size: 880px;
+    block-size: 74px;
+    border-bottom: 1px solid #545454;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 425px) {
+    .header {
+        padding-inline-start: 0;
+        padding-inline-end: 0;
+        block-size: 56px;
+
+    }
+}

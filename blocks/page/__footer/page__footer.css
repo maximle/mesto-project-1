@@ -1,0 +1,5 @@
+.page__footer {
+    margin-block-start: auto;   
+    align-self: flex-start; 
+    box-sizing: border-box;
+}

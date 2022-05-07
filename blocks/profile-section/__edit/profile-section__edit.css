@@ -1,0 +1,30 @@
+.profile-section__edit {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+    inline-size: 24px;
+    block-size: 24px;
+    padding: 0;
+    border: 1px solid #FFFFFF;
+    background-color: transparent;
+    background-image: url(../../../images/profile-section/icon_edit.svg);
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 10px 10px;
+    opacity: 1;
+    transition: opacity 0.1s linear;
+}
+
+.profile-section__edit:hover {
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+@media screen and (max-width: 425px) {
+    .profile-section__edit {
+        inline-size: 18px;
+        block-size: 18px;
+        background-size: 7px 7px;
+    }
+}

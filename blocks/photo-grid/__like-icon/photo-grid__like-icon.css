@@ -1,0 +1,15 @@
+.photo-grid__like-icon {
+    inline-size: 22px;
+    block-size: 19px;
+    background-image: url(../../../images/photo-grid/like_icon.svg);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: contain;
+    opacity: 1;
+    transition: opacity 0.1s linear;
+}
+
+.photo-grid__like-icon:hover {
+    opacity: 0.5;
+    cursor: pointer;
+}

@@ -1,0 +1,24 @@
+.profile-section__name {
+    margin: 0;
+    margin-inline-end: 18px;
+    font-weight: 500;
+    font-size: 42px;
+    line-height: 48px;
+}
+
+@media screen and (max-width: 768px) {
+    .profile-section__name {
+        padding-inline-start: 42px; /* Для выравнивания блоков __name и __text по центру (противовес размеру __edit + margin до него */
+
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .profile-section__name {
+        font-size: 27px;
+        line-height: 33px;
+        margin-inline-end: 10px;
+        padding-inline-start: 28px; /* Для выравнивания блоков __name и __text по центру (противовес размеру __edit + margin до него */
+
+    }
+}

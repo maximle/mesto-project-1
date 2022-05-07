@@ -1,0 +1,12 @@
+.profile-section__avatar {
+    max-inline-size: 120px;
+    max-block-size: 120px;
+    border-radius: 50%;
+    margin-inline-end: 30px;
+}
+
+@media screen and (max-width: 768px) {
+    .profile-section__avatar {
+        margin-inline-end: 0;
+    }
+}

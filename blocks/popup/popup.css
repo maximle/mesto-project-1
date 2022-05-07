@@ -1,0 +1,29 @@
+.popup {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    z-index: 2;
+    box-sizing: border-box;
+}
+
+.popup::before {
+    content: " ";
+    position: absolute;
+    top: 0;
+    left: 0;
+    inline-size: 100%;
+    block-size: 100%;
+    z-index: 1;
+    background-color: black;
+    opacity: 0.5;
+}
+
+@media screen and (max-width: 768px) {
+    .popup {
+        padding-inline-start: 19px;
+        padding-inline-end: 19px;
+    }
+}

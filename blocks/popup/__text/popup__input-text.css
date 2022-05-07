@@ -1,0 +1,29 @@
+.popup__input-text {
+    border: 0;
+    border-bottom: 1px solid black;
+    opacity: 0.2;
+    border-radius: 0; 
+    -webkit-border-radius: 0;
+    -moz-border-radius: 0; 
+    -khtml-border-radius: 0;
+    background: #ffffff;
+    outline: none; 
+    block-size: 27px;
+    inline-size: 100%;
+    color: black;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 17px;
+    font-family: "Inter";
+    margin-block-end: 30px;
+    padding: 0;
+}
+
+.popup__input-text:last-child {
+    margin-block-end: 0;
+
+}
+
+.popup__input-text:focus {
+    opacity: 1;
+}

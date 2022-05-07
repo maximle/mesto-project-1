@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="author" content="Yanchev Alexey" />
+    <meta name="description" content="Проект Место. Фотоальбом" />
+    <meta name="keywords" content="Туризм, путешествия, россия, отдых, фото" />
+    <link
+      rel="shortcut icon"
+      href="./images/favicon/mesto__favicon.svg"
+      type="image/svg"
+    />
+    <link rel="stylesheet" href="./pages/index.css" />
+    <title>Mesto</title>
+  </head>
+  <body class="page">
+    <div class="page__container">
+      <header class="header page__header">
+        <img
+          src="./images/logo/logo__mesto.svg"
+          alt="Логотип Место."
+          class="logo"
+        />
+      </header>
+      <section class="profile-section page__profile-section">
+        <img
+          src="./images/profile-section/avatar.jpg"
+          alt="Аватар профиля"
+          class="profile-section__avatar"
+        />
+        <div class="profile-section__info">
+          <div class="profile-section__name-container">
+            <h1 class="profile-section__name">Жак-Ив Кусто</h1>
+            <button class="profile-section__edit" type="button"></button>
+          </div>
+          <p class="profile-section__text">Исследователь океана</p>
+        </div>
+        <button class="profile-section__add" type="button"></button>
+      </section>
+      <section class="photo-grid page__photo-grid">
+        <div class="photo-grid__element-container">
+          <img
+            src="./images/photo-grid/photo-grid__church.jpg"
+            alt="Церковь."
+            class="photo-grid__image"
+          />
+          <div class="photo-grid__info">
+            <h2 class="photo-grid__name">Карачаевск</h2>
+            <div class="photo-grid__like-icon"></div>
+          </div>
+        </div>
+
+        <div class="photo-grid__element-container">
+          <img
+            src="./images/photo-grid/photo-grid__sunset.jpg"
+            alt="Церковь."
+            class="photo-grid__image"
+          />
+          <div class="photo-grid__info">
+            <h2 class="photo-grid__name">Гора Эльбрус</h2>
+            <div
+              class="photo-grid__like-icon photo-grid__like-icon_active"
+            ></div>
+          </div>
+        </div>
+
+        <div class="photo-grid__element-container">
+          <img
+            src="./images/photo-grid/photo-grid__mountain.jpg"
+            alt="Церковь."
+            class="photo-grid__image"
+          />
+          <div class="photo-grid__info">
+            <h2 class="photo-grid__name">Домбай</h2>
+            <div class="photo-grid__like-icon"></div>
+          </div>
+        </div>
+
+        <div class="photo-grid__element-container">
+          <img
+            src="./images/photo-grid/photo-grid__sunset.jpg"
+            alt="Церковь."
+            class="photo-grid__image"
+          />
+          <div class="photo-grid__info">
+            <h2 class="photo-grid__name">Гора Эльбрус</h2>
+            <div class="photo-grid__like-icon"></div>
+          </div>
+        </div>
+
+        <div class="photo-grid__element-container">
+          <img
+            src="./images/photo-grid/photo-grid__mountain.jpg"
+            alt="Церковь."
+            class="photo-grid__image"
+          />
+          <div class="photo-grid__info">
+            <h2 class="photo-grid__name">Домбай</h2>
+            <div class="photo-grid__like-icon"></div>
+          </div>
+        </div>
+
+        <div class="photo-grid__element-container">
+          <img
+            src="./images/photo-grid/photo-grid__church.jpg"
+            alt="Церковь."
+            class="photo-grid__image"
+          />
+          <div class="photo-grid__info">
+            <h2 class="photo-grid__name">Карачаево-черкесская республика</h2>
+            <div class="photo-grid__like-icon"></div>
+          </div>
+        </div>
+      </section>
+      <footer class="footer page__footer">
+        <p class="footer__text">&copy; 2020 Mesto Russia</p>
+      </footer>
+      <div class="popup">
+        <form
+          id="popup__form-container"
+          class="popup__form-container"
+          action="#"
+          method="post"
+        >
+          <fieldset form="popup__form-container" class="popup_inputs">
+            <legend class="popup__title">Редактировать профиль</legend>
+            <input
+              type="text"
+              placeholder="Введите имя"
+              name="name"
+              maxlength="100"
+              class="popup__input-text"
+              required
+            />
+            <input
+              type="text"
+              placeholder="Введите описание"
+              name="description"
+              maxlength="150"
+              class="popup__input-text"
+              required
+            />
+          </fieldset>
+          <button name="submit" class="popup__save">Сохранить</button>
+          <button type="button" class="popup__close"></button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>

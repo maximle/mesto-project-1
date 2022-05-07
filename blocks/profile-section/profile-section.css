@@ -1,0 +1,15 @@
+.profile-section {
+    inline-size: 100%;
+    display: flex;
+    align-items: center;
+    min-block-size: 120px;
+    padding-inline-start: 19px;
+    padding-inline-end: 19px;
+    box-sizing: border-box;
+}
+
+@media screen and (max-width: 768px) {
+    .profile-section {
+        flex-direction: column;
+    }
+}

@@ -1,0 +1,16 @@
+.logo {
+    max-inline-size: 142px;
+}
+
+@media screen and (max-width: 918px) {
+    .logo {
+        padding-inline-start: 19px;
+    }
+}
+
+@media screen and (max-width: 425px) {
+    .logo {
+        max-inline-size: 103px;
+        padding-inline-start: 27px;
+    }
+}
