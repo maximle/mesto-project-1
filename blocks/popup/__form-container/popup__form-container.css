@@ -21,4 +21,9 @@
 
 
 
-
+@media screen and (max-width: 500px) {
+    .popup__form-container {
+        padding-inline-start: 22px;
+        padding-inline-end: 22px;
+    }
+}
