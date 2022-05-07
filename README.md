@@ -1,6 +1,6 @@
 # Проект: Место
 
-[Ссылка на проект](https://alexeynewdeveloper.github.io/gh-pages-mesto/index.html)
+Ссылка на проект [Mesto](https://alexeynewdeveloper.github.io/gh-pages-mesto/index.html)
 
 ### Обзор
 
@@ -10,6 +10,7 @@
 - Будущее
 
 **Цель проекта**
+
 Создать удобный инструмент для выкладывания красивых фото. Свозможностью их комментировать и ставить лайки.
 
 **Figma**
