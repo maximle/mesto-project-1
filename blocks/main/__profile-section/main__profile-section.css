@@ -1,9 +1,9 @@
-.page__profile-section {
+.main__profile-section {
     margin-block-end: 50px;
 }
 
 @media screen and (max-width: 425px) {
-    .page__profile-section {
+    .main__profile-section {
         margin-block-end: 36px;
     }
 }

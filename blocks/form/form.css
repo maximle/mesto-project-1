@@ -1,9 +1,5 @@
-.popup__form-container {
-    margin: auto;
-    position: relative;
-    z-index: 3;
+.form {
     background-color: #fff;
-    background: #FFFFFF;
     box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
     border-radius: 10px;
     inline-size: 100%;
@@ -21,8 +17,8 @@
 
 
 
-@media screen and (max-width: 500px) {
-    .popup__form-container {
+@media screen and (max-width: 440px) {
+    .form {
         padding-inline-start: 22px;
         padding-inline-end: 22px;
     }

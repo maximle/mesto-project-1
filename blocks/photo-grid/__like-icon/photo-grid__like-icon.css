@@ -1,6 +1,13 @@
 .photo-grid__like-icon {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    border: 0;
+    border-radius: 0;
+    padding: 0;
     inline-size: 22px;
     block-size: 19px;
+    background-color: transparent;
     background-image: url(../../../images/photo-grid/like_icon.svg);
     background-position: center;
     background-repeat: no-repeat;

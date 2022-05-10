@@ -1,4 +1,4 @@
-.popup__input-text {
+.form__input-text {
     border: 0;
     border-bottom: 1px solid black;
     opacity: 0.2;
@@ -14,16 +14,16 @@
     font-weight: 400;
     font-size: 14px;
     line-height: 17px;
-    font-family: "Inter";
+    font-family: "Inter", Arial, Helvetica, sans-serif;
     margin-block-end: 30px;
     padding: 0;
 }
 
-.popup__input-text:last-child {
+.form__input-text:last-child {
     margin-block-end: 0;
 
 }
 
-.popup__input-text:focus {
+.form__input-text:focus {
     opacity: 1;
 }
