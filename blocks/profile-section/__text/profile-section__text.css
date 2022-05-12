@@ -13,5 +13,6 @@
     .profile-section__text {
         font-size: 14px;
         line-height: 17px;
+        max-inline-size: 282px;
     }
 }

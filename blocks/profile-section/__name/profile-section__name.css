@@ -13,7 +13,7 @@
 @media screen and (max-width: 768px) {
     .profile-section__name {
         padding-inline-start: 42px; /* Для выравнивания блоков __name и __text по центру (противовес размеру __edit + margin до него */
-
+        max-inline-size: 336px;
     }
 }
 
@@ -23,6 +23,7 @@
         line-height: 33px;
         margin-inline-end: 10px;
         padding-inline-start: 28px; /* Для выравнивания блоков __name и __text по центру (противовес размеру __edit + margin до него */
+        max-inline-size: 217px;
 
     }
 }
