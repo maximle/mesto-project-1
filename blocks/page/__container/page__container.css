@@ -1,7 +1,7 @@
 .page__container {
     margin: 0 auto;
     max-inline-size: calc(880px + 2*19px); /* два отступа по краям для малых разрешений */
-    min-inline-size: 320px;
+    min-inline-size: 300px;
     inline-size: 100%;
     min-block-size: 100%;
     display: flex;

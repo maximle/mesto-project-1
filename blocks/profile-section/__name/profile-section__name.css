@@ -4,7 +4,7 @@
     font-weight: 500;
     font-size: 42px;
     line-height: 48px;
-    max-inline-size: 294px;
+    max-inline-size: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
@@ -13,17 +13,15 @@
 @media screen and (max-width: 768px) {
     .profile-section__name {
         padding-inline-start: 42px; /* Для выравнивания блоков __name и __text по центру (противовес размеру __edit + margin до него */
-        max-inline-size: 336px;
     }
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 440px) {
     .profile-section__name {
         font-size: 27px;
         line-height: 33px;
         margin-inline-end: 10px;
         padding-inline-start: 28px; /* Для выравнивания блоков __name и __text по центру (противовес размеру __edit + margin до него */
-        max-inline-size: 217px;
 
     }
 }

@@ -3,16 +3,15 @@
     font-weight: 400;
     font-size: 18px;
     line-height: 22px;
-    max-inline-size: 336px;
+    max-inline-size: 100%;
     text-overflow: ellipsis;
     white-space: nowrap;
     overflow: hidden;
 }
 
-@media screen and (max-width: 425px) {
+@media screen and (max-width: 440px) {
     .profile-section__text {
         font-size: 14px;
         line-height: 17px;
-        max-inline-size: 282px;
     }
 }
