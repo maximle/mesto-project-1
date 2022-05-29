@@ -4,3 +4,9 @@
     padding: 0;
     margin-block-end: 48px;
 }
+
+@media screen and (max-width: 440px) {
+    .form__inputs {
+        margin-block-end: 45px;
+    }
+}

@@ -19,6 +19,8 @@
 
 @media screen and (max-width: 440px) {
     .form {
+        padding-block-start: 25px;
+        padding-block-end: 25px;
         padding-inline-start: 22px;
         padding-inline-end: 22px;
     }
