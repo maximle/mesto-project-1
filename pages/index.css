@@ -40,6 +40,7 @@
 @import url(../blocks/photo-grid/__items/photo-grid__items.css);
 @import url(../blocks/photo-grid/__element-container/photo-grid__element-container.css);
 @import url(../blocks/photo-grid/__image/photo-grid__image.css);
+@import url(../blocks/photo-grid/__delete/photo-grid__delete.css);
 @import url(../blocks/photo-grid/__info/photo-grid__info.css);
 @import url(../blocks/photo-grid/__like-icon/photo-grid__like-icon.css);
 @import url(../blocks/photo-grid/__like-icon/_active/photo-grid__like-icon_active.css);

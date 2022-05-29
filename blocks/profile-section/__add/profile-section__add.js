@@ -22,6 +22,19 @@ addCard.addEventListener('submit', function(evt) {
     const cardName = cardItem.querySelector('.photo-grid__name');
     cardName.textContent = addCard.querySelectorAll('.form__input-text')[0].value;
 
+    const likeButton = cardItem.querySelector('.photo-grid__like-icon');
+    likeButton.addEventListener('click', function() {
+        likeButton.classList.toggle('photo-grid__like-icon_active');
+    });
+
+    const buttonDelete = cardItem.querySelector('.photo-grid__delete');
+    buttonDelete.addEventListener('click', function(evt) {
+        const currentButtonDelete = evt.target;
+        const cardElement = currentButtonDelete.closest('.photo-grid__element-container');
+
+        cardElement.remove();
+    });
+
     const cardItemsList = document.querySelector('.photo-grid__items');
     cardItemsList.prepend(cardItem);
 
