@@ -54,9 +54,13 @@
 /* Block popup */
 
 @import url(../blocks/popup/popup.css);
+@import url(../blocks/popup/_opacity/popup_opacity_high.css);
 @import url(../blocks/popup/_opened/popup_opened.css);
 @import url(../blocks/popup/__container/popup__container.css);
 @import url(../blocks/popup/__close/popup__close.css);
+@import url(../blocks/popup/__image-container/popup__image-container.css);
+@import url(../blocks/popup/__image/popup__image.css);
+@import url(../blocks/popup/__image-caption/popup__image-caption.css);
 
 /* Block form */
 

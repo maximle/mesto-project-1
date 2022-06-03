@@ -1,3 +1,48 @@
+function addEventOpenImagePopup(typeEvent, cardImg, cardName) {
+    cardImg.addEventListener(typeEvent, () => {
+        const openImage = document.querySelector('#openImage');
+        const image = openImage.querySelector('.popup__image');
+        const caption = openImage.querySelector('.popup__image-caption');
+
+        openImage.classList.add('popup_opened');
+
+        image.src = cardImg.src;
+        image.alt = cardImg.alt;
+
+        caption.textContent = cardName.textContent;
+        
+    });
+}
+
+
+function getCloneNode(template, desiredNode) {
+    let photoGridItemTemplate = document.querySelector(template).content;
+    
+    return photoGridItemTemplate.querySelector(desiredNode).cloneNode(true);
+}
+
+
+function popupClose() {
+    document.querySelectorAll('.popup').forEach(popup => popup.classList.remove('popup_opened'));
+}
+
+
+function addEventLikeButton(typeEvent, buttonElement, className) {
+    buttonElement.addEventListener(typeEvent, function() {
+        buttonElement.classList.toggle(className);
+    });
+}
+
+
+function addEventButtonDelete(typeEvent, buttonElement, parentClassName) {
+    buttonElement.addEventListener(typeEvent, function(evt) {
+        const currentButtonDelete = evt.target;
+        const cardElement = currentButtonDelete.closest(parentClassName);
+
+        cardElement.remove();
+    });
+}
+
 // photo-grid__items -------------------------------------------------------------------------------------------------------
 
 const initialCards = [
@@ -27,37 +72,31 @@ const initialCards = [
     }
     ];
 
-initialCards.forEach(function(item) {
-    let photoGridItemTemplate = document.querySelector('#photo-grid__item').content;
-    let cardItem = photoGridItemTemplate.querySelector('.photo-grid__element-container').cloneNode(true);
-
+    let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
     const cardImg = cardItem.querySelector('.photo-grid__image');
+    const cardName = cardItem.querySelector('.photo-grid__name');
+    const likeButton = cardItem.querySelector('.photo-grid__like-icon');
+    const buttonDelete = cardItem.querySelector('.photo-grid__delete');
+    const cardItemsList = document.querySelector('.photo-grid__items');
+
+initialCards.forEach(function(item) {
+
     cardImg.src = item.link;
     cardImg.alt = item.name;
 
-    const cardName = cardItem.querySelector('.photo-grid__name');
     cardName.textContent = item.name;
 
-    const cardItemsList = document.querySelector('.photo-grid__items');
+    addEventLikeButton('click', likeButton, 'photo-grid__like-icon_active');
+
+    addEventButtonDelete('click', buttonDelete, '.photo-grid__element-container')
+
+    addEventOpenImagePopup('click', cardImg, cardName);
+
     cardItemsList.prepend(cardItem);
 });
 
+document.querySelectorAll('.popup__close').forEach(popupCloseButton => popupCloseButton.addEventListener('click', popupClose));
 
-//photo-grid__delete -------------------------------------------------------------------------------------------------
-
-document.querySelectorAll('.photo-grid__delete').forEach(buttonDelete => 
-    buttonDelete.addEventListener('click', function(evt) {
-        const currentButtonDelete = evt.target;
-        const cardElement = currentButtonDelete.closest('.photo-grid__element-container');
-
-        cardElement.remove();
-}));
-
-//photo-grid__like-icon ----------------------------------------------------------------------------------------------
-
-document.querySelectorAll('.photo-grid__like-icon').forEach(likeButton => likeButton.addEventListener('click', function() {
-    likeButton.classList.toggle('photo-grid__like-icon_active');
-}));
 
 //profile-section__add ------------------------------------------------------------------------------------------------
 
@@ -75,45 +114,28 @@ document.querySelector('.profile-section__add').addEventListener('click', functi
 
 addCard.addEventListener('submit', function(evt) {
     evt.preventDefault();
+
+    let inputSourceImg = addCard.querySelectorAll('.form__input-text')[1];
+    let inputNameCard = addCard.querySelectorAll('.form__input-text')[0];
+
+
+    cardImg.src = inputSourceImg.value;
+    cardImg.alt = inputNameCard.value;
+
+    cardName.textContent = inputNameCard.value;
     
-    let photoGridItemTemplate = document.querySelector('#photo-grid__item').content;
-    let cardItem = photoGridItemTemplate.querySelector('.photo-grid__element-container').cloneNode(true);   
+    addEventOpenImagePopup('click', cardImg, cardName);
 
-    const cardImg = cardItem.querySelector('.photo-grid__image');
-    cardImg.src = addCard.querySelectorAll('.form__input-text')[1].value;
-    cardImg.alt = addCard.querySelectorAll('.form__input-text')[0].value;
+    addEventLikeButton('click', likeButton, 'photo-grid__like-icon_active');
 
-    const cardName = cardItem.querySelector('.photo-grid__name');
-    cardName.textContent = addCard.querySelectorAll('.form__input-text')[0].value;
+    addEventButtonDelete('click', buttonDelete, '.photo-grid__element-container')
 
-    const likeButton = cardItem.querySelector('.photo-grid__like-icon');
-    likeButton.addEventListener('click', function() {
-        likeButton.classList.toggle('photo-grid__like-icon_active');
-    });
-
-    const buttonDelete = cardItem.querySelector('.photo-grid__delete');
-    buttonDelete.addEventListener('click', function(evt) {
-        const currentButtonDelete = evt.target;
-        const cardElement = currentButtonDelete.closest('.photo-grid__element-container');
-
-        cardElement.remove();
-    });
-
-    const cardItemsList = document.querySelector('.photo-grid__items');
     cardItemsList.prepend(cardItem);
 
     popupClose();
     
 });
 
-//popup__close -----------------------------------------------------------------------------------------------------------
-
-function popupClose() {
-
-    document.querySelectorAll('.popup').forEach(popup => popup.classList.remove('popup_opened'));
-}
-
-document.querySelectorAll('.popup__close').forEach(popupCloseButton => popupCloseButton.addEventListener('click', popupClose));
 
 //profile-section__edit -------------------------------------------------------------------------------------------------
 
@@ -152,4 +174,6 @@ function formSaveHandler(evt) {
 }
 
 editProfile.addEventListener('submit', formSaveHandler);
+
+
 

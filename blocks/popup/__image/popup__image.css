@@ -1,0 +1,7 @@
+.popup__image {
+    max-inline-size: 75vw;
+    max-block-size: 75vh;
+    object-fit: contain;
+    margin: 0;
+    margin-block-end: 10px;
+}
