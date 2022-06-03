@@ -72,15 +72,15 @@ const initialCards = [
     }
     ];
 
+
+initialCards.forEach(function(item) {
+
+    let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
     const cardImg = cardItem.querySelector('.photo-grid__image');
     const cardName = cardItem.querySelector('.photo-grid__name');
     const likeButton = cardItem.querySelector('.photo-grid__like-icon');
     const buttonDelete = cardItem.querySelector('.photo-grid__delete');
     const cardItemsList = document.querySelector('.photo-grid__items');
-
-initialCards.forEach(function(item) {
-
-    let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
 
     cardImg.src = item.link;
     cardImg.alt = item.name;
@@ -117,6 +117,11 @@ addCard.addEventListener('submit', function(evt) {
     evt.preventDefault();
 
     let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
+    const cardImg = cardItem.querySelector('.photo-grid__image');
+    const cardName = cardItem.querySelector('.photo-grid__name');
+    const likeButton = cardItem.querySelector('.photo-grid__like-icon');
+    const buttonDelete = cardItem.querySelector('.photo-grid__delete');
+    const cardItemsList = document.querySelector('.photo-grid__items');
 
     let inputSourceImg = addCard.querySelectorAll('.form__input-text')[1];
     let inputNameCard = addCard.querySelectorAll('.form__input-text')[0];
