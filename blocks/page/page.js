@@ -72,7 +72,6 @@ const initialCards = [
     }
     ];
 
-    let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
     const cardImg = cardItem.querySelector('.photo-grid__image');
     const cardName = cardItem.querySelector('.photo-grid__name');
     const likeButton = cardItem.querySelector('.photo-grid__like-icon');
@@ -80,6 +79,8 @@ const initialCards = [
     const cardItemsList = document.querySelector('.photo-grid__items');
 
 initialCards.forEach(function(item) {
+
+    let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
 
     cardImg.src = item.link;
     cardImg.alt = item.name;
@@ -114,6 +115,8 @@ document.querySelector('.profile-section__add').addEventListener('click', functi
 
 addCard.addEventListener('submit', function(evt) {
     evt.preventDefault();
+
+    let cardItem = getCloneNode('#photo-grid__item', '.photo-grid__element-container');
 
     let inputSourceImg = addCard.querySelectorAll('.form__input-text')[1];
     let inputNameCard = addCard.querySelectorAll('.form__input-text')[0];
