@@ -33,20 +33,17 @@ function addEventOpenImagePopup(typeEvent, cardImg, cardName) {
         popupImage.alt = cardImg.alt;
         popupImageCaption.textContent = cardName.textContent;
     });
-    addEventForCloseButton(closeButtonOpenImage, openImage);
 }
 
 function openPopupForAdd() {
     openPopup(addCard);
     formAddCard.reset();
-    addEventForCloseButton(closeButtonAddCard, addCard);
 }
 
 function openPopupForEdit() {
     openPopup(editProfile);
     inputNameOfEditProfile.value = profileName.textContent;
     inputTextOfEditProfile.value = profileText.textContent;
-    addEventForCloseButton(closeButtonEditCard, editProfile);
 }
 
 
@@ -137,6 +134,9 @@ function handleProfileEditFormSubmit(evt) {
     closePopup(editProfile);
 }
 
+addEventForCloseButton(closeButtonOpenImage, openImage);
+addEventForCloseButton(closeButtonAddCard, addCard);
+addEventForCloseButton(closeButtonEditCard, editProfile);
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item);
