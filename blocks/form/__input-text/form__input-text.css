@@ -1,7 +1,6 @@
 .form__input-text {
     border: 0;
-    border-bottom: 1px solid black;
-    opacity: 0.2;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.2);
     border-radius: 0; 
     -webkit-border-radius: 0;
     -moz-border-radius: 0; 
@@ -21,9 +20,16 @@
 
 .form__input-text:last-child {
     margin-block-end: 0;
-
 }
 
-.form__input-text:focus {
-    opacity: 1;
+.form__input-text::placeholder {
+    color: #C4C4C4;
+}
+
+.form__input-text::-webkit-input-placeholder {
+    color: #C4C4C4;
+}
+
+.form__input-text::-moz-placeholder {
+    color: #C4C4C4;
 }
