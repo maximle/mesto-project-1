@@ -88,22 +88,23 @@ function getCardObject(initialData, params = {
 
     addEventLikeButton('click', cardObject, 'photo-grid__like-icon_active');
     addEventButtonDelete('click', cardObject, '.photo-grid__element-container')
-    addEventOpenImagePopup('click', cardObject.cardImg, cardObject.cardName);
-    insertCardinsideList(cardObject);    
+    addEventOpenImagePopup('click', cardObject.cardImg, cardObject.cardName);   
     return cardObject;
 }
 
-function insertCardinsideList (card) {
+function insertCardInsideList (card) {
     cardItemsList.prepend(card.cardItem);
 }
 
 
 function addCardOnPage(evt) {
     evt.preventDefault();
-    getCardObject({
+    const cardObject = getCardObject(
+        {
         link: inputSourceImg.value, 
         name: inputNameCard.value
-    });
+        });
+    insertCardInsideList(cardObject);
     closePopup(addCard);
 }
 
@@ -128,7 +129,8 @@ function openPopupForEdit() {
 
 
 initialCards.forEach(function(item) {
-    getCardObject(item);
+    const cardObject = getCardObject(item);
+    insertCardInsideList(cardObject);
 });
 
 allCloseButtons.forEach(popupCloseButton => popupCloseButton.addEventListener('click', closePopup));
