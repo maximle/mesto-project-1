@@ -24,6 +24,9 @@ const cardItemsList = document.querySelector('.photo-grid__items');
 const editAvatar = document.querySelector('#editAvatar');
 const closeButtonEditAvatar = editAvatar.querySelector('.popup__close');
 const buttonEditAvatar = document.querySelector('.profile-section__edit-avatar');
+const formEditAvatar = editAvatar.querySelector('.form');
+const profileAvatar = document.querySelector('.profile-section__avatar');
+const inputLinkToAvatar = editAvatar.querySelector('.form__input-text');
 
 
 
@@ -143,6 +146,11 @@ function handleProfileEditFormSubmit(evt) {
     closePopup(editProfile);
 }
 
+function handleEditAvatarFormSubmit(evt) {
+    evt.preventDefault();
+    profileAvatar.src = inputLinkToAvatar.value;
+    closePopup(editAvatar);
+}
 
 
 function addEventToOverlayForClose(popup, classNamePopupContainer) {
@@ -185,6 +193,7 @@ initialCards.forEach(function(item) {
 
 formAddCard.addEventListener('submit', addCardOnPage);
 formEditProfile.addEventListener('submit', handleProfileEditFormSubmit);
+formEditAvatar.addEventListener('submit', handleEditAvatarFormSubmit)
 buttonAdd.addEventListener('click', openPopupForAdd);
 buttonEdit.addEventListener('click', openPopupForEdit);
 buttonEditAvatar.addEventListener('click', openPopupForEditAvatar);
