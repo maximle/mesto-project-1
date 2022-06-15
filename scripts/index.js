@@ -144,9 +144,22 @@ function addEventToOverlayForClose(popup, classNamePopupContainer) {
     });
 }
 
+function closePopupToKey(evt, popup) {
+    if (evt.key === 'Escape' && popup.classList.contains('popup_opened')) {
+        closePopup(popup);
+    }
+}
+
+function addEventToKeyForClose(popup) {
+    document.addEventListener('keydown', evt => {
+        closePopupToKey(evt, popup);
+    });
+}
+
 function addEventForClosePopup(button, popup) {
     addEventForCloseButton(button, popup);
     addEventToOverlayForClose(popup, '.popup__container');
+    addEventToKeyForClose(popup);
 }
 
 
