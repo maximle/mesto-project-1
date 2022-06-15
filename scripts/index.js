@@ -21,6 +21,11 @@ const popupImage = openImage.querySelector('.popup__image');
 const popupImageCaption = openImage.querySelector('.popup__image-caption');
 const cardItemsList = document.querySelector('.photo-grid__items');
 
+const editAvatar = document.querySelector('#editAvatar');
+const closeButtonEditAvatar = editAvatar.querySelector('.popup__close');
+const buttonEditAvatar = document.querySelector('.profile-section__edit-avatar');
+
+
 
 function addEventForCloseButton(button, popup) {
     button.addEventListener('click', () => closePopup(popup))
@@ -44,6 +49,10 @@ function openPopupForEdit() {
     openPopup(editProfile);
     inputNameOfEditProfile.value = profileName.textContent;
     inputTextOfEditProfile.value = profileText.textContent;
+}
+
+function openPopupForEditAvatar() {
+    openPopup(editAvatar);
 }
 
 
@@ -167,6 +176,7 @@ function addEventForClosePopup(button, popup) {
 addEventForClosePopup(closeButtonOpenImage, openImage);
 addEventForClosePopup(closeButtonAddCard, addCard);
 addEventForClosePopup(closeButtonEditCard, editProfile);
+addEventForClosePopup(closeButtonEditAvatar, editAvatar);
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item);
@@ -177,6 +187,7 @@ formAddCard.addEventListener('submit', addCardOnPage);
 formEditProfile.addEventListener('submit', handleProfileEditFormSubmit);
 buttonAdd.addEventListener('click', openPopupForAdd);
 buttonEdit.addEventListener('click', openPopupForEdit);
+buttonEditAvatar.addEventListener('click', openPopupForEditAvatar);
 
 
 
