@@ -134,9 +134,26 @@ function handleProfileEditFormSubmit(evt) {
     closePopup(editProfile);
 }
 
-addEventForCloseButton(closeButtonOpenImage, openImage);
-addEventForCloseButton(closeButtonAddCard, addCard);
-addEventForCloseButton(closeButtonEditCard, editProfile);
+
+
+function addEventToOverlayForClose(popup, classNamePopupContainer) {
+    popup.addEventListener('click', evt => {
+        if (!(evt.target.closest(classNamePopupContainer))) {
+            closePopup(popup);
+        }
+    });
+}
+
+function addEventForClosePopup(button, popup) {
+    addEventForCloseButton(button, popup);
+    addEventToOverlayForClose(popup, '.popup__container');
+}
+
+
+
+addEventForClosePopup(closeButtonOpenImage, openImage);
+addEventForClosePopup(closeButtonAddCard, addCard);
+addEventForClosePopup(closeButtonEditCard, editProfile);
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item);
