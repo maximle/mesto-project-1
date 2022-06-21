@@ -2,36 +2,36 @@ const addCard = document.querySelector('#addCard');
 const formAddCard = addCard.querySelector('#formAddCard');
 const inputSourceImg = addCard.querySelectorAll('.form__input-text')[1];
 const inputNameCard = addCard.querySelectorAll('.form__input-text')[0];
-const closeButtonAddCard = addCard.querySelector('.popup__close');
 const buttonAdd = document.querySelector('.profile-section__add');
 
 const editProfile = document.querySelector('#editProfile');
 const formEditProfile = document.querySelector('#formEditPofile');
 const inputNameOfEditProfile = editProfile.querySelectorAll('.form__input-text')[0];
 const inputTextOfEditProfile = editProfile.querySelectorAll('.form__input-text')[1];
-const closeButtonEditCard = editProfile.querySelector('.popup__close');
 const buttonEdit = document.querySelector('.profile-section__edit');
 
 const profileName = document.querySelector('.profile-section__name');
 const profileText = document.querySelector('.profile-section__text');
 const openImage = document.querySelector('#openImage');
-const closeButtonOpenImage = openImage.querySelector('.popup__close');
 
 const popupImage = openImage.querySelector('.popup__image');
 const popupImageCaption = openImage.querySelector('.popup__image-caption');
 const cardItemsList = document.querySelector('.photo-grid__items');
 
 const editAvatar = document.querySelector('#editAvatar');
-const closeButtonEditAvatar = editAvatar.querySelector('.popup__close');
 const buttonEditAvatar = document.querySelector('.profile-section__edit-avatar');
 const formEditAvatar = editAvatar.querySelector('.form');
 const profileAvatar = document.querySelector('.profile-section__avatar');
 const inputLinkToAvatar = editAvatar.querySelector('.form__input-text');
 
+const arrayPopups = Array.from(document.querySelectorAll('.popup'));
 
 
-function addEventForCloseButton(button, popup) {
-    button.addEventListener('click', () => closePopup(popup))
+
+
+function addEventForCloseButton(popup) {
+    const buttonClose = popup.querySelector('.popup__close');
+    buttonClose.addEventListener('click', () => closePopup(popup))
 }
 
 function addEventOpenImagePopup(typeEvent, cardImg, cardName) {
@@ -173,18 +173,22 @@ function addEventToKeyForClose(popup) {
     });
 }
 
-function addEventForClosePopup(button, popup) {
-    addEventForCloseButton(button, popup);
+function addEventForClosePopup(popup) {
+    addEventForCloseButton(popup);
     addEventToOverlayForClose(popup, '.popup__container');
     addEventToKeyForClose(popup);
 }
 
 
 
-addEventForClosePopup(closeButtonOpenImage, openImage);
-addEventForClosePopup(closeButtonAddCard, addCard);
-addEventForClosePopup(closeButtonEditCard, editProfile);
-addEventForClosePopup(closeButtonEditAvatar, editAvatar);
+// addEventForClosePopup(openImage);
+// addEventForClosePopup(addCard);
+// addEventForClosePopup(editProfile);
+// addEventForClosePopup(editAvatar);
+
+arrayPopups.forEach(function(popup) {
+    addEventForClosePopup(popup);
+});
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item);
