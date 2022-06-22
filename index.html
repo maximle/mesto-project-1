@@ -118,21 +118,22 @@
                   type="text"
                   placeholder="Название"
                   name="name"
-                  maxlength="100"
+                  minlength="2"
+                  maxlength="30"
                   id="addCardInputName"
                   class="form__input-text"
-                  required /><span
+                  required />
+                <span
                   class="form__title-error"
                   id="addCardInputName-error"
                 ></span
               ></label>
               <label class="form__field"
                 ><input
-                  type="text"
+                  type="url"
                   placeholder="Ссылка на картинку"
                   name="description"
                   id="addCardInputDescription"
-                  maxlength="200"
                   class="form__input-text"
                   required />
                 <span

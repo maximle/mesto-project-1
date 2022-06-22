@@ -179,37 +179,11 @@ function addEventForClosePopup(popup) {
     addEventToKeyForClose(popup);
 }
 
-
-arrayPopups.forEach(function(popup) {
-    addEventForClosePopup(popup);
-});
-
-initialCards.forEach(function(item) {
-    const cardObject = getCardObject(item);
-    insertCardInsideList(cardObject);
-});
-
-formAddCard.addEventListener('submit', addCardOnPage);
-formEditProfile.addEventListener('submit', handleProfileEditFormSubmit);
-formEditAvatar.addEventListener('submit', handleEditAvatarFormSubmit);
-buttonAdd.addEventListener('click', () => {
-    openPopupForAdd();
-    toggleButtonSubmitState(formAddCard);
-});
-buttonEdit.addEventListener('click', () => {
-    openPopupForEdit();
-    getArrayInputsOfForm(formEditProfile).forEach(input => {
-        isValid(formEditProfile, input);
-    })
-    toggleButtonSubmitState(formEditProfile);
-});
-buttonEditAvatar.addEventListener('click', () => {
-    openPopupForEditAvatar();
-    toggleButtonSubmitState(formEditAvatar);
-});
-
-
-//------------------
+function checkValidityOfFields(formElement) {
+    getArrayInputsOfForm(formElement).forEach(input => {
+        isValid(formElement, input);
+    });
+}
 
 function getArrayInputsOfForm(formElement) {
     return Array.from(formElement.querySelectorAll('.form__input-text'));
@@ -252,8 +226,6 @@ function isValid(formElement, input) {
     }
 }
 
-
-
 function setEventListenersForInputs(formElement) {
     const formInputs = getArrayInputsOfForm(formElement);
     formInputs.forEach(input => {
@@ -271,5 +243,35 @@ function enableValidationAllForms(){
         setEventListenersForInputs(form);
     });
 }
+
+arrayPopups.forEach(function(popup) {
+    addEventForClosePopup(popup);
+});
+
+
+initialCards.forEach(function(item) {
+    const cardObject = getCardObject(item);
+    insertCardInsideList(cardObject);
+});
+
+formAddCard.addEventListener('submit', addCardOnPage);
+formEditProfile.addEventListener('submit', handleProfileEditFormSubmit);
+formEditAvatar.addEventListener('submit', handleEditAvatarFormSubmit);
+buttonAdd.addEventListener('click', () => {
+    openPopupForAdd();
+    checkValidityOfFields(formAddCard);
+    toggleButtonSubmitState(formAddCard);
+});
+buttonEdit.addEventListener('click', () => {
+    openPopupForEdit();
+    checkValidityOfFields(formEditProfile);
+    toggleButtonSubmitState(formEditProfile);
+});
+buttonEditAvatar.addEventListener('click', () => {
+    openPopupForEditAvatar();
+    checkValidityOfFields(formEditAvatar);
+    toggleButtonSubmitState(formEditAvatar);
+});
+
 
 enableValidationAllForms();
