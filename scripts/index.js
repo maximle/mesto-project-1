@@ -26,6 +26,14 @@ const inputLinkToAvatar = editAvatar.querySelector('.form__input-text');
 
 const arrayPopups = Array.from(document.querySelectorAll('.popup'));
 
+const validationSettings = {
+    formSelector: '.form',
+    inputSelector: '.form__input-text',
+    submitButtonSelector: '.form__save',
+    inputErrorClass: 'form__input-text_invalid',
+    errorClass: 'form__title-error',
+    errorClassActive: 'form__title-error_active',
+}
 
 
 
@@ -56,6 +64,7 @@ function openPopupForEdit() {
 
 function openPopupForEditAvatar() {
     openPopup(editAvatar);
+    formEditAvatar.reset();
 }
 
 
