@@ -55,30 +55,46 @@
         <div class="popup__container">
           <button type="button" class="popup__close"></button>
           <form
-            name="form"
+            name="formEditPofile"
             id="formEditPofile"
             class="form"
             action="#"
             method="post"
+            novalidate
           >
-            <fieldset form="form" class="form__inputs">
+            <fieldset form="formEditPofile" class="form__inputs">
               <legend class="form__title">Редактировать профиль</legend>
-              <input
-                type="text"
-                placeholder="Введите имя"
-                name="name"
-                maxlength="100"
-                class="form__input-text"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Введите описание"
-                name="description"
-                maxlength="150"
-                class="form__input-text"
-                required
-              />
+              <label class="form__field">
+                <input
+                  type="text"
+                  placeholder="Введите имя"
+                  name="name"
+                  id="editProfileInputName"
+                  minlength="2"
+                  maxlength="40"
+                  class="form__input-text"
+                  required
+                />
+                <span
+                  class="form__title-error"
+                  id="editProfileInputName-error"
+                ></span>
+              </label>
+              <label class="form__field"
+                ><input
+                  type="text"
+                  placeholder="Введите описание"
+                  name="description"
+                  id="editProfileInputDescription"
+                  minlength="2"
+                  maxlength="200"
+                  class="form__input-text"
+                  required />
+                <span
+                  class="form__title-error"
+                  id="editProfileInputDescription-error"
+                ></span
+              ></label>
             </fieldset>
             <button type="submit" class="form__save">Сохранить</button>
           </form>
@@ -97,22 +113,34 @@
           >
             <fieldset form="form" class="form__inputs">
               <legend class="form__title">Новое место</legend>
-              <input
-                type="text"
-                placeholder="Название"
-                name="name"
-                maxlength="100"
-                class="form__input-text"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Ссылка на картинку"
-                name="description"
-                maxlength="200"
-                class="form__input-text"
-                required
-              />
+              <label class="form__field"
+                ><input
+                  type="text"
+                  placeholder="Название"
+                  name="name"
+                  minlength="2"
+                  maxlength="30"
+                  id="addCardInputName"
+                  class="form__input-text"
+                  required />
+                <span
+                  class="form__title-error"
+                  id="addCardInputName-error"
+                ></span
+              ></label>
+              <label class="form__field"
+                ><input
+                  type="url"
+                  placeholder="Ссылка на картинку"
+                  name="description"
+                  id="addCardInputDescription"
+                  class="form__input-text"
+                  required />
+                <span
+                  class="form__title-error"
+                  id="addCardInputDescription-error"
+                ></span
+              ></label>
             </fieldset>
             <button type="submit" class="form__save">Создать</button>
           </form>
@@ -132,14 +160,18 @@
         >
           <fieldset form="form" class="form__inputs">
             <legend class="form__title">Обновить аватар</legend>
-            <input
-              type="text"
-              placeholder="Ссылка на картинку"
-              name="description"
-              maxlength="200"
-              class="form__input-text"
-              required
-            />
+            <label class="form__field">
+              <input
+                type="url"
+                placeholder="Ссылка на картинку"
+                name="description"
+                id="editAvatarInputDescription"
+                class="form__input-text"
+                required /><span
+                class="form__title-error"
+                id="editAvatarInputDescription-error"
+              ></span
+            ></label>
           </fieldset>
           <button type="submit" class="form__save">Сохранить</button>
         </form>

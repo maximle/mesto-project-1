@@ -67,6 +67,10 @@
 
 @import url(../blocks/form/form.css);
 @import url(../blocks/form/__input-text/form__input-text.css);
+@import url(../blocks/form/__input-text/_invalid/form__input-text_invalid.css);
+@import url(../blocks/form/__title-error/form__title-error.css);
+@import url(../blocks/form/__title-error/_active/form__title-error_active.css);
 @import url(../blocks/form/__inputs/form__inputs.css);
+@import url(../blocks/form/__field/form__field.css);
 @import url(../blocks/form/__save/form__save.css);
 @import url(../blocks/form/__title/form__title.css);

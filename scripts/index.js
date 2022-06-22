@@ -2,36 +2,44 @@ const addCard = document.querySelector('#addCard');
 const formAddCard = addCard.querySelector('#formAddCard');
 const inputSourceImg = addCard.querySelectorAll('.form__input-text')[1];
 const inputNameCard = addCard.querySelectorAll('.form__input-text')[0];
-const closeButtonAddCard = addCard.querySelector('.popup__close');
 const buttonAdd = document.querySelector('.profile-section__add');
 
 const editProfile = document.querySelector('#editProfile');
 const formEditProfile = document.querySelector('#formEditPofile');
 const inputNameOfEditProfile = editProfile.querySelectorAll('.form__input-text')[0];
 const inputTextOfEditProfile = editProfile.querySelectorAll('.form__input-text')[1];
-const closeButtonEditCard = editProfile.querySelector('.popup__close');
 const buttonEdit = document.querySelector('.profile-section__edit');
 
 const profileName = document.querySelector('.profile-section__name');
 const profileText = document.querySelector('.profile-section__text');
 const openImage = document.querySelector('#openImage');
-const closeButtonOpenImage = openImage.querySelector('.popup__close');
 
 const popupImage = openImage.querySelector('.popup__image');
 const popupImageCaption = openImage.querySelector('.popup__image-caption');
 const cardItemsList = document.querySelector('.photo-grid__items');
 
 const editAvatar = document.querySelector('#editAvatar');
-const closeButtonEditAvatar = editAvatar.querySelector('.popup__close');
 const buttonEditAvatar = document.querySelector('.profile-section__edit-avatar');
 const formEditAvatar = editAvatar.querySelector('.form');
 const profileAvatar = document.querySelector('.profile-section__avatar');
 const inputLinkToAvatar = editAvatar.querySelector('.form__input-text');
 
+const arrayPopups = Array.from(document.querySelectorAll('.popup'));
+
+const validationSettings = {
+    formSelector: '.form',
+    inputSelector: '.form__input-text',
+    submitButtonSelector: '.form__save',
+    inputErrorClass: 'form__input-text_invalid',
+    errorClass: 'form__title-error',
+    errorClassActive: 'form__title-error_active',
+}
 
 
-function addEventForCloseButton(button, popup) {
-    button.addEventListener('click', () => closePopup(popup))
+
+function addEventForCloseButton(popup) {
+    const buttonClose = popup.querySelector('.popup__close');
+    buttonClose.addEventListener('click', () => closePopup(popup))
 }
 
 function addEventOpenImagePopup(typeEvent, cardImg, cardName) {
@@ -56,6 +64,7 @@ function openPopupForEdit() {
 
 function openPopupForEditAvatar() {
     openPopup(editAvatar);
+    formEditAvatar.reset();
 }
 
 
@@ -173,18 +182,86 @@ function addEventToKeyForClose(popup) {
     });
 }
 
-function addEventForClosePopup(button, popup) {
-    addEventForCloseButton(button, popup);
+function addEventForClosePopup(popup) {
+    addEventForCloseButton(popup);
     addEventToOverlayForClose(popup, '.popup__container');
     addEventToKeyForClose(popup);
 }
 
+function checkValidityOfFields(formElement) {
+    getArrayInputsOfForm(formElement).forEach(input => {
+        if(input.value.length > 0){
+            isValid(formElement, input);
+        }
+    });
+}
+
+function getArrayInputsOfForm(formElement) {
+    return Array.from(formElement.querySelectorAll('.form__input-text'));
+}
 
 
-addEventForClosePopup(closeButtonOpenImage, openImage);
-addEventForClosePopup(closeButtonAddCard, addCard);
-addEventForClosePopup(closeButtonEditCard, editProfile);
-addEventForClosePopup(closeButtonEditAvatar, editAvatar);
+function showInputError(formElement, input, errorMessage) {
+    const errorElement = formElement.querySelector(`#${input.id}-error`);
+    input.classList.add('form__input-text_invalid');
+    errorElement.textContent = errorMessage;
+    errorElement.classList.add('form__title-error_active');
+}
+
+function hideInputError(formElement, input) {
+    const errorElement = formElement.querySelector(`#${input.id}-error`);
+    input.classList.remove('form__input-text_invalid');
+    errorElement.textContent = '';
+    errorElement.classList.remove('form__title-error_active');
+}
+
+function hasInvalidInput(formElement) {
+    const formInputs = getArrayInputsOfForm(formElement);
+    return formInputs.some(input => {
+        return !input.validity.valid;
+    });
+}
+
+function toggleButtonSubmitState(formElement) {
+    const buttonSubmit = formElement.querySelector('.form__save');
+    if(hasInvalidInput(formElement)) {
+        buttonSubmit.disabled = true;
+    } else {
+        buttonSubmit.disabled = false;
+    }
+}
+
+function isValid(formElement, input) {
+    if(!input.validity.valid) {
+        showInputError(formElement, input, input.validationMessage);
+    } else {
+        hideInputError(formElement, input);
+    }
+}
+
+function setEventListenersForInputs(formElement) {
+    const formInputs = getArrayInputsOfForm(formElement);
+    formInputs.forEach(input => {
+        input.addEventListener('input', () => {
+            toggleButtonSubmitState(formElement);
+            isValid(formElement, input);
+        });
+    });
+}
+
+
+function enableValidationAllForms(){
+    const forms = Array.from(document.querySelectorAll('.form'));
+    forms.forEach(form => {
+        setEventListenersForInputs(form);
+    });
+}
+
+
+arrayPopups.forEach(function(popup) {
+    addEventForClosePopup(popup);
+});
+
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item);
@@ -193,14 +270,22 @@ initialCards.forEach(function(item) {
 
 formAddCard.addEventListener('submit', addCardOnPage);
 formEditProfile.addEventListener('submit', handleProfileEditFormSubmit);
-formEditAvatar.addEventListener('submit', handleEditAvatarFormSubmit)
-buttonAdd.addEventListener('click', openPopupForAdd);
-buttonEdit.addEventListener('click', openPopupForEdit);
-buttonEditAvatar.addEventListener('click', openPopupForEditAvatar);
+formEditAvatar.addEventListener('submit', handleEditAvatarFormSubmit);
+buttonAdd.addEventListener('click', () => {
+    openPopupForAdd();
+    checkValidityOfFields(formAddCard);
+    toggleButtonSubmitState(formAddCard);
+});
+buttonEdit.addEventListener('click', () => {
+    openPopupForEdit();
+    checkValidityOfFields(formEditProfile);
+    toggleButtonSubmitState(formEditProfile);
+});
+buttonEditAvatar.addEventListener('click', () => {
+    openPopupForEditAvatar();
+    checkValidityOfFields(formEditAvatar);
+    toggleButtonSubmitState(formEditAvatar);
+});
 
 
-
-
-
-
-
+enableValidationAllForms();
