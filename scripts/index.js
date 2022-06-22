@@ -181,7 +181,9 @@ function addEventForClosePopup(popup) {
 
 function checkValidityOfFields(formElement) {
     getArrayInputsOfForm(formElement).forEach(input => {
-        isValid(formElement, input);
+        if(input.value.length > 0){
+            isValid(formElement, input);
+        }
     });
 }
 
@@ -190,14 +192,16 @@ function getArrayInputsOfForm(formElement) {
 }
 
 
-function showInputError(formElement, inputElement, errorMessage) {
-    const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+function showInputError(formElement, input, errorMessage) {
+    const errorElement = formElement.querySelector(`#${input.id}-error`);
+    input.classList.add('form__input-text_invalid');
     errorElement.textContent = errorMessage;
     errorElement.classList.add('form__title-error_active');
 }
 
-function hideInputError(formElement, inputElement) {
-    const errorElement = formElement.querySelector(`#${inputElement.id}-error`);
+function hideInputError(formElement, input) {
+    const errorElement = formElement.querySelector(`#${input.id}-error`);
+    input.classList.remove('form__input-text_invalid');
     errorElement.textContent = '';
     errorElement.classList.remove('form__title-error_active');
 }
@@ -243,6 +247,7 @@ function enableValidationAllForms(){
         setEventListenersForInputs(form);
     });
 }
+
 
 arrayPopups.forEach(function(popup) {
     addEventForClosePopup(popup);
