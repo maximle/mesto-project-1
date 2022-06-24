@@ -19,3 +19,9 @@
 .profile-section__edit-avatar:hover .profile-section__avatar {
     opacity: 0.2;
 }
+
+@media screen and (max-width: 768px) {
+    .profile-section__edit-avatar {
+        margin-inline-end: 0;
+    }
+}
