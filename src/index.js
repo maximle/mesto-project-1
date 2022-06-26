@@ -4,7 +4,6 @@ import initialCards from './components/cards.js';
 import { addCardOnPage, getCardObject, insertCardInsideList } from './components/card.js';
 import { handleEditAvatarFormSubmit,
          handleProfileEditFormSubmit,
-         addEventForClosePopup,
          openPopup 
     } from './components/modal.js';
 import { checkValidityOfFields, enableValidationAllForms, toggleButtonSubmitState } from './components/validate.js';
@@ -27,15 +26,6 @@ const profileName = document.querySelector('.profile-section__name');
 const profileText = document.querySelector('.profile-section__text');
 
 
-
-
-
-const inputNameOfEditProfile = editProfile.querySelectorAll('.form__input-text')[0];
-const inputTextOfEditProfile = editProfile.querySelectorAll('.form__input-text')[1];
-const buttonEdit = document.querySelector('.profile-section__edit');
-
-
-
 export const validationSettings = {
     formSelector: '.form',
     inputSelector: '.form__input-text',
@@ -50,15 +40,14 @@ export const validationSettings = {
 }
 
 
-arrayPopups.forEach(function(popup) {
-    addEventForClosePopup(popup);
-});
-
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item, popupImage);
     insertCardInsideList(cardObject);
 });
+
+
+
 
 formAddCard.addEventListener('submit', evt => {
     addCardOnPage(evt, popupAddCard);
@@ -70,8 +59,11 @@ formEditAvatar.addEventListener('submit', evt => {
     handleEditAvatarFormSubmit(evt, popupEditAvatar)
 });
 
+
+
+
 buttonAddCard.addEventListener('click', () => {
-    openPopup(addCard, formAddCard,{needReset: true});
+    openPopup(addCard, formAddCard, {needReset: true});
     checkValidityOfFields(formAddCard, validationSettings);
     toggleButtonSubmitState(formAddCard, validationSettings);
 });

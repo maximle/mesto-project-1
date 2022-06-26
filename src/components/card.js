@@ -49,7 +49,7 @@ function addCardOnPage(evt, popup) {
         name: inputNameCard.value
         });
     insertCardInsideList(cardObject);
-    closePopup(popup);
+    closePopup(evt);
 }
 
 function addEventButtonDelete(typeEvent, cardObj, parentClassName) {

@@ -1,9 +1,13 @@
 import {getArrayInputsOfForm} from './utils.js';
 import {validationSettings} from '../index.js';
 
-function addEventForCloseButton(popup) {
+function addEventForCloseButton(popup, settings={removeEvent: false}) {
     const buttonClose = popup.querySelector('.popup__close');
-    buttonClose.addEventListener('click', () => closePopup(popup))
+    if(settings.removeEvent) {
+        buttonClose.removeEventListener('click', closePopup);
+    } else {
+        buttonClose.addEventListener('click', closePopup);
+    }
 }
 
 function addEventOpenImagePopup(typeEvent, popup, cardImg, cardName) {
@@ -18,8 +22,16 @@ function addEventOpenImagePopup(typeEvent, popup, cardImg, cardName) {
 }
 
 
-function closePopup(popup) {
-    popup.classList.remove('popup_opened');
+function closePopup(evt=null, popup=null) {
+    if(popup) {
+        addEventForClosePopup(popup, {removeAllCloseEvent: true});
+        popup.classList.remove('popup_opened');
+    } else {
+        const popup = evt.target.closest('.popup');
+        addEventForClosePopup(popup, {removeAllCloseEvent: true});
+        popup.classList.remove('popup_opened');
+    }
+    
 }
 
 
@@ -31,32 +43,49 @@ function openPopup(popup, formElement=null, settings={needReset: false, fillInit
     if(settings.fillInitialValuesFields) {
         fillInitialValuesFields(popup, settings.fillInitialValuesFields, validationSettings);
     }
+    addEventForClosePopup(popup);
 }
 
-function addEventToOverlayForClose(popup) {
-    popup.addEventListener('click', evt => {
-        if (!(evt.target.closest('.popup__container'))) {
-            closePopup(popup);
-        }
-    });
-}
-
-function closePopupToKey(evt, popup) {
-    if (evt.key === 'Escape' && popup.classList.contains('popup_opened')) {
-        closePopup(popup);
+function addEventToOverlayForClose(popup, settings={removeEvent: false}) {
+    if(settings.removeEvent) {
+        popup.removeEventListener('click', closePopupToOverlay);
+    } else {
+        popup.addEventListener('click', closePopupToOverlay);
     }
 }
 
-function addEventToKeyForClose(popup) {
-    document.addEventListener('keydown', evt => {
-        closePopupToKey(evt, popup);
-    });
+function closePopupToOverlay(evt) {
+    if (!(evt.target.closest('.popup__container'))) {
+        closePopup(evt);
+    }
 }
 
-function addEventForClosePopup(popup) {
-    addEventForCloseButton(popup);
-    addEventToOverlayForClose(popup);
-    addEventToKeyForClose(popup);
+
+function closePopupToKey(evt) {
+    const popup = document.querySelector('.popup_opened');
+    if (evt.key === 'Escape' && popup) {
+        closePopup(null, popup);
+    }
+}
+
+function addEventToKeyForClose(settings={removeEvent: false}) {
+    if(settings.removeEvent) {
+        document.removeEventListener('keydown', closePopupToKey);
+    } else {
+        document.addEventListener('keydown', closePopupToKey);
+    }
+}
+
+function addEventForClosePopup(popup, settings={removeAllCloseEvent: false}) {
+    if(settings.removeAllCloseEvent) {
+        addEventForCloseButton(popup, {removeEvent: true});
+        addEventToOverlayForClose(popup, {removeEvent: true});
+        addEventToKeyForClose({removeEvent: true});
+    } else {
+        addEventForCloseButton(popup);
+        addEventToOverlayForClose(popup);
+        addEventToKeyForClose();
+    }
 }
 
 
@@ -84,7 +113,7 @@ function fillInitialValuesFields(popup, arrayData=[], validationSettings=null, r
 function handleProfileEditFormSubmit(evt, popup, profileName, profileText) {
     evt.preventDefault();
     fillInitialValuesFields(popup, [profileName, profileText], null, true);
-    closePopup(popup);
+    closePopup(evt);
 }
 
 function handleEditAvatarFormSubmit(evt, popup) {
@@ -92,13 +121,12 @@ function handleEditAvatarFormSubmit(evt, popup) {
     const profileAvatar = document.querySelector('.profile-section__avatar');
     const inputLinkToAvatar = popup.querySelector('.form__input-text');
     profileAvatar.src = inputLinkToAvatar.value;
-    closePopup(popup);
+    closePopup(evt);
 }
 
 export {
     addEventOpenImagePopup, 
     handleProfileEditFormSubmit, 
     handleEditAvatarFormSubmit,
-    addEventForClosePopup, 
     openPopup,
 };
