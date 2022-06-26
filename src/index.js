@@ -1,4 +1,4 @@
-import '../pages/index.css';
+import './index.css';
 
 import initialCards from './components/cards.js';
 import { addCardOnPage, getCardObject, insertCardInsideList } from './components/card.js';
