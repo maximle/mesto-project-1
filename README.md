@@ -54,7 +54,7 @@
 
 ### Общий вид
 
-![screen-gif](./Mesto-gif.gif)
+![screen-gif](https://github.com/AlexeyNewDeveloper/IMGs/blob/main/gifs/Mesto-gif.gif)
 
 #
 
