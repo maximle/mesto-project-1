@@ -60,7 +60,6 @@ formEditAvatar.addEventListener('submit', evt => {
 
 
 
-
 buttonAddCard.addEventListener('click', () => {
     openPopup(addCard, formAddCard, {needReset: true});
     checkValidityOfFields(formAddCard, validationSettings);
