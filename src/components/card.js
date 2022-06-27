@@ -1,9 +1,8 @@
-import {addEventOpenImagePopup} from './modal.js';
-import {getCloneNode} from './utils.js';
+import {addEventOpenImagePopup, closePopup} from './modal.js';
+import {getCloneNode, cardItemsList} from './utils.js';
 
-function insertCardInsideList (card) {
-    const cardItemsList = document.querySelector('.photo-grid__items');
-    cardItemsList.prepend(card.cardItem);
+function insertCardInsideList (card, container) {
+    container.prepend(card.cardItem);
 }
 
 function getCardObject(initialData, popup=null, params = {
@@ -47,8 +46,8 @@ function addCardOnPage(evt, popup) {
         {
         link: inputSourceImg.value, 
         name: inputNameCard.value
-        });
-    insertCardInsideList(cardObject);
+        }, popup);
+    insertCardInsideList(cardObject, cardItemsList);
     closePopup(evt);
 }
 

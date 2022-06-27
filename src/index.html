@@ -104,13 +104,13 @@
         <div class="popup__container">
           <button type="button" class="popup__close"></button>
           <form
-            name="form"
+            name="formAddCard"
             id="formAddCard"
             class="form"
             action="#"
             method="post"
           >
-            <fieldset form="form" class="form__inputs">
+            <fieldset form="formAddCard" class="form__inputs">
               <legend class="form__title">Новое место</legend>
               <label class="form__field"
                 ><input
@@ -151,13 +151,13 @@
       <div class="popup__container">
         <button type="button" class="popup__close"></button>
         <form
-          name="form"
+          name="formEditAvatar"
           id="formEditAvatar"
           class="form"
           action="#"
           method="post"
         >
-          <fieldset form="form" class="form__inputs">
+          <fieldset form="formEditAvatar" class="form__inputs">
             <legend class="form__title">Обновить аватар</legend>
             <label class="form__field">
               <input
@@ -178,7 +178,7 @@
     </div>
 
     <div class="popup popup_opacity_high" id="openImage">
-      <div class="popup__container">
+      <div class="popup__container popup__container_for-images">
         <button type="button" class="popup__close"></button>
         <figure class="popup__image-container">
           <img src="#" alt="" class="popup__image" />

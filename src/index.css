@@ -58,6 +58,7 @@
 @import url(./blocks/popup/_opacity/popup_opacity_high.css);
 @import url(./blocks/popup/_opened/popup_opened.css);
 @import url(./blocks/popup/__container/popup__container.css);
+@import url(./blocks/popup/__container/_for-images/popup__container_for-images.css);
 @import url(./blocks/popup/__close/popup__close.css);
 @import url(./blocks/popup/__image-container/popup__image-container.css);
 @import url(./blocks/popup/__image/popup__image.css);

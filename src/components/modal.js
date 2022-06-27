@@ -1,5 +1,5 @@
-import {getArrayInputsOfForm} from './utils.js';
-import {validationSettings} from '../index.js';
+import {getArrayInputsOfForm, validationSettings} from './utils.js';
+
 
 function addEventForCloseButton(popup, settings={removeEvent: false}) {
     const buttonClose = popup.querySelector('.popup__close');
@@ -62,9 +62,13 @@ function closePopupToOverlay(evt) {
 
 
 function closePopupToKey(evt) {
-    const popup = document.querySelector('.popup_opened');
-    if (evt.key === 'Escape' && popup) {
-        closePopup(null, popup);
+    if (evt.key === 'Escape') {
+        const popup = document.querySelector('.popup_opened');
+        if(popup) {
+            closePopup(null, popup);
+        } else {
+            console.log('Открытых попапов нет.');
+        }
     }
 }
 
@@ -103,16 +107,16 @@ function fillInitialValuesFields(popup, arrayData=[], validationSettings=null, r
             }
         } else {
             for (let i = 0; i < popupInputs.length; i++) {
-                arrayData.textContent[i] = popupInputs[i].value;
+                arrayData[i].textContent = popupInputs[i].value;
             }
         }
         
 }
 
 
-function handleProfileEditFormSubmit(evt, popup, profileName, profileText) {
+function handleProfileEditFormSubmit(evt, popup, profileName, profileText, validationSettings=null) {
     evt.preventDefault();
-    fillInitialValuesFields(popup, [profileName, profileText], null, true);
+    fillInitialValuesFields(popup, [profileName, profileText], validationSettings, true);
     closePopup(evt);
 }
 
@@ -129,4 +133,5 @@ export {
     handleProfileEditFormSubmit, 
     handleEditAvatarFormSubmit,
     openPopup,
+    closePopup,
 };

@@ -7,6 +7,7 @@ import { handleEditAvatarFormSubmit,
          openPopup 
     } from './components/modal.js';
 import { checkValidityOfFields, enableValidationAllForms, toggleButtonSubmitState } from './components/validate.js';
+import {cardItemsList, validationSettings} from './components/utils.js';
 
 const popupAddCard = document.querySelector('#addCard');
 const popupEditProfile = document.querySelector('#editProfile');
@@ -25,24 +26,11 @@ const profileName = document.querySelector('.profile-section__name');
 const profileText = document.querySelector('.profile-section__text');
 
 
-export const validationSettings = {
-    formSelector: '.form',
-    inputSelector: '.form__input-text',
-    submitButtonSelector: '.form__save',
-    inputErrorClass: 'form__input-text_invalid',
-    errorId: null,
-    errorClassActive: 'form__title-error_active',
-
-    set setErrorId(inputId) {
-        this.errorId = `#${inputId}-error`;
-    }
-}
-
 
 
 initialCards.forEach(function(item) {
     const cardObject = getCardObject(item, popupImage);
-    insertCardInsideList(cardObject);
+    insertCardInsideList(cardObject, cardItemsList);
 });
 
 
@@ -52,7 +40,7 @@ formAddCard.addEventListener('submit', evt => {
     addCardOnPage(evt, popupAddCard);
 });
 formEditProfile.addEventListener('submit', evt => {
-    handleProfileEditFormSubmit(evt, popupEditProfile, profileName, profileText)
+    handleProfileEditFormSubmit(evt, popupEditProfile, profileName, profileText, validationSettings)
 });
 formEditAvatar.addEventListener('submit', evt => {
     handleEditAvatarFormSubmit(evt, popupEditAvatar)
