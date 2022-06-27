@@ -8,7 +8,6 @@ import { handleEditAvatarFormSubmit,
     } from './components/modal.js';
 import { checkValidityOfFields, enableValidationAllForms, toggleButtonSubmitState } from './components/validate.js';
 
-const arrayPopups = Array.from(document.querySelectorAll('.popup'));
 const popupAddCard = document.querySelector('#addCard');
 const popupEditProfile = document.querySelector('#editProfile');
 const popupEditAvatar = document.querySelector('#editAvatar');
