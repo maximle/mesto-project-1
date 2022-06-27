@@ -1,4 +1,9 @@
 .form__field {
     position: relative;
     display: block;
+    margin-block-end: 30px;
+}
+
+.form__field:last-child {
+    margin-block-end: 0;
 }
