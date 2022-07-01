@@ -1,5 +1,5 @@
-import {getArrayInputsOfForm} from './utils.js';
-import {validationSettings} from '../index.js';
+import {getArrayInputsOfForm, validationSettings} from './utils.js';
+
 
 function addEventForCloseButton(popup, settings={removeEvent: false}) {
     const buttonClose = popup.querySelector('.popup__close');

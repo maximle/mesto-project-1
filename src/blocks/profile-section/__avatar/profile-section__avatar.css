@@ -1,11 +1,9 @@
 .profile-section__avatar {
-    max-inline-size: 120px;
-    max-block-size: 120px;
-    inline-size: 100%;
-    block-size: 100%;
+    inline-size: 120px;
+    block-size: 120px;
     border-radius: 50%;
     transition: opacity 0.3s linear;
-
+    object-fit: cover;
 }
 
 
