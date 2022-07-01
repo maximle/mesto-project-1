@@ -1,4 +1,11 @@
+<<<<<<< HEAD
 export const cardItemsList = document.querySelector('.photo-grid__items');
+=======
+const userAvatar = document.querySelector('.profile-section__avatar');
+const userName = document.querySelector('.profile-section__name');
+const userAbout = document.querySelector('.profile-section__text');
+
+>>>>>>> develop
 export const validationSettings = {
     formSelector: '.form',
     inputSelector: '.form__input-text',
@@ -23,3 +30,33 @@ export function getArrayInputsOfForm(formElement, validationSettings) {
     return Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
 }
 
+export function checkPromiseResponse(response) {
+    if(response.ok) {
+        return response.json();
+    } else {
+        return Promise.reject(`Ошибка: ${response.status} - ${response.statusText}`)
+    }
+}
+
+export function initialUser(data) {
+    data
+        .then(user => {
+            if(user) {
+                userAvatar.src = user.avatar;
+                userName.textContent = user.name;
+                userAbout.textContent = user.about;
+            }
+        })
+}
+
+export function requestPromiseFromURL(settings={baseUrl: null, cohortId: null, headers: {authorization: null}}, target='') {
+    if(settings.baseUrl && settings.cohortId && settings.headers.authorization) {
+        return (
+            fetch(`${settings.baseUrl}/${settings.cohortId}/${target}`, {
+                headers: settings.headers,
+            })
+        );
+    } else {
+        console.log('Не хватает свойств, переданных функции.');
+    }
+}
