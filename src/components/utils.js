@@ -1,11 +1,9 @@
-<<<<<<< HEAD
-export const cardItemsList = document.querySelector('.photo-grid__items');
-=======
 const userAvatar = document.querySelector('.profile-section__avatar');
 const userName = document.querySelector('.profile-section__name');
 const userAbout = document.querySelector('.profile-section__text');
+export const cardItemsList = document.querySelector('.photo-grid__items');
 
->>>>>>> develop
+
 export const validationSettings = {
     formSelector: '.form',
     inputSelector: '.form__input-text',

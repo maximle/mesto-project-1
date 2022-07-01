@@ -7,13 +7,9 @@ import { handleEditAvatarFormSubmit,
          openPopup 
     } from './components/modal.js';
 import { checkValidityOfFields, enableValidationAllForms, toggleButtonSubmitState } from './components/validate.js';
-<<<<<<< HEAD
-import {cardItemsList, validationSettings} from './components/utils.js';
-=======
-import {validationSettings, initialUser} from './components/utils.js';
+import {cardItemsList, validationSettings, initialUser} from './components/utils.js';
 import { getUser, config } from './components/api.js';
 
->>>>>>> develop
 
 const popupAddCard = document.querySelector('#addCard');
 const popupEditProfile = document.querySelector('#editProfile');
@@ -33,10 +29,7 @@ const profileText = document.querySelector('.profile-section__text');
 
 const primaryUser = getUser({config: config, isMe: true});
 
-<<<<<<< HEAD
-=======
 
->>>>>>> develop
 
 initialUser(primaryUser);
 
@@ -44,9 +37,6 @@ initialCards.forEach(function(item) {
     const cardObject = getCardObject(item, popupImage);
     insertCardInsideList(cardObject, cardItemsList);
 });
-
-
-
 
 formAddCard.addEventListener('submit', evt => {
     addCardOnPage(evt, popupAddCard);
