@@ -14,6 +14,7 @@
     background-size: contain;
     opacity: 1;
     transition: opacity 0.1s linear;
+    margin-block-end: 3px;
 }
 
 .photo-grid__like-icon:hover {

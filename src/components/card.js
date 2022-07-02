@@ -12,7 +12,8 @@ function getCardObject(initialData, params = {
     classOfImage:'.photo-grid__image', 
     classOfName:'.photo-grid__name', 
     classOfLike:'.photo-grid__like-icon', 
-    classOfDelete:'.photo-grid__delete', 
+    classOfDelete:'.photo-grid__delete',
+    classOfLikes: '.photo-grid__likes', 
     }) {
 
     const cardItem = getCloneNode(params.template, params.node);
@@ -20,18 +21,22 @@ function getCardObject(initialData, params = {
     const cardName = cardItem.querySelector(params.classOfName);
     const likeButton = cardItem.querySelector(params.classOfLike);
     const buttonDelete = cardItem.querySelector(params.classOfDelete);
+    const quantityLikes = cardItem.querySelector(params.classOfLikes);
     const cardObject = {
         cardItem: cardItem, 
         cardImg: cardImg,
         cardName: cardName,
         likeButton: likeButton,
         buttonDelete: buttonDelete,
+        likes: quantityLikes,
     } 
  
 
     cardObject.cardImg.src = initialData.link;
     cardObject.cardImg.alt = initialData.name;
     cardObject.cardName.textContent = initialData.name;
+    cardObject.likes.textContent = initialData.likes.length;
+
 
     addEventLikeButton('click', cardObject, 'photo-grid__like-icon_active');
     addEventButtonDelete('click', cardObject, '.photo-grid__element-container')
@@ -79,7 +84,7 @@ function initialCards(data) {
 }
 
 function insertCardOnPage(card) {
-    const cardObject = getCardObject({link: card.link, name: card.name});
+    const cardObject = getCardObject({link: card.link, name: card.name, likes: card.likes});
         checkLoadImageFromServer(cardObject)
             .then(res => {
                 insertCardInsideList(res, cardItemsList);

@@ -43,8 +43,10 @@
 @import url(./blocks/photo-grid/__image/photo-grid__image.css);
 @import url(./blocks/photo-grid/__delete/photo-grid__delete.css);
 @import url(./blocks/photo-grid/__info/photo-grid__info.css);
+@import url(./blocks/photo-grid/__like-area/photo-grid__like-area.css);
 @import url(./blocks/photo-grid/__like-icon/photo-grid__like-icon.css);
 @import url(./blocks/photo-grid/__like-icon/_active/photo-grid__like-icon_active.css);
+@import url(./blocks/photo-grid/__likes/photo-grid__likes.css);
 @import url(./blocks/photo-grid/__name/photo-grid__name.css);
 
 /* Block footer */
