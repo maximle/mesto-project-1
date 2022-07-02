@@ -2,6 +2,8 @@ const userAvatar = document.querySelector('.profile-section__avatar');
 const userName = document.querySelector('.profile-section__name');
 const userAbout = document.querySelector('.profile-section__text');
 export const cardItemsList = document.querySelector('.photo-grid__items');
+export const popupImage = document.querySelector('#openImage');
+
 
 
 export const validationSettings = {
@@ -58,3 +60,17 @@ export function requestPromiseFromURL(settings={baseUrl: null, cohortId: null, h
         console.log('Не хватает свойств, переданных функции.');
     }
 }
+
+export function checkLoadImageFromServer(cardObject) {
+    return new Promise(function(resolve, reject) {
+        const image = document.createElement('img');
+        image.src = cardObject.cardImg.src;
+        image.onerror = function() {
+            reject(cardObject);
+        };
+        image.onload = function() {
+            resolve(cardObject);
+        };
+    });
+  }
+

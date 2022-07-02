@@ -1,11 +1,11 @@
 import {addEventOpenImagePopup, closePopup} from './modal.js';
-import {getCloneNode, cardItemsList} from './utils.js';
+import {getCloneNode, cardItemsList, checkLoadImageFromServer, popupImage} from './utils.js';
 
 function insertCardInsideList (card, container) {
     container.prepend(card.cardItem);
 }
 
-function getCardObject(initialData, popup=null, params = {
+function getCardObject(initialData, params = {
     template: '#photo-grid__item', 
     node:'.photo-grid__element-container', 
     classOfImage:'.photo-grid__image', 
@@ -20,12 +20,13 @@ function getCardObject(initialData, popup=null, params = {
     const likeButton = cardItem.querySelector(params.classOfLike);
     const buttonDelete = cardItem.querySelector(params.classOfDelete);
     const cardObject = {
-        cardItem, 
-        cardImg,
-        cardName,
-        likeButton,
-        buttonDelete,
+        cardItem: cardItem, 
+        cardImg: cardImg,
+        cardName: cardName,
+        likeButton: likeButton,
+        buttonDelete: buttonDelete,
     } 
+ 
 
     cardObject.cardImg.src = initialData.link;
     cardObject.cardImg.alt = initialData.name;
@@ -33,7 +34,7 @@ function getCardObject(initialData, popup=null, params = {
 
     addEventLikeButton('click', cardObject, 'photo-grid__like-icon_active');
     addEventButtonDelete('click', cardObject, '.photo-grid__element-container')
-    addEventOpenImagePopup('click', popup, cardObject.cardImg, cardObject.cardName);   
+    addEventOpenImagePopup('click', popupImage, cardObject.cardImg, cardObject.cardName);   
     return cardObject;
 }
 
@@ -66,4 +67,26 @@ function addEventLikeButton(typeEvent, cardObj, className) {
     });
 }
 
-export {addCardOnPage, getCardObject, insertCardInsideList};
+function initialCards(data) {
+    data
+        .then(arrayCards => {
+            if(arrayCards) {
+                arrayCards.forEach(insertCardOnPage);
+            }
+        })
+}
+
+function insertCardOnPage(card) {
+    const cardObject = getCardObject({link: card.link, name: card.name});
+        checkLoadImageFromServer(cardObject)
+            .then(res => {
+                insertCardInsideList(res, cardItemsList);
+            })
+            .catch(err => {
+                console.log(`Картинка не загрузилась. ${err.cardImg.src}`);
+            }) 
+}
+
+
+
+export {addCardOnPage, getCardObject, insertCardInsideList, initialCards};

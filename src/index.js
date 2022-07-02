@@ -1,20 +1,18 @@
 import './index.css';
 
-import initialCards from './components/cards.js';
-import { addCardOnPage, getCardObject, insertCardInsideList } from './components/card.js';
+import { addCardOnPage, initialCards} from './components/card.js';
 import { handleEditAvatarFormSubmit,
          handleProfileEditFormSubmit,
          openPopup 
     } from './components/modal.js';
 import { checkValidityOfFields, enableValidationAllForms, toggleButtonSubmitState } from './components/validate.js';
 import {cardItemsList, validationSettings, initialUser} from './components/utils.js';
-import { getUser, config } from './components/api.js';
+import { getUser, getCards, config } from './components/api.js';
 
 
 const popupAddCard = document.querySelector('#addCard');
 const popupEditProfile = document.querySelector('#editProfile');
 const popupEditAvatar = document.querySelector('#editAvatar');
-const popupImage = document.querySelector('#openImage');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
 const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
@@ -28,15 +26,13 @@ const profileName = document.querySelector('.profile-section__name');
 const profileText = document.querySelector('.profile-section__text');
 
 const primaryUser = getUser({config: config, isMe: true});
+const primaryCards = getCards();
 
 
 
 initialUser(primaryUser);
+initialCards(primaryCards);
 
-initialCards.forEach(function(item) {
-    const cardObject = getCardObject(item, popupImage);
-    insertCardInsideList(cardObject, cardItemsList);
-});
 
 formAddCard.addEventListener('submit', evt => {
     addCardOnPage(evt, popupAddCard);

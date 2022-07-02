@@ -26,6 +26,21 @@ function getUser(settings={idUser: false, isMe: false}) {
     }
   }
 
+function getCards() {
+    return (
+        requestPromiseFromURL(config, 'cards')
+        .then(checkPromiseResponse)
+        .then(arrayCards => {
+            return arrayCards;
+        })
+        .catch(error => {
+            console.log(error);
+            return false;
+        })
+    );
+}
 
-export {config, getUser};
+function updateProfileInformation()
+
+export {config, getUser, getCards};
   
