@@ -1,4 +1,4 @@
-import {checkPromiseResponse, requestPromiseFromURL} from './utils.js';
+import {checkPromiseResponse, requestPromiseFromURL, userObject} from './utils.js';
 
 const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1',
@@ -85,7 +85,10 @@ function updateProfileInformation(settings={
         requestPromiseFromURL(configForRequest, 'users/me')
             .then(checkPromiseResponse)
             .then(updatedUser => {
-                console.log(updatedUser);
+                userObject.name = updatedUser.name;
+                userObject.description = updatedUser.about;
+                userObject.avatar = updatedUser.avatar;
+                userObject['_id'] = updatedUser['_id'];
             })
             .catch(error => {
                 console.log(error);

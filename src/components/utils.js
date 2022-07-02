@@ -1,6 +1,13 @@
 const userAvatar = document.querySelector('.profile-section__avatar');
 const userName = document.querySelector('.profile-section__name');
 const userAbout = document.querySelector('.profile-section__text');
+
+export const userObject = {
+    name: '',
+    description: '',
+    avatar: '',
+    '_id': ''
+};
 export const cardItemsList = document.querySelector('.photo-grid__items');
 export const popupImage = document.querySelector('#openImage');
 
@@ -45,6 +52,10 @@ export function initialUser(data) {
                 userAvatar.src = user.avatar;
                 userName.textContent = user.name;
                 userAbout.textContent = user.about;
+                userObject.avatar = user.avatar;
+                userObject.name = user.name;
+                userObject.description = user.about;
+                userObject['_id'] = user['_id'];
             }
         })
 }

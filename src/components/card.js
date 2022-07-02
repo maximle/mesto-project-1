@@ -1,5 +1,5 @@
 import {addEventOpenImagePopup, closePopup} from './modal.js';
-import {getCloneNode, cardItemsList, checkLoadImageFromServer, popupImage} from './utils.js';
+import {getCloneNode, cardItemsList, checkLoadImageFromServer, popupImage, userObject} from './utils.js';
 import {addCardOnServer} from './api.js';
 
 function insertCardInsideList (card, container) {
@@ -29,17 +29,33 @@ function getCardObject(initialData, params = {
         likeButton: likeButton,
         buttonDelete: buttonDelete,
         likes: quantityLikes,
+        ownerId: '',
     } 
  
-
+    
     cardObject.cardImg.src = initialData.link;
     cardObject.cardImg.alt = initialData.name;
     cardObject.cardName.textContent = initialData.name;
-    cardObject.likes.textContent = initialData.likes.length;
+    if(initialData.likes){
+        cardObject.likes.textContent = initialData.likes.length;
+    } else {
+        cardObject.likes.textContent = 0;
+    }
 
+    if(initialData.ownerId) {
+        cardObject.ownerId = initialData.ownerId;
+    } else {
+        cardObject.ownerId = userObject['_id'];
+    }
+    
+
+    
+    if(cardObject.ownerId === userObject['_id']) {
+        cardObject.buttonDelete.classList.add('photo-grid__delete_active');
+        addEventButtonDelete('click', cardObject, '.photo-grid__element-container');
+    }
 
     addEventLikeButton('click', cardObject, 'photo-grid__like-icon_active');
-    addEventButtonDelete('click', cardObject, '.photo-grid__element-container')
     addEventOpenImagePopup('click', popupImage, cardObject.cardImg, cardObject.cardName);   
     return cardObject;
 }
@@ -84,7 +100,8 @@ function initialCards(data) {
 }
 
 function insertCardOnPage(card) {
-    const cardObject = getCardObject({link: card.link, name: card.name, likes: card.likes});
+    
+    const cardObject = getCardObject({link: card.link, name: card.name, likes: card.likes, ownerId: card.owner['_id']});
         checkLoadImageFromServer(cardObject)
             .then(res => {
                 insertCardInsideList(res, cardItemsList);
