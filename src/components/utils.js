@@ -49,12 +49,16 @@ export function initialUser(data) {
         })
 }
 
-export function requestPromiseFromURL(settings={baseUrl: null, cohortId: null, headers: {authorization: null}}, target='') {
-    if(settings.baseUrl && settings.cohortId && settings.headers.authorization) {
+export function requestPromiseFromURL(settings={
+    config: {
+        baseUrl: null, 
+        cohortId: null,
+     }, 
+     options: {}}, 
+    target='') {
+    if(settings.config.baseUrl && settings.config.cohortId && settings.options.headers.authorization) {
         return (
-            fetch(`${settings.baseUrl}/${settings.cohortId}/${target}`, {
-                headers: settings.headers,
-            })
+            fetch(`${settings.config.baseUrl}/${settings.config.cohortId}/${target}`, settings.options)
         );
     } else {
         console.log('Не хватает свойств, переданных функции.');

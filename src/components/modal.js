@@ -1,4 +1,4 @@
-import {getArrayInputsOfForm, validationSettings} from './utils.js';
+import {updateProfileInformation, config} from './api.js';
 
 
 function addEventForCloseButton(popup, settings={removeEvent: false}) {
@@ -41,7 +41,7 @@ function openPopup(popup, formElement=null, settings={needReset: false, fillInit
         formElement.reset();
     }
     if(settings.fillInitialValuesFields) {
-        fillInitialValuesFields(popup, settings.fillInitialValuesFields, validationSettings);
+        fillInitialValuesFields(popup, settings.fillInitialValuesFields);
     }
     addEventForClosePopup(popup);
 }
@@ -93,30 +93,29 @@ function addEventForClosePopup(popup, settings={removeAllCloseEvent: false}) {
 }
 
 
-function fillInitialValuesFields(popup, arrayData=[], validationSettings=null, reverse=false) {
-    const popupInputs = getArrayInputsOfForm(popup, validationSettings);
-        if(popupInputs.length !== arrayData.length) {
-            console.log(`Массивы должны быть равны по длине. 
-            Сейчас popupInputs.length(${popupInputs.length} не равен 
-                arrayData.length(${arrayData.length})`);
-            return false;
-        } 
+function fillInitialValuesFields(popup, arrayData=[], reverse=false) {
+    const form = popup.querySelector('.form');
         if(!reverse) {
-            for (let i = 0; i < popupInputs.length; i++) {
-                popupInputs[i].value = arrayData[i].textContent;
-            }
+            form.elements.name.value = arrayData[0].textContent;
+            form.elements.description.value = arrayData[1].textContent;
         } else {
-            for (let i = 0; i < popupInputs.length; i++) {
-                arrayData[i].textContent = popupInputs[i].value;
-            }
+            arrayData[0].textContent = form.elements.name.value;
+            arrayData[1].textContent = form.elements.description.value;
+            updateProfileInformation({
+                information: {
+                    name: form.elements.name.value,
+                    description: form.elements.description.value,
+                }
+            })
         }
         
 }
 
 
+
 function handleProfileEditFormSubmit(evt, popup, profileName, profileText, validationSettings=null) {
     evt.preventDefault();
-    fillInitialValuesFields(popup, [profileName, profileText], validationSettings, true);
+    fillInitialValuesFields(popup, [profileName, profileText], true);
     closePopup(evt);
 }
 

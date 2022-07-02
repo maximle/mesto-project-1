@@ -1,5 +1,6 @@
 import {addEventOpenImagePopup, closePopup} from './modal.js';
 import {getCloneNode, cardItemsList, checkLoadImageFromServer, popupImage} from './utils.js';
+import {addCardOnServer} from './api.js';
 
 function insertCardInsideList (card, container) {
     container.prepend(card.cardItem);
@@ -47,8 +48,9 @@ function addCardOnPage(evt, popup) {
         {
         link: inputSourceImg.value, 
         name: inputNameCard.value
-        }, popup);
+        });
     insertCardInsideList(cardObject, cardItemsList);
+    addCardOnServer({information: {name: cardObject.cardName, link: cardObject.cardImg.src}});
     closePopup(evt);
 }
 

@@ -9,11 +9,29 @@ const config = {
     }
   }
 
+  const configTemplate = {
+    config: {
+        baseUrl: config.baseUrl, 
+        cohortId: config.cohortId,
+    }, 
+    options: {
+        method: '',
+        headers: config.headers,
+        body: null
+}};
+  
 
 function getUser(settings={idUser: false, isMe: false}) {
     if(settings.isMe) {
         return (
-            requestPromiseFromURL(config, 'users/me')
+            requestPromiseFromURL({config: {
+                baseUrl: config.baseUrl,
+                cohortId: config.cohortId
+            },
+            options: {
+                headers: config.headers,
+            }
+            }, 'users/me')
             .then(checkPromiseResponse)
             .then(user => {
                 return user;
@@ -28,7 +46,15 @@ function getUser(settings={idUser: false, isMe: false}) {
 
 function getCards() {
     return (
-        requestPromiseFromURL(config, 'cards')
+        requestPromiseFromURL({
+            config: {
+                baseUrl: config.baseUrl,
+                cohortId: config.cohortId
+        },
+        options: {
+            headers: config.headers,
+        }
+        }, 'cards')
         .then(checkPromiseResponse)
         .then(arrayCards => {
             return arrayCards;
@@ -40,7 +66,55 @@ function getCards() {
     );
 }
 
-function updateProfileInformation()
+function updateProfileInformation(settings={
+    information: {
+        name: '', description: ''
+    }}
+    ) {
 
-export {config, getUser, getCards};
+        const configForRequest = configTemplate;
+        configForRequest.options.method = 'PATCH';
+        configForRequest.options.body = JSON.stringify(
+            {
+            name: `${settings.information.name}`,
+            about: `${settings.information.description}`
+        }
+        );
+
+
+        requestPromiseFromURL(configForRequest, 'users/me')
+            .then(checkPromiseResponse)
+            .then(updatedUser => {
+                console.log(updatedUser);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+}
+
+function addCardOnServer(settings={
+    information: {
+        name: '', link: ''
+    }}
+    ) {
+        const configForRequest = configTemplate;
+        configForRequest.options.method = 'POST';
+        configForRequest.options.body = JSON.stringify(
+            {
+            name: `${settings.information.name}`,
+            link: `${settings.information.link}`
+        }
+        );
+
+        requestPromiseFromURL(configForRequest, 'cards')
+            .then(checkPromiseResponse)
+            .then(card => {
+                console.log(card);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+    }
+
+export {config, getUser, getCards, updateProfileInformation, addCardOnServer};
   
