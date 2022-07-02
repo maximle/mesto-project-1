@@ -30,25 +30,17 @@ function getCardObject(initialData, params = {
         buttonDelete: buttonDelete,
         likes: quantityLikes,
         ownerId: '',
+        cardId: '',
     } 
  
     
     cardObject.cardImg.src = initialData.link;
     cardObject.cardImg.alt = initialData.name;
     cardObject.cardName.textContent = initialData.name;
-    if(initialData.likes){
-        cardObject.likes.textContent = initialData.likes.length;
-    } else {
-        cardObject.likes.textContent = 0;
-    }
 
-    if(initialData.ownerId) {
-        cardObject.ownerId = initialData.ownerId;
-    } else {
-        cardObject.ownerId = userObject['_id'];
-    }
-    
+    cardObject.likes.textContent = initialData.likes.length;
 
+    cardObject.ownerId = initialData.owner['_id'];
     
     if(cardObject.ownerId === userObject['_id']) {
         cardObject.buttonDelete.classList.add('photo-grid__delete_active');
@@ -65,13 +57,14 @@ function addCardOnPage(evt, popup) {
     evt.preventDefault();
     const inputSourceImg = popup.querySelectorAll('.form__input-text')[1];
     const inputNameCard = popup.querySelectorAll('.form__input-text')[0];
-    const cardObject = getCardObject(
-        {
-        link: inputSourceImg.value, 
-        name: inputNameCard.value
-        });
-    insertCardInsideList(cardObject, cardItemsList);
-    addCardOnServer({information: {name: cardObject.cardName, link: cardObject.cardImg.src}});
+    addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
+        .then(card => {
+            if(card) {
+                const cardObject = getCardObject(card);
+                insertCardInsideList(cardObject, cardItemsList);
+            }
+        })
+    
     closePopup(evt);
 }
 
@@ -100,8 +93,7 @@ function initialCards(data) {
 }
 
 function insertCardOnPage(card) {
-    
-    const cardObject = getCardObject({link: card.link, name: card.name, likes: card.likes, ownerId: card.owner['_id']});
+    const cardObject = getCardObject(card);
         checkLoadImageFromServer(cardObject)
             .then(res => {
                 insertCardInsideList(res, cardItemsList);

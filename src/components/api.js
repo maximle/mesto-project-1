@@ -108,15 +108,18 @@ function addCardOnServer(settings={
             link: `${settings.information.link}`
         }
         );
-
-        requestPromiseFromURL(configForRequest, 'cards')
+        return(
+            requestPromiseFromURL(configForRequest, 'cards')
             .then(checkPromiseResponse)
             .then(card => {
-                console.log(card);
+                return card;
             })
             .catch(error => {
                 console.log(error);
+                return false;
             })
+        );
+        
     }
 
 export {config, getUser, getCards, updateProfileInformation, addCardOnServer};
