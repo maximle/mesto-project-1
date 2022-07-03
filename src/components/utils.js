@@ -1,3 +1,6 @@
+import { closePopup, openPopup } from "./modal.js";
+
+
 const userAvatar = document.querySelector('.profile-section__avatar');
 const userName = document.querySelector('.profile-section__name');
 const userAbout = document.querySelector('.profile-section__text');
@@ -89,3 +92,16 @@ export function checkLoadImageFromServer(cardObject) {
     });
   }
 
+export function confirmDelete(cardElement) {
+    const popupConfirmDelete = document.querySelector('#confirmDelete');
+    const formConfirm = popupConfirmDelete.querySelector('.form');
+    openPopup(popupConfirmDelete);
+    formConfirm.addEventListener('submit', {handleEvent: confirmDeleteCallback, cardElement: cardElement});    
+}
+
+export function confirmDeleteCallback(evt) {
+    evt.preventDefault();
+    this.cardElement.remove();
+    evt.target.removeEventListener('submit', this);
+    closePopup(evt);
+}

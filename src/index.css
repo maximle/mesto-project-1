@@ -75,6 +75,8 @@
 @import url(./blocks/form/__title-error/form__title-error.css);
 @import url(./blocks/form/__title-error/_active/form__title-error_active.css);
 @import url(./blocks/form/__inputs/form__inputs.css);
+@import url(./blocks/form/__inputs/_form-confirm-delete/form__inputs_form-confirm-delete.css);
 @import url(./blocks/form/__field/form__field.css);
 @import url(./blocks/form/__save/form__save.css);
 @import url(./blocks/form/__title/form__title.css);
+@import url(./blocks/form/__title/_form-confirm-delete/form__title_form-confirm-delete.css);

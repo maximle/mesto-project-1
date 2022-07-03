@@ -183,6 +183,29 @@
       </div>
     </div>
 
+    <div class="popup" id="confirmDelete">
+      <div class="popup__container">
+        <button type="button" class="popup__close"></button>
+        <form
+          name="formConfirmDelete"
+          id="formConfirmDelete"
+          class="form"
+          action="#"
+          method="post"
+        >
+          <fieldset
+            form="formConfirmDelete"
+            class="form__inputs form__inputs_form-confirm-delete"
+          >
+            <legend class="form__title form__title_form-confirm-delete">
+              Вы уверены?
+            </legend>
+          </fieldset>
+          <button type="submit" class="form__save">Да</button>
+        </form>
+      </div>
+    </div>
+
     <template id="photo-grid__item">
       <li class="photo-grid__element-container">
         <button class="photo-grid__delete" type="button"></button>

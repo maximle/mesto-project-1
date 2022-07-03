@@ -35,7 +35,7 @@ function closePopup(evt=null, popup=null) {
 }
 
 
-function openPopup(popup, formElement=null, settings={needReset: false, fillInitialValuesFields:[]}) {
+function openPopup(popup, formElement=null, settings={needReset: false, fillInitialValuesFields: null}) {
     popup.classList.add('popup_opened');
     if(settings.needReset) {
         formElement.reset();

@@ -1,5 +1,13 @@
 import {addEventOpenImagePopup, closePopup} from './modal.js';
-import {getCloneNode, cardItemsList, checkLoadImageFromServer, popupImage, userObject} from './utils.js';
+import {
+    getCloneNode, 
+    cardItemsList, 
+    checkLoadImageFromServer, 
+    popupImage, 
+    userObject, 
+    confirmDelete,
+    confirmDeleteCallback
+} from './utils.js';
 import {addCardOnServer} from './api.js';
 
 function insertCardInsideList (card, container) {
@@ -37,9 +45,7 @@ function getCardObject(initialData, params = {
     cardObject.cardImg.src = initialData.link;
     cardObject.cardImg.alt = initialData.name;
     cardObject.cardName.textContent = initialData.name;
-
     cardObject.likes.textContent = initialData.likes.length;
-
     cardObject.ownerId = initialData.owner['_id'];
     
     if(cardObject.ownerId === userObject['_id']) {
@@ -73,9 +79,10 @@ function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
     cardObj.buttonDelete.addEventListener(typeEvent, function(evt) {
         const currentButtonDelete = evt.target;
         const cardElement = currentButtonDelete.closest(parentClassName);
-        cardElement.remove();
+        confirmDelete(cardElement);
     });
 }
+
 
 function addEventLikeButton(typeEvent, cardObj, className) {
     cardObj.likeButton.addEventListener(typeEvent, function() {
