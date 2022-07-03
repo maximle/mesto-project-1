@@ -122,5 +122,84 @@ function addCardOnServer(settings={
         
     }
 
-export {config, getUser, getCards, updateProfileInformation, addCardOnServer};
+
+function deleteCardFromServer(idObj) {
+    const configForRequest = configTemplate;
+    configForRequest.options.method = 'DELETE';
+    requestPromiseFromURL(configForRequest, `cards/${idObj}`)
+        .then(checkPromiseResponse)
+        .then(res => {
+            console.log(res);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+    }
+
+
+function likeCard(settings={cardObject: {}, deleteLike: false}) {
+    const configForRequest = configTemplate;
+    if(settings.deleteLike) {
+        configForRequest.options.method = 'DELETE';
+        return (
+            requestPromiseFromURL(configForRequest, `cards/likes/${settings.cardObject.cardId}`)
+                .then(checkPromiseResponse)
+                .then(card => {
+                    return card;
+                })
+                .catch(error => {
+                    console.log(error);
+                    return false;
+                })
+        );
+    } else {
+        configForRequest.options.method = 'PUT';
+        return (
+            requestPromiseFromURL(configForRequest, `cards/likes/${settings.cardObject.cardId}`)
+                .then(checkPromiseResponse)
+                .then(card => {
+                    return card;
+                })
+                .catch(error => {
+                    console.log(error);
+                    return false;
+                })
+        );
+    }
+    
+}
+
+function updateAvatar(settings={link: ''}) {
+    const configForRequest = configTemplate;
+    configForRequest.options.method = 'PATCH';
+    configForRequest.options.body = JSON.stringify(
+        {
+        avatar: `${settings.link}`,
+    }
+    );
+    return(
+        requestPromiseFromURL(configForRequest, 'users/me/avatar')
+        .then(checkPromiseResponse)
+        .then(updatedUser => {
+            userObject.avatar = updatedUser.avatar;
+            return updatedUser.avatar;
+        })
+        .catch(error => {
+            console.log(error);
+            return false;
+        })
+    );
+    
+}
+
+export {
+    config, 
+    getUser, 
+    getCards, 
+    updateProfileInformation, 
+    addCardOnServer, 
+    deleteCardFromServer,
+    likeCard,
+    updateAvatar,
+};
   

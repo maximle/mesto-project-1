@@ -1,4 +1,4 @@
-import {updateProfileInformation, config} from './api.js';
+import {updateProfileInformation, config, updateAvatar} from './api.js';
 
 
 function addEventForCloseButton(popup, settings={removeEvent: false}) {
@@ -123,7 +123,12 @@ function handleEditAvatarFormSubmit(evt, popup) {
     evt.preventDefault();
     const profileAvatar = document.querySelector('.profile-section__avatar');
     const inputLinkToAvatar = popup.querySelector('.form__input-text');
-    profileAvatar.src = inputLinkToAvatar.value;
+    updateAvatar({link: inputLinkToAvatar.value})
+        .then(userAvatar => {
+            if(userAvatar) {
+                profileAvatar.src = userAvatar;
+            }
+        })
     closePopup(evt);
 }
 

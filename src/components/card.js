@@ -8,7 +8,7 @@ import {
     confirmDelete,
     confirmDeleteCallback
 } from './utils.js';
-import {addCardOnServer} from './api.js';
+import {addCardOnServer, likeCard} from './api.js';
 
 function insertCardInsideList (card, container) {
     container.prepend(card.cardItem);
@@ -47,6 +47,7 @@ function getCardObject(initialData, params = {
     cardObject.cardName.textContent = initialData.name;
     cardObject.likes.textContent = initialData.likes.length;
     cardObject.ownerId = initialData.owner['_id'];
+    cardObject.cardId = initialData['_id'];
     
     if(cardObject.ownerId === userObject['_id']) {
         cardObject.buttonDelete.classList.add('photo-grid__delete_active');
@@ -79,7 +80,7 @@ function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
     cardObj.buttonDelete.addEventListener(typeEvent, function(evt) {
         const currentButtonDelete = evt.target;
         const cardElement = currentButtonDelete.closest(parentClassName);
-        confirmDelete(cardElement);
+        confirmDelete(cardElement, cardObj);
     });
 }
 
@@ -87,6 +88,22 @@ function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
 function addEventLikeButton(typeEvent, cardObj, className) {
     cardObj.likeButton.addEventListener(typeEvent, function() {
         cardObj.likeButton.classList.toggle(className);
+        if(cardObj.likeButton.classList.contains(className)) {
+            likeCard({cardObject: cardObj})
+                .then(card => {
+                    if(card){
+                        cardObj.likes.textContent = card.likes.length;
+
+                    }
+                })
+        } else {
+            likeCard({cardObject: cardObj, deleteLike: true})
+                .then(card => {
+                    if(card){
+                        cardObj.likes.textContent = card.likes.length;
+                    }
+                })
+        }
     });
 }
 

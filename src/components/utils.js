@@ -1,4 +1,5 @@
 import { closePopup, openPopup } from "./modal.js";
+import {deleteCardFromServer} from "./api.js";
 
 
 const userAvatar = document.querySelector('.profile-section__avatar');
@@ -92,16 +93,17 @@ export function checkLoadImageFromServer(cardObject) {
     });
   }
 
-export function confirmDelete(cardElement) {
+export function confirmDelete(cardElement, cardObject) {
     const popupConfirmDelete = document.querySelector('#confirmDelete');
     const formConfirm = popupConfirmDelete.querySelector('.form');
     openPopup(popupConfirmDelete);
-    formConfirm.addEventListener('submit', {handleEvent: confirmDeleteCallback, cardElement: cardElement});    
+    formConfirm.addEventListener('submit', {handleEvent: confirmDeleteCallback, cardElement: cardElement, cardObject: cardObject});    
 }
 
 export function confirmDeleteCallback(evt) {
     evt.preventDefault();
     this.cardElement.remove();
+    deleteCardFromServer(this.cardObject.cardId);
     evt.target.removeEventListener('submit', this);
     closePopup(evt);
 }
