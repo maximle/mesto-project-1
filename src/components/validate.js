@@ -42,20 +42,26 @@ function isValid(formElement, input, validationSettings) {
 
 function setEventListenersForInputs(formElement, validationSettings) {
     const formInputs = getArrayInputsOfForm(formElement, validationSettings);
-    formInputs.forEach(input => {
-        input.addEventListener('input', () => {
-            toggleButtonSubmitState(formElement, validationSettings);
-            isValid(formElement, input, validationSettings);
+    if(formInputs) {
+        formInputs.forEach(input => {
+            input.addEventListener('input', () => {
+                toggleButtonSubmitState(formElement, validationSettings);
+                isValid(formElement, input, validationSettings);
+            });
         });
-    });
+    }
 }
 
 function checkValidityOfFields(formElement, validationSettings) {
-    getArrayInputsOfForm(formElement, validationSettings).forEach(input => {
-        if(input.value.length > 0){
-            isValid(formElement, input, validationSettings);
-        }
-    });
+    const inputsArray = getArrayInputsOfForm(formElement, validationSettings);
+    if(inputsArray) {
+        inputsArray.forEach(input => {
+            if(input.value.length > 0){
+                isValid(formElement, input, validationSettings);
+            }
+        });
+    }
+    
 }
 
 

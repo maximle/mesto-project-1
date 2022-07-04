@@ -1,10 +1,18 @@
-import { closePopup, openPopup } from "./modal.js";
+import { closePopup, openPopup, handleEditAvatarFormSubmit, handleProfileEditFormSubmit } from "./modal.js";
 import {deleteCardFromServer} from "./api.js";
+import {addCardOnPage} from './card.js'
 
 
 const userAvatar = document.querySelector('.profile-section__avatar');
 const userName = document.querySelector('.profile-section__name');
 const userAbout = document.querySelector('.profile-section__text');
+
+export const formsAndHandlers = {
+    'formAddCard': addCardOnPage,
+    'formEditPofile': handleProfileEditFormSubmit,
+    'formEditAvatar': handleEditAvatarFormSubmit,
+    'formConfirmDelete': confirmDeleteCallback,
+}
 
 export const userObject = {
     name: '',
@@ -38,7 +46,11 @@ export function getCloneNode(template, desiredNode) {
 
 
 export function getArrayInputsOfForm(formElement, validationSettings) {
-    return Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
+    if(formElement.querySelector(validationSettings.inputSelector)) {
+        return Array.from(formElement.querySelectorAll(validationSettings.inputSelector));
+    } else {
+        return false;
+    }
 }
 
 export function checkPromiseResponse(response) {
@@ -95,9 +107,8 @@ export function checkLoadImageFromServer(cardObject) {
 
 export function confirmDelete(cardElement, cardObject) {
     const popupConfirmDelete = document.querySelector('#confirmDelete');
-    const formConfirm = popupConfirmDelete.querySelector('.form');
-    openPopup(popupConfirmDelete);
-    formConfirm.addEventListener('submit', {handleEvent: confirmDeleteCallback, cardElement: cardElement, cardObject: cardObject});    
+    const formConfirm = popupConfirmDelete.querySelector('#formConfirmDelete');
+    openPopup({popup: popupConfirmDelete, formElement: formConfirm, cardElement: cardElement, cardObject: cardObject});
 }
 
 export function confirmDeleteCallback(evt) {
@@ -105,5 +116,19 @@ export function confirmDeleteCallback(evt) {
     this.cardElement.remove();
     deleteCardFromServer(this.cardObject.cardId);
     evt.target.removeEventListener('submit', this);
-    closePopup(evt);
+    closePopup(this.popup);
+}
+
+export function getDataOnRequestToServer(settings={configForRequest: {}, targetLink: ''}) {
+    return (
+        requestPromiseFromURL(settings.configForRequest, settings.targetLink)
+        .then(checkPromiseResponse)
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+            return false;
+        })
+    );  
 }

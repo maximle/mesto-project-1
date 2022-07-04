@@ -1,4 +1,4 @@
-import {checkPromiseResponse, requestPromiseFromURL, userObject} from './utils.js';
+import {checkPromiseResponse, requestPromiseFromURL, userObject, getDataOnRequestToServer} from './utils.js';
 
 const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1',
@@ -15,53 +15,28 @@ const config = {
         cohortId: config.cohortId,
     }, 
     options: {
-        method: '',
         headers: config.headers,
-        body: null
 }};
   
 
 function getUser(settings={idUser: false, isMe: false}) {
+    const configForRequest = configTemplate;
     if(settings.isMe) {
         return (
-            requestPromiseFromURL({config: {
-                baseUrl: config.baseUrl,
-                cohortId: config.cohortId
-            },
-            options: {
-                headers: config.headers,
-            }
-            }, 'users/me')
-            .then(checkPromiseResponse)
-            .then(user => {
-                return user;
-            })
-            .catch(error => {
-                console.log(error);
-                return false;
+            getDataOnRequestToServer({
+                configForRequest: configForRequest,
+                targetLink: 'users/me',
             })
         );
     }
   }
 
 function getCards() {
+    const configForRequest = configTemplate;
     return (
-        requestPromiseFromURL({
-            config: {
-                baseUrl: config.baseUrl,
-                cohortId: config.cohortId
-        },
-        options: {
-            headers: config.headers,
-        }
-        }, 'cards')
-        .then(checkPromiseResponse)
-        .then(arrayCards => {
-            return arrayCards;
-        })
-        .catch(error => {
-            console.log(error);
-            return false;
+        getDataOnRequestToServer({
+            configForRequest: configForRequest,
+            targetLink: 'cards',
         })
     );
 }
@@ -81,18 +56,12 @@ function updateProfileInformation(settings={
         }
         );
 
-
-        requestPromiseFromURL(configForRequest, 'users/me')
-            .then(checkPromiseResponse)
-            .then(updatedUser => {
-                userObject.name = updatedUser.name;
-                userObject.description = updatedUser.about;
-                userObject.avatar = updatedUser.avatar;
-                userObject['_id'] = updatedUser['_id'];
+        return (
+            getDataOnRequestToServer({
+                configForRequest: configForRequest,
+                targetLink: 'users/me',
             })
-            .catch(error => {
-                console.log(error);
-            })
+        );
 }
 
 function addCardOnServer(settings={
@@ -109,14 +78,9 @@ function addCardOnServer(settings={
         }
         );
         return(
-            requestPromiseFromURL(configForRequest, 'cards')
-            .then(checkPromiseResponse)
-            .then(card => {
-                return card;
-            })
-            .catch(error => {
-                console.log(error);
-                return false;
+            getDataOnRequestToServer({
+                configForRequest: configForRequest,
+                targetLink: 'cards',
             })
         );
         
@@ -126,14 +90,10 @@ function addCardOnServer(settings={
 function deleteCardFromServer(idObj) {
     const configForRequest = configTemplate;
     configForRequest.options.method = 'DELETE';
-    requestPromiseFromURL(configForRequest, `cards/${idObj}`)
-        .then(checkPromiseResponse)
-        .then(res => {
-            console.log(res);
-        })
-        .catch(error => {
-            console.log(error);
-        })
+    getDataOnRequestToServer({
+        configForRequest: configForRequest,
+        targetLink: `cards/${idObj}`,
+    })
     }
 
 
@@ -141,32 +101,15 @@ function likeCard(settings={cardObject: {}, deleteLike: false}) {
     const configForRequest = configTemplate;
     if(settings.deleteLike) {
         configForRequest.options.method = 'DELETE';
-        return (
-            requestPromiseFromURL(configForRequest, `cards/likes/${settings.cardObject.cardId}`)
-                .then(checkPromiseResponse)
-                .then(card => {
-                    return card;
-                })
-                .catch(error => {
-                    console.log(error);
-                    return false;
-                })
-        );
     } else {
         configForRequest.options.method = 'PUT';
-        return (
-            requestPromiseFromURL(configForRequest, `cards/likes/${settings.cardObject.cardId}`)
-                .then(checkPromiseResponse)
-                .then(card => {
-                    return card;
-                })
-                .catch(error => {
-                    console.log(error);
-                    return false;
-                })
-        );
     }
-    
+    return (
+        getDataOnRequestToServer({
+            configForRequest: configForRequest,
+            targetLink: `cards/likes/${settings.cardObject.cardId}`,
+        })
+    );    
 }
 
 function updateAvatar(settings={link: ''}) {
@@ -178,18 +121,11 @@ function updateAvatar(settings={link: ''}) {
     }
     );
     return(
-        requestPromiseFromURL(configForRequest, 'users/me/avatar')
-        .then(checkPromiseResponse)
-        .then(updatedUser => {
-            userObject.avatar = updatedUser.avatar;
-            return updatedUser.avatar;
-        })
-        .catch(error => {
-            console.log(error);
-            return false;
+        getDataOnRequestToServer({
+            configForRequest: configForRequest,
+            targetLink: 'users/me/avatar',
         })
     );
-    
 }
 
 export {

@@ -6,7 +6,6 @@ import {
     popupImage, 
     userObject, 
     confirmDelete,
-    confirmDeleteCallback
 } from './utils.js';
 import {addCardOnServer, likeCard} from './api.js';
 
@@ -60,17 +59,18 @@ function getCardObject(initialData, params = {
 }
 
 
-function addCardOnPage(evt, popup) {
+function addCardOnPage(evt) {
     evt.preventDefault();
+    const popup = evt.target.closest('.popup');
     const inputSourceImg = popup.querySelectorAll('.form__input-text')[1];
     const inputNameCard = popup.querySelectorAll('.form__input-text')[0];
+
     const btn = evt.target.querySelector('.form__save');
     const btnPrimaryValue = btn.textContent;
     btn.textContent = 'Сохранение...';
+
     setTimeout(() => {
-        for(let i=0; i<30000; i++) {
-            console.log(i);
-        }
+        
         addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
         .then(card => {
             if(card) {
@@ -79,11 +79,13 @@ function addCardOnPage(evt, popup) {
             }
         })
     
-        closePopup(evt);
+        closePopup(popup);
+
         btn.textContent = btnPrimaryValue;
     }, 1);
     
 }
+
 
 function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
 
@@ -103,7 +105,6 @@ function addEventLikeButton(typeEvent, cardObj, className) {
                 .then(card => {
                     if(card){
                         cardObj.likes.textContent = card.likes.length;
-
                     }
                 })
         } else {
