@@ -115,21 +115,42 @@ function fillInitialValuesFields(popup, arrayData=[], reverse=false) {
 
 function handleProfileEditFormSubmit(evt, popup, profileName, profileText, validationSettings=null) {
     evt.preventDefault();
-    fillInitialValuesFields(popup, [profileName, profileText], true);
-    closePopup(evt);
+    const btn = evt.target.querySelector('.form__save');
+    const btnPrimaryValue = btn.textContent;
+    btn.textContent = 'Сохранение...';
+    setTimeout(() => {
+        for(let i=0; i<30000; i++) {
+            console.log(i);
+        }
+        fillInitialValuesFields(popup, [profileName, profileText], true);
+        closePopup(evt);
+        btn.textContent = btnPrimaryValue;
+    }, 1);
+    
 }
 
 function handleEditAvatarFormSubmit(evt, popup) {
     evt.preventDefault();
     const profileAvatar = document.querySelector('.profile-section__avatar');
     const inputLinkToAvatar = popup.querySelector('.form__input-text');
-    updateAvatar({link: inputLinkToAvatar.value})
+
+    const btn = evt.target.querySelector('.form__save');
+    const btnPrimaryValue = btn.textContent;
+    btn.textContent = 'Сохранение...';
+    setTimeout(() => {
+        for(let i=0; i<30000; i++) {
+            console.log(i);
+        }
+        updateAvatar({link: inputLinkToAvatar.value})
         .then(userAvatar => {
             if(userAvatar) {
                 profileAvatar.src = userAvatar;
             }
         })
-    closePopup(evt);
+        closePopup(evt);
+        btn.textContent = btnPrimaryValue;
+    }, 1);
+    
 }
 
 export {

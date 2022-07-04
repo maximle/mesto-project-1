@@ -64,7 +64,14 @@ function addCardOnPage(evt, popup) {
     evt.preventDefault();
     const inputSourceImg = popup.querySelectorAll('.form__input-text')[1];
     const inputNameCard = popup.querySelectorAll('.form__input-text')[0];
-    addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
+    const btn = evt.target.querySelector('.form__save');
+    const btnPrimaryValue = btn.textContent;
+    btn.textContent = 'Сохранение...';
+    setTimeout(() => {
+        for(let i=0; i<30000; i++) {
+            console.log(i);
+        }
+        addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
         .then(card => {
             if(card) {
                 const cardObject = getCardObject(card);
@@ -72,7 +79,10 @@ function addCardOnPage(evt, popup) {
             }
         })
     
-    closePopup(evt);
+        closePopup(evt);
+        btn.textContent = btnPrimaryValue;
+    }, 1);
+    
 }
 
 function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
