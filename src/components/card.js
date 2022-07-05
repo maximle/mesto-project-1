@@ -13,7 +13,7 @@ function insertCardInsideList (card, container) {
     container.prepend(card.cardItem);
 }
 
-function getCardObject(initialData, params = {
+function getCardObject(initialData, userId=null, params = {
     template: '#photo-grid__item', 
     node:'.photo-grid__element-container', 
     classOfImage:'.photo-grid__image', 
@@ -48,7 +48,7 @@ function getCardObject(initialData, params = {
     cardObject.ownerId = initialData.owner['_id'];
     cardObject.cardId = initialData['_id'];
     
-    if(cardObject.ownerId === userObject['_id']) {
+    if(cardObject.ownerId === userId) {
         cardObject.buttonDelete.classList.add('photo-grid__delete_active');
         addEventButtonDelete('click', cardObject, '.photo-grid__element-container');
     }
@@ -74,7 +74,7 @@ function addCardOnPage(evt) {
         addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
         .then(card => {
             if(card) {
-                const cardObject = getCardObject(card);
+                const cardObject = getCardObject(card, userObject['_id']);
                 insertCardInsideList(cardObject, cardItemsList);
             }
         })
@@ -128,7 +128,7 @@ function initialCards(data) {
 }
 
 function insertCardOnPage(card) {
-    const cardObject = getCardObject(card);
+    const cardObject = getCardObject(card, userObject['_id']);
         checkLoadImageFromServer(cardObject)
             .then(res => {
                 insertCardInsideList(res, cardItemsList);
