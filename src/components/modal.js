@@ -172,8 +172,9 @@ function fillInitialValuesFields(formElement, reverse=false) {
             })
                 .then(updatedUser => {
                     if(updatedUser) {
+                        console.log(updatedUser);
                         profileName.textContent = updatedUser.name;
-                        profileDescription.textContent = updatedUser.value;
+                        profileDescription.textContent = updatedUser.about;
 
                         userObject.name = updatedUser.name;
                         userObject.description = updatedUser.about;
