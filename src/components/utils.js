@@ -1,11 +1,10 @@
 import {openPopup, addEventSubmitForForm, addEventForClosePopup } from "./modal.js";
 
 
-const userAvatar = document.querySelector('.profile-section__avatar');
-const userName = document.querySelector('.profile-section__name');
-const userAbout = document.querySelector('.profile-section__text');
+
 const popupConfirmDelete = document.querySelector('#confirmDelete');
 const buttonSubmitPopupConfirmDelete = popupConfirmDelete.querySelector('.form__save');
+let primaryTextButton = '';
 
 
 
@@ -56,24 +55,6 @@ export function checkPromiseResponse(response) {
     }
 }
 
-export function initialUser(data) {
-    data
-        .then(user => {
-            if(user) {
-                userAvatar.src = user.avatar;
-                userName.textContent = user.name;
-                userAbout.textContent = user.about;
-                userObject.avatar = user.avatar;
-                userObject.name = user.name;
-                userObject.description = user.about;
-                userObject['_id'] = user['_id'];
-            }
-        })
-        .catch(error => {
-            console.log(error);
-        })
-}
-
 
 
 export function checkLoadImageFromServer(cardObject) {
@@ -101,5 +82,15 @@ export function addEventForConfirmDelete(cardElement, cardObject) {
     openPopup({popup: popupConfirmDelete});
 }
 
-
-
+export function changeButtonTextDuringLoading(settings={
+    button: null,
+    loadingText: null,
+    primaryText: null,
+}) {
+    if(settings.loadingText) {
+        primaryTextButton = settings.primaryText;
+        settings.button.textContent = settings.loadingText;
+    } else {
+        settings.button.textContent = primaryTextButton;
+    }
+}

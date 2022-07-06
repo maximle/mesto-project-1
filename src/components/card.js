@@ -7,7 +7,8 @@ import {
     userObject, 
     addEventForConfirmDelete,
 } from './utils.js';
-import {likeCard} from './api.js';
+
+import {configTemplate, getDataOnRequestToServer} from './api.js';
 
 function insertCardInsideList (card, container) {
     container.prepend(card.cardItem);
@@ -60,8 +61,26 @@ function getCardObject(initialData, userId=null, confirmDeleteCallback=null, par
 }
 
 
-
-
+function likeCard(evt) {
+    const configForRequest = configTemplate;
+    if(evt.target.classList.contains('photo-grid__like-icon_active')) {
+        configForRequest.options.method = 'DELETE';
+    } else {
+        configForRequest.options.method = 'PUT';
+    }
+    
+    getDataOnRequestToServer({
+        configForRequest: configForRequest,
+        targetLink: `cards/likes/${this.cardObject.cardId}`,
+    })
+        .then(card => {
+            this.cardObject.likes.textContent = card.likes.length;
+            changeColorLikeButton(this.cardObject);
+        })
+        .catch(error => {
+            console.log(error);
+        })
+}
 
 function addEventLikeButton(cardObject) {
     cardObject.likeButton.addEventListener('click', {handleEvent: likeCard, cardObject: cardObject})

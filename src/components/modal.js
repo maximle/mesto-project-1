@@ -1,10 +1,10 @@
 import {popupImage} from './utils.js';
 
 
-const ElementImageOfPopupImage = popupImage.querySelector('.popup__image');
-const ElementCaptionOfPopupImage = popupImage.querySelector('.popup__image-caption');
-export const profileName = document.querySelector('.profile-section__name');
-export const profileDescription = document.querySelector('.profile-section__text');
+const elementImageOfPopupImage = popupImage.querySelector('.popup__image');
+const elementCaptionOfPopupImage = popupImage.querySelector('.popup__image-caption');
+export const userName = document.querySelector('.profile-section__name');
+export const userAbout = document.querySelector('.profile-section__text');
 
 
 function addEventForCloseButton(settings={popup: null, removeListener: false}) {
@@ -94,9 +94,9 @@ function addEventOpenImagePopup(typeEvent, popup, cardImg, cardName) {
                 justOpen: true,
             }});
         addEventForClosePopup({popup: popup});
-        ElementImageOfPopupImage.src = cardImg.src;
-        ElementImageOfPopupImage.alt = cardImg.alt;
-        ElementCaptionOfPopupImage.textContent = cardName.textContent;
+        elementImageOfPopupImage.src = cardImg.src;
+        elementImageOfPopupImage.alt = cardImg.alt;
+        elementCaptionOfPopupImage.textContent = cardName.textContent;
     });
 }
 
@@ -137,8 +137,8 @@ function addEventSubmitForForm(settings={
 
 
 function fillInitialValuesFields(formElement) {
-    formElement.elements.name.value = profileName.textContent;
-    formElement.elements.description.value = profileDescription.textContent;
+    formElement.elements.name.value = userName.textContent;
+    formElement.elements.description.value = userAbout.textContent;
 }
 
 
