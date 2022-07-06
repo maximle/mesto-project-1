@@ -1,4 +1,7 @@
-import {checkPromiseResponse, requestPromiseFromURL, userObject, getDataOnRequestToServer} from './utils.js';
+import {userObject, getDataOnRequestToServer} from './utils.js';
+import {changeColorLikeButton, insertCardOnPage, removeCard} from './card.js';
+import {profileName, profileDescription, closePopup} from './modal.js';
+
 
 const config = {
     baseUrl: 'https://mesto.nomoreparties.co/v1',
@@ -31,14 +34,20 @@ function getUser(settings={idUser: false, isMe: false}) {
     }
   }
 
-function getCards() {
+function getCards(settings={confirmDeleteCallback: null}) {           
     const configForRequest = configTemplate;
-    return (
         getDataOnRequestToServer({
             configForRequest: configForRequest,
             targetLink: 'cards',
         })
-    );
+        .then(arrayCards => {                    // Получаю массив карточек, которые нужно отрисовать и вызываю колбек ->
+            arrayCards.forEach(card => {
+                insertCardOnPage({card: card, confirmDeleteCallback: settings.confirmDeleteCallback});
+            });
+        })
+        .catch(error => {
+            console.log(error);
+        })
 }
 
 function updateProfileInformation(settings={
@@ -56,12 +65,23 @@ function updateProfileInformation(settings={
         }
         );
 
-        return (
             getDataOnRequestToServer({
                 configForRequest: configForRequest,
                 targetLink: 'users/me',
             })
-        );
+            .then(updatedUser => {
+                profileName.textContent = updatedUser.name;
+                profileDescription.textContent = updatedUser.about;
+
+                userObject.name = updatedUser.name;
+                userObject.description = updatedUser.about;
+                userObject.avatar = updatedUser.avatar;
+                userObject['_id'] = updatedUser['_id'];
+            })
+            .catch(error => {
+                console.log(error);
+            })
+
 }
 
 function addCardOnServer(settings={
@@ -87,29 +107,51 @@ function addCardOnServer(settings={
     }
 
 
-function deleteCardFromServer(idObj) {
+function deleteCardFromServer(settings={
+    idObj: null,
+    cardElement: null,
+    handlerObject: null,
+    buttonSubmit: null,
+}) {
     const configForRequest = configTemplate;
     configForRequest.options.method = 'DELETE';
     getDataOnRequestToServer({
         configForRequest: configForRequest,
-        targetLink: `cards/${idObj}`,
+        targetLink: `cards/${settings.idObj}`,
+    })
+    .then(data => {
+        console.log('Карточка удалена');
+        removeCard(settings.cardElement);
+    })
+    .catch(error => {
+        console.log('Карточка не удалена', error);
+    })
+    .finally(() => {
+        settings.buttonSubmit.removeEventListener('click', settings.handlerObject);
+        closePopup({popup: settings.handlerObject.popup});
     })
     }
 
 
-function likeCard(settings={cardObject: {}, deleteLike: false}) {
+function likeCard(evt) {
     const configForRequest = configTemplate;
-    if(settings.deleteLike) {
+    if(evt.target.classList.contains('photo-grid__like-icon_active')) {
         configForRequest.options.method = 'DELETE';
     } else {
         configForRequest.options.method = 'PUT';
     }
-    return (
-        getDataOnRequestToServer({
-            configForRequest: configForRequest,
-            targetLink: `cards/likes/${settings.cardObject.cardId}`,
+    
+    getDataOnRequestToServer({
+        configForRequest: configForRequest,
+        targetLink: `cards/likes/${this.cardObject.cardId}`,
+    })
+        .then(card => {
+            this.cardObject.likes.textContent = card.likes.length;
+            changeColorLikeButton(this.cardObject);
         })
-    );    
+        .catch(error => {
+            console.log(error);
+        })
 }
 
 function updateAvatar(settings={link: ''}) {

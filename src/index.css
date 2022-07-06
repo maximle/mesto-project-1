@@ -62,10 +62,12 @@
 @import url(./blocks/popup/_opened/popup_opened.css);
 @import url(./blocks/popup/__container/popup__container.css);
 @import url(./blocks/popup/__container/_for-images/popup__container_for-images.css);
+@import url(./blocks/popup/__container/_for-confirm/popup__container_for-confirm.css);
 @import url(./blocks/popup/__close/popup__close.css);
 @import url(./blocks/popup/__image-container/popup__image-container.css);
 @import url(./blocks/popup/__image/popup__image.css);
 @import url(./blocks/popup/__image-caption/popup__image-caption.css);
+@import url(./blocks/popup/__confirm-text/popup__confirm-text.css);
 
 /* Block form */
 
@@ -75,8 +77,6 @@
 @import url(./blocks/form/__title-error/form__title-error.css);
 @import url(./blocks/form/__title-error/_active/form__title-error_active.css);
 @import url(./blocks/form/__inputs/form__inputs.css);
-@import url(./blocks/form/__inputs/_form-confirm-delete/form__inputs_form-confirm-delete.css);
 @import url(./blocks/form/__field/form__field.css);
 @import url(./blocks/form/__save/form__save.css);
 @import url(./blocks/form/__title/form__title.css);
-@import url(./blocks/form/__title/_form-confirm-delete/form__title_form-confirm-delete.css);

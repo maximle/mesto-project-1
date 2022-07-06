@@ -184,25 +184,10 @@
     </div>
 
     <div class="popup" id="confirmDelete">
-      <div class="popup__container">
+      <div class="popup__container popup__container_for-confirm">
         <button type="button" class="popup__close"></button>
-        <form
-          name="formConfirmDelete"
-          id="formConfirmDelete"
-          class="form"
-          action="#"
-          method="post"
-        >
-          <fieldset
-            form="formConfirmDelete"
-            class="form__inputs form__inputs_form-confirm-delete"
-          >
-            <legend class="form__title form__title_form-confirm-delete">
-              Вы уверены?
-            </legend>
-          </fieldset>
-          <button type="submit" class="form__save">Да</button>
-        </form>
+        <p class="popup__confirm-text">Вы уверены?</p>
+        <button type="submit" class="form__save">Да</button>
       </div>
     </div>
 

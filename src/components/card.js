@@ -1,19 +1,19 @@
-import {addEventOpenImagePopup, closePopup} from './modal.js';
+import {addEventOpenImagePopup} from './modal.js';
 import {
     getCloneNode, 
     cardItemsList, 
     checkLoadImageFromServer, 
     popupImage, 
     userObject, 
-    confirmDelete,
+    addEventForConfirmDelete,
 } from './utils.js';
-import {addCardOnServer, likeCard} from './api.js';
+import {likeCard} from './api.js';
 
 function insertCardInsideList (card, container) {
     container.prepend(card.cardItem);
 }
 
-function getCardObject(initialData, userId=null, params = {
+function getCardObject(initialData, userId=null, confirmDeleteCallback=null, params = {
     template: '#photo-grid__item', 
     node:'.photo-grid__element-container', 
     classOfImage:'.photo-grid__image', 
@@ -38,6 +38,7 @@ function getCardObject(initialData, userId=null, params = {
         likes: quantityLikes,
         ownerId: '',
         cardId: '',
+        confirmDeleteCallback: confirmDeleteCallback,
     } 
  
     
@@ -53,38 +54,23 @@ function getCardObject(initialData, userId=null, params = {
         addEventButtonDelete('click', cardObject, '.photo-grid__element-container');
     }
 
-    addEventLikeButton('click', cardObject, 'photo-grid__like-icon_active');
+    addEventLikeButton(cardObject);
     addEventOpenImagePopup('click', popupImage, cardObject.cardImg, cardObject.cardName);   
     return cardObject;
 }
 
 
-function addCardOnPage(evt) {
-    evt.preventDefault();
-    const popup = evt.target.closest('.popup');
-    const inputSourceImg = popup.querySelectorAll('.form__input-text')[1];
-    const inputNameCard = popup.querySelectorAll('.form__input-text')[0];
 
-    const btn = evt.target.querySelector('.form__save');
-    const btnPrimaryValue = btn.textContent;
-    btn.textContent = 'Сохранение...';
 
-    setTimeout(() => {
-        
-        addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
-        .then(card => {
-            if(card) {
-                const cardObject = getCardObject(card, userObject['_id']);
-                insertCardInsideList(cardObject, cardItemsList);
-            }
-        })
-    
-        closePopup(popup);
 
-        btn.textContent = btnPrimaryValue;
-    }, 1);
-    
+function addEventLikeButton(cardObject) {
+    cardObject.likeButton.addEventListener('click', {handleEvent: likeCard, cardObject: cardObject})
 }
+
+function removeCard(card) {
+    card.remove();
+}
+
 
 
 function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
@@ -92,47 +78,25 @@ function addEventButtonDelete(typeEvent, cardObj, parentClassName) {
     cardObj.buttonDelete.addEventListener(typeEvent, function(evt) {
         const currentButtonDelete = evt.target;
         const cardElement = currentButtonDelete.closest(parentClassName);
-        confirmDelete(cardElement, cardObj);
+        addEventForConfirmDelete(cardElement, cardObj);
     });
 }
 
 
-function addEventLikeButton(typeEvent, cardObj, className) {
-    cardObj.likeButton.addEventListener(typeEvent, function() {
-        cardObj.likeButton.classList.toggle(className);
-        if(cardObj.likeButton.classList.contains(className)) {
-            likeCard({cardObject: cardObj})
-                .then(card => {
-                    if(card){
-                        cardObj.likes.textContent = card.likes.length;
-                    }
-                })
-        } else {
-            likeCard({cardObject: cardObj, deleteLike: true})
-                .then(card => {
-                    if(card){
-                        cardObj.likes.textContent = card.likes.length;
-                    }
-                })
-        }
-    });
-}
+function changeColorLikeButton(cardObject) {
+    cardObject.likeButton.classList.toggle('photo-grid__like-icon_active');
+    };
 
-function initialCards(data) {
-    data
-        .then(arrayCards => {
-            if(arrayCards) {
-                arrayCards.forEach(insertCardOnPage);
-            }
-        })
-}
+    
 
-function insertCardOnPage(card) {
-    const cardObject = getCardObject(card, userObject['_id']);
-        checkLoadImageFromServer(cardObject)
-            .then(res => {
-                insertCardInsideList(res, cardItemsList);
-            })
+
+
+function insertCardOnPage(settings={card: null, confirmDeleteCallback: null}) {             
+    const cardObject = getCardObject(settings.card, userObject['_id'], settings.confirmDeleteCallback);
+        checkLoadImageFromServer(cardObject)                    // Проверяю, могу ли я загрузить картинку, присланную сервером. Если да,
+            .then(res => {                                      // 
+                insertCardInsideList(res, cardItemsList);       // то отрисовываю на клиенте, если нет, то не рисую. 
+            })                                                  // Повторно на сервер не отправляю
             .catch(err => {
                 console.log(`Картинка не загрузилась. ${err.cardImg.src}`);
             }) 
@@ -140,4 +104,9 @@ function insertCardOnPage(card) {
 
 
 
-export {addCardOnPage, getCardObject, insertCardInsideList, initialCards};
+export {getCardObject, 
+    insertCardInsideList, 
+    changeColorLikeButton,
+    insertCardOnPage,
+    removeCard,
+};

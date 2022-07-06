@@ -1,0 +1,12 @@
+.popup__container_for-confirm {
+    background-color: #fff;
+    box-shadow: 0px 0px 25px rgba(0, 0, 0, 0.15);
+    border-radius: 10px;
+    padding-block-start: 34px;
+    padding-block-end: 37px;
+    padding-inline-start: 36px;
+    padding-inline-end: 36px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+}
