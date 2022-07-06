@@ -74,15 +74,22 @@ function handleProfileEditFormSubmit(evt) {
     const btnPrimaryValue = this.buttonSubmit.textContent;
     this.buttonSubmit.textContent = 'Сохранение...';
     setTimeout(() => {   // DOM не успевает перерисоваться              
-        
         updateProfileInformation({
             information: {
                 name: this.formElement.elements.name.value,
                 description: this.formElement.elements.description.value,
             }
         })
-        closePopup({popup: this.popup, handleEvent: handleProfileEditFormSubmit});
-        this.buttonSubmit.textContent = btnPrimaryValue;
+        .then(res => {
+            console.log(res);
+            closePopup({popup: this.popup, handleEvent: handleProfileEditFormSubmit});
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            this.buttonSubmit.textContent = btnPrimaryValue;
+        })
     }, 1);
 }
 
@@ -97,15 +104,13 @@ function handleEditAvatarFormSubmit(evt) {
         
         updateAvatar({link: inputLinkToAvatar.value})
         .then(userAvatar => {
-            if(userAvatar) {
-                profileAvatar.src = userAvatar.avatar;
-            }
+            profileAvatar.src = userAvatar.avatar;
+            closePopup({popup: this.popup, handleEvent: handleEditAvatarFormSubmit});
         })
         .catch(error => {
             console.log(error);
         })
         .finally(() => {
-            closePopup({popup: this.popup, handleEvent: handleEditAvatarFormSubmit});
             this.buttonSubmit.textContent = btnPrimaryValue;
         })
         
@@ -125,13 +130,13 @@ function addCardOnPage(evt) {
         .then(card => {
             const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
             insertCardInsideList(cardObject, cardItemsList);
+            closePopup({popup: popupAddCard, handleEvent: addCardOnPage});
         })
         .catch(error => {
             console.log(error);
         })
         .finally(() => {
             this.buttonSubmit.textContent = btnPrimaryValue;
-            closePopup({popup: popupAddCard, handleEvent: addCardOnPage});
         })
     }, 1);
     
@@ -141,6 +146,7 @@ function addCardOnPage(evt) {
 
 initialUser(primaryUser);
 getCards({confirmDeleteCallback: confirmDeleteCallback});
+
 
 buttonAddCard.addEventListener('click', () => {
     openPopup({popup: popupAddCard});

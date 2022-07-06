@@ -1,4 +1,4 @@
-import {userObject, getDataOnRequestToServer} from './utils.js';
+import {userObject, checkPromiseResponse} from './utils.js';
 import {changeColorLikeButton, insertCardOnPage, removeCard} from './card.js';
 import {profileName, profileDescription, closePopup} from './modal.js';
 
@@ -64,7 +64,7 @@ function updateProfileInformation(settings={
             about: `${settings.information.description}`
         }
         );
-
+        return(
             getDataOnRequestToServer({
                 configForRequest: configForRequest,
                 targetLink: 'users/me',
@@ -77,11 +77,12 @@ function updateProfileInformation(settings={
                 userObject.description = updatedUser.about;
                 userObject.avatar = updatedUser.avatar;
                 userObject['_id'] = updatedUser['_id'];
+                return updatedUser;
             })
             .catch(error => {
-                console.log(error);
+                return error
             })
-
+        );
 }
 
 function addCardOnServer(settings={
@@ -168,6 +169,36 @@ function updateAvatar(settings={link: ''}) {
             targetLink: 'users/me/avatar',
         })
     );
+}
+
+function requestPromiseFromURL(settings={
+    config: {
+        baseUrl: null, 
+        cohortId: null,
+     }, 
+     options: {}}, 
+    target='') {
+    if(settings.config.baseUrl && settings.config.cohortId && settings.options.headers.authorization) {
+        return (
+            fetch(`${settings.config.baseUrl}/${settings.config.cohortId}/${target}`, settings.options)
+        );
+    } else {
+        console.log('Не хватает свойств, переданных функции.');
+    }
+}
+
+function getDataOnRequestToServer(settings={configForRequest: {}, targetLink: ''}) {
+    return (
+        requestPromiseFromURL(settings.configForRequest, settings.targetLink)
+        .then(checkPromiseResponse)
+        .then(data => {
+            return data;
+        })
+        .catch(error => {
+            console.log(error);
+            return false;
+        })
+    );  
 }
 
 export {

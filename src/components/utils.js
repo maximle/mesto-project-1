@@ -74,21 +74,7 @@ export function initialUser(data) {
         })
 }
 
-export function requestPromiseFromURL(settings={
-    config: {
-        baseUrl: null, 
-        cohortId: null,
-     }, 
-     options: {}}, 
-    target='') {
-    if(settings.config.baseUrl && settings.config.cohortId && settings.options.headers.authorization) {
-        return (
-            fetch(`${settings.config.baseUrl}/${settings.config.cohortId}/${target}`, settings.options)
-        );
-    } else {
-        console.log('Не хватает свойств, переданных функции.');
-    }
-}
+
 
 export function checkLoadImageFromServer(cardObject) {
     return new Promise(function(resolve, reject) {
@@ -117,16 +103,3 @@ export function addEventForConfirmDelete(cardElement, cardObject) {
 
 
 
-export function getDataOnRequestToServer(settings={configForRequest: {}, targetLink: ''}) {
-    return (
-        requestPromiseFromURL(settings.configForRequest, settings.targetLink)
-        .then(checkPromiseResponse)
-        .then(data => {
-            return data;
-        })
-        .catch(error => {
-            console.log(error);
-            return false;
-        })
-    );  
-}

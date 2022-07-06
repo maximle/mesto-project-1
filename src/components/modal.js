@@ -143,8 +143,6 @@ function fillInitialValuesFields(formElement) {
 
 
 
-
-
 export {
     addEventOpenImagePopup, 
     openPopup,
