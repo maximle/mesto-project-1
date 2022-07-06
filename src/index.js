@@ -55,7 +55,9 @@ const inputNameCard = formAddCard.elements.name;
 
 const profileAvatar = document.querySelector('.profile-section__avatar');
 
-let firstClick = true;
+let firstClickAddCard = true;
+let firstClickEditProfile = true;
+let firstClickEditAvatar = true;
 
 const primaryUser = getUser({config: config, isMe: true});
 
@@ -153,7 +155,7 @@ buttonAddCard.addEventListener('click', () => {
     formAddCard.reset();
     checkValidityOfFields(formAddCard, validationSettings);
     toggleButtonSubmitState(formAddCard, validationSettings);
-    if(firstClick) {
+    if(firstClickAddCard) {
         addEventForClosePopup({popup: popupAddCard});
         addEventSubmitForForm({
             popup: popupAddCard,
@@ -161,7 +163,7 @@ buttonAddCard.addEventListener('click', () => {
             handlers: addCardOnPage, 
             buttonSubmit: buttonSubmitFormAddCard,
         });
-        firstClick = false;
+        firstClickAddCard = false;
     }
 });
 
@@ -171,7 +173,7 @@ buttonEditProfile.addEventListener('click', () => {
     fillInitialValuesFields(formEditProfile);
     checkValidityOfFields(formEditProfile, validationSettings);
     toggleButtonSubmitState(formEditProfile, validationSettings);
-    if(firstClick) {
+    if(firstClickEditProfile) {
         addEventForClosePopup({popup: popupEditProfile});
         addEventSubmitForForm({
             popup: popupEditProfile,
@@ -179,7 +181,7 @@ buttonEditProfile.addEventListener('click', () => {
             handlers: handleProfileEditFormSubmit, 
             buttonSubmit: buttonSubmitFormEditProfile,
         })
-        firstClick = false;
+        firstClickEditProfile = false;
     }
 });
 
@@ -188,7 +190,7 @@ buttonEditAvatar.addEventListener('click', () => {
     formEditAvatar.reset();
     checkValidityOfFields(formEditAvatar, validationSettings);
     toggleButtonSubmitState(formEditAvatar, validationSettings);
-    if(firstClick) {
+    if(firstClickEditAvatar) {
         addEventForClosePopup({popup: popupEditAvatar});
         addEventSubmitForForm({
             popup: popupEditAvatar,
@@ -196,7 +198,7 @@ buttonEditAvatar.addEventListener('click', () => {
             handlers: handleEditAvatarFormSubmit, 
             buttonSubmit: buttonSubmitFormEditAvatar,
         })
-        firstClick = false;
+        firstClickEditAvatar = false;
     }
 });
 
