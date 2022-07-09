@@ -71,14 +71,15 @@ export function checkLoadImageFromServer(cardObject) {
   }
 
 export function addEventForConfirmDelete(cardElement, cardObject) {
-    addEventSubmitForForm({
+    const objectHandler = {
         popup: popupConfirmDelete,
         buttonSubmit: buttonSubmitPopupConfirmDelete,
-        handlers: cardObject.confirmDeleteCallback, 
+        handleEvent: cardObject.confirmDeleteCallback, 
         cardElement: cardElement, 
         cardObject: cardObject,
-    });
-    addEventForClosePopup({popup: popupConfirmDelete});
+    }
+    addEventSubmitForForm({objectHandler: objectHandler});
+    addEventForClosePopup({objectHandler: objectHandler});
     openPopup({popup: popupConfirmDelete});
 }
 

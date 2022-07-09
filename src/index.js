@@ -59,19 +59,10 @@ const profileAvatar = document.querySelector('.profile-section__avatar');
 
 const loadingText = 'Сохранение...';
 
-let firstClickAddCard = true;
-let firstClickEditProfile = true;
-let firstClickEditAvatar = true;
-
 
 function confirmDeleteCallback(evt) {
     evt.preventDefault();
-    deleteCardFromServer({
-        idObj: this.cardObject.cardId, 
-        cardElement: this.cardElement,
-        handlerObject: this,
-        buttonSubmit: this.buttonSubmit,
-    });
+    deleteCardFromServer({objectHandler: this});
 }
 
 function handleProfileEditFormSubmit(evt) {
@@ -90,7 +81,7 @@ function handleProfileEditFormSubmit(evt) {
         })
         .then(res => {
             console.log(res);
-            closePopup({popup: this.popup, handleEvent: handleProfileEditFormSubmit});
+            closePopup({objectHandler: this});
         })
         .catch(error => {
             console.log(error);
@@ -115,7 +106,7 @@ function handleEditAvatarFormSubmit(evt) {
         updateAvatar({link: inputLinkToAvatar.value})
         .then(userAvatar => {
             profileAvatar.src = userAvatar.avatar;
-            closePopup({popup: this.popup, handleEvent: handleEditAvatarFormSubmit});
+            closePopup({objectHandler: this});
         })
         .catch(error => {
             console.log(error);
@@ -143,7 +134,7 @@ function addCardOnPage(evt) {
         .then(card => {
             const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
             insertCardInsideList(cardObject, cardItemsList);
-            closePopup({popup: popupAddCard, handleEvent: addCardOnPage});
+            closePopup({objectHandler: this});
         })
         .catch(error => {
             console.log(error);
@@ -216,24 +207,18 @@ function updateProfileInformation(settings={
 }
 
 
-
-function deleteCardFromServer(settings={
-    idObj: null,
-    cardElement: null,
-    handlerObject: null,
-    buttonSubmit: null,
-}) {
+function deleteCardFromServer(settings={objectHandler: null}) {
     const configForRequest = configTemplate;
     configForRequest.options.method = 'DELETE';
     getDataOnRequestToServer({
         configForRequest: configForRequest,
-        targetLink: `cards/${settings.idObj}`,
+        targetLink: `cards/${settings.objectHandler.cardObject.cardId}`,
     })
     .then(data => {
         console.log('Карточка удалена');
-        removeCard(settings.cardElement);
-        closePopup({popup: settings.handlerObject.popup});
-        settings.buttonSubmit.removeEventListener('click', settings.handlerObject);
+        removeCard(settings.objectHandler.cardElement);
+        closePopup({objectHandler: settings.objectHandler});
+        settings.objectHandler.buttonSubmit.removeEventListener('click', settings.objectHandler);
     })
     .catch(error => {
         console.log('Карточка не удалена', error);
@@ -308,55 +293,51 @@ Promise.all([
 ])
     .then(arrayData => {
         buttonAddCard.addEventListener('click', () => {
+            const objectHandler = {
+                popup: popupAddCard,
+                formElement: formAddCard, 
+                handleEvent: addCardOnPage, 
+                buttonSubmit: buttonSubmitFormAddCard,
+            };
             openPopup({popup: popupAddCard});
             formAddCard.reset();
             checkValidityOfFields(formAddCard, validationSettings);
             toggleButtonSubmitState(formAddCard, validationSettings);
-            if(firstClickAddCard) {
-                addEventForClosePopup({popup: popupAddCard});
-                addEventSubmitForForm({
-                    popup: popupAddCard,
-                    formElement: formAddCard, 
-                    handlers: addCardOnPage, 
-                    buttonSubmit: buttonSubmitFormAddCard,
-                });
-                firstClickAddCard = false;
-            }
+            addEventForClosePopup({objectHandler: objectHandler});
+            addEventSubmitForForm({objectHandler: objectHandler});
+
         });
         
         
         buttonEditProfile.addEventListener('click', () => {
+            const objectHandler = {
+                popup: popupEditProfile,
+                formElement: formEditProfile, 
+                handleEvent: handleProfileEditFormSubmit, 
+                buttonSubmit: buttonSubmitFormEditProfile,
+            };
             openPopup({popup: popupEditProfile});
             fillInitialValuesFields(formEditProfile);
             checkValidityOfFields(formEditProfile, validationSettings);
             toggleButtonSubmitState(formEditProfile, validationSettings);
-            if(firstClickEditProfile) {
-                addEventForClosePopup({popup: popupEditProfile});
-                addEventSubmitForForm({
-                    popup: popupEditProfile,
-                    formElement: formEditProfile, 
-                    handlers: handleProfileEditFormSubmit, 
-                    buttonSubmit: buttonSubmitFormEditProfile,
-                })
-                firstClickEditProfile = false;
-            }
+            addEventForClosePopup({objectHandler: objectHandler});
+            addEventSubmitForForm({objectHandler: objectHandler});
+
         });
         
         buttonEditAvatar.addEventListener('click', () => {
+            const objectHandler = {
+                popup: popupEditAvatar,
+                formElement: formEditAvatar, 
+                handleEvent: handleEditAvatarFormSubmit, 
+                buttonSubmit: buttonSubmitFormEditAvatar,
+            };
             openPopup({popup: popupEditAvatar});
             formEditAvatar.reset();
             checkValidityOfFields(formEditAvatar, validationSettings);
             toggleButtonSubmitState(formEditAvatar, validationSettings);
-            if(firstClickEditAvatar) {
-                addEventForClosePopup({popup: popupEditAvatar});
-                addEventSubmitForForm({
-                    popup: popupEditAvatar,
-                    formElement: formEditAvatar, 
-                    handlers: handleEditAvatarFormSubmit, 
-                    buttonSubmit: buttonSubmitFormEditAvatar,
-                })
-                firstClickEditAvatar = false;
-            }
+            addEventForClosePopup({objectHandler: objectHandler});
+            addEventSubmitForForm({objectHandler: objectHandler});
         });
         
         

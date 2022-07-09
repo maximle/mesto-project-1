@@ -3,100 +3,118 @@ import {popupImage} from './utils.js';
 
 const elementImageOfPopupImage = popupImage.querySelector('.popup__image');
 const elementCaptionOfPopupImage = popupImage.querySelector('.popup__image-caption');
+const listHandlersEventForClosePopup = {
+    closeButtonEvent: {},
+    overlayCloseEvent: {},
+    toKeyCloseEvent: {},
+};
 export const userName = document.querySelector('.profile-section__name');
 export const userAbout = document.querySelector('.profile-section__text');
 
 
-function addEventForCloseButton(settings={popup: null, removeListener: false}) {
-    const buttonClose = settings.popup.querySelector('.popup__close');
+function addEventForCloseButton(settings={objectHandler: null}) {
+    const buttonClose = settings.objectHandler.popup.querySelector('.popup__close');
     const handlerEventObject = {
         handleEvent: closePopupToButton, 
-        popup: settings.popup
+        objectHandler: settings.objectHandler,
+        buttonClose: buttonClose,
     }
-    if(settings.removeListener) {
-        buttonClose.removeEventListener('click', handlerEventObject);
-    } else {
-        buttonClose.addEventListener('click', handlerEventObject);
-    }
+    listHandlersEventForClosePopup.closeButtonEvent.buttonClose = buttonClose;
+    listHandlersEventForClosePopup.closeButtonEvent.handlerEventObject = handlerEventObject;
+    buttonClose.addEventListener('click', handlerEventObject);
 }
 
 function closePopupToButton(evt) {
-    closePopup({popup: this.popup});
+    closePopup({objectHandler: this.objectHandler});
 }
 
-function addEventToOverlayForClose(settings={popup: null, removeListener: false}) {
-    if(settings.removeListener) {
-        settings.popup.removeEventListener('click', closePopupToOverlay);
-    } else {
-        settings.popup.addEventListener('click', closePopupToOverlay);
-    }
+function addEventToOverlayForClose(settings={objectHandler: null}) {
+    const handlerEventObject = {
+        handleEvent: closePopupToOverlay, 
+        objectHandler: settings.objectHandler
+    };
+    listHandlersEventForClosePopup.overlayCloseEvent.popup = settings.objectHandler.popup;
+    listHandlersEventForClosePopup.overlayCloseEvent.handlerEventObject = handlerEventObject;
+    settings.objectHandler.popup.addEventListener('click', handlerEventObject);
 }
 
 function closePopupToOverlay(evt) {
     if (!(evt.target.closest('.popup__container'))) {
-        closePopup({popup: evt.currentTarget});
+        closePopup({objectHandler: this.objectHandler});
     }
 }
 
 
-function addEventToKeyForClose(settings={removeListener: false}) {
-    if(settings.removeListener) {
-        document.removeEventListener('keydown', closePopupToKey);
-    } else {
-        document.addEventListener('keydown', closePopupToKey);
-    }
-        
+
+function addEventToKeyForClose(settings={objectHandler: null}) {
+    const handlerEventObject = {
+        handleEvent: closePopupToKey, 
+        objectHandler: settings.objectHandler
+    };
+    listHandlersEventForClosePopup.toKeyCloseEvent.handlerEventObject = handlerEventObject;
+    document.addEventListener('keydown', handlerEventObject);     
 }
 
 function closePopupToKey(evt) {
     if (evt.key === 'Escape') {
         const popup = document.querySelector('.popup_opened');
         if(popup) {
-            closePopup({popup: popup});
+            closePopup({objectHandler: this.objectHandler});
         }
     }
 }
 
-
-function closePopup(settings={popup: null, handleEvent: null}) {
-    const form = settings.popup.querySelector('.form');
-    settings.popup.classList.remove('popup_opened');
-    addEventForClosePopup({popup: settings.popup, removeListeners: true});
-    if(form) {
-        removeFormListener({formElement: form, handlers: settings.handleEvent}); 
-    } 
+function removeEventForCloseButton(settings={listHandlersEventForClosePopup: null}) {
+    const buttonCloseEvent = settings.listHandlersEventForClosePopup.closeButtonEvent;
+    buttonCloseEvent.buttonClose.removeEventListener('click', buttonCloseEvent.handlerEventObject);
 }
 
-function removeFormListener(settings={formElement: null, handlers: null}) {
-    settings.formElement.removeEventListener('submit', settings.handlers);
+function removeEventForCloseToOverlay(settings={listHandlersEventForClosePopup: null}) {
+    const overlayCloseEvent = settings.listHandlersEventForClosePopup.overlayCloseEvent;
+    overlayCloseEvent.popup.removeEventListener('click', overlayCloseEvent.handlerEventObject);
 }
 
-function addEventForClosePopup(settings={popup: null, removeListeners: false}) {
-    if(settings.removeListeners) {
-        addEventForCloseButton({popup: settings.popup, removeListener: true});
-        addEventToOverlayForClose({popup: settings.popup, removeListener: true});
-        addEventToKeyForClose({removeListener: true});
-    } else {
-        addEventForCloseButton({popup: settings.popup});
-        addEventToOverlayForClose({popup: settings.popup});
-        addEventToKeyForClose();
+function removeEventForCloseToKey(settings={listHandlersEventForClosePopup: null}) {
+    const keyCloseEvent = settings.listHandlersEventForClosePopup.toKeyCloseEvent;
+    document.removeEventListener('keydown', keyCloseEvent.handlerEventObject);
+}
+
+function closePopup(settings={objectHandler: null}) {
+    settings.objectHandler.popup.classList.remove('popup_opened');
+    if(settings.objectHandler.formElement) {
+        removeFormListener({objectHandler: settings.objectHandler}); 
     }
-        
+    removeEventForCloseButton({listHandlersEventForClosePopup: listHandlersEventForClosePopup});
+    removeEventForCloseToOverlay({listHandlersEventForClosePopup: listHandlersEventForClosePopup});
+    removeEventForCloseToKey({listHandlersEventForClosePopup: listHandlersEventForClosePopup});
+}
+
+function removeFormListener(settings={objectHandler: null}) {
+    settings.objectHandler.formElement.removeEventListener('submit', settings.objectHandler);
+}
+
+function addEventForClosePopup(settings={objectHandler: null}) {
+        addEventForCloseButton({objectHandler: settings.objectHandler});
+        addEventToOverlayForClose({objectHandler: settings.objectHandler});
+        addEventToKeyForClose({objectHandler: settings.objectHandler});
 }
 
 
 
 function addEventOpenImagePopup(typeEvent, popup, cardImg, cardName) {
+    const objectHandler = {
+        popup: popup,
+    };
     cardImg.addEventListener(typeEvent, () => {
         openPopup({
-            popup: popup, 
+            popup: objectHandler.popup, 
             options: {
                 justOpen: true,
             }});
-        addEventForClosePopup({popup: popup});
-        elementImageOfPopupImage.src = cardImg.src;
-        elementImageOfPopupImage.alt = cardImg.alt;
-        elementCaptionOfPopupImage.textContent = cardName.textContent;
+    addEventForClosePopup({objectHandler: objectHandler});
+    elementImageOfPopupImage.src = cardImg.src;
+    elementImageOfPopupImage.alt = cardImg.alt;
+    elementCaptionOfPopupImage.textContent = cardName.textContent;
     });
 }
 
@@ -106,30 +124,11 @@ function openPopup(settings={popup: null, }) {
     settings.popup.classList.add('popup_opened');
 }
 
-function addEventSubmitForForm(settings={
-    popup: null,
-    formElement: null,
-    buttonSubmit: null, 
-    handlers: null, 
-    cardElement: null, 
-    cardObject: null,
-    removeListener: false,
-}) {
-        if(settings.popup.id === 'confirmDelete') {
-            settings.buttonSubmit.addEventListener('click', {
-                handleEvent: settings.handlers,
-                cardElement: settings.cardElement, 
-                cardObject: settings.cardObject,
-                popup: settings.popup,
-                buttonSubmit: settings.buttonSubmit,
-            });
+function addEventSubmitForForm(settings={objectHandler: null}) {
+        if(settings.objectHandler.popup.id === 'confirmDelete') {
+            settings.objectHandler.buttonSubmit.addEventListener('click', settings.objectHandler);
         } else {
-            settings.formElement.addEventListener('submit', {
-                handleEvent: settings.handlers,
-                popup: settings.popup,
-                buttonSubmit: settings.buttonSubmit,
-                formElement: settings.formElement,
-            });
+            settings.objectHandler.formElement.addEventListener('submit', settings.objectHandler);
         }
     }
 

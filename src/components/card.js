@@ -123,7 +123,8 @@ function insertCardOnPage(settings={card: null, confirmDeleteCallback: null}) {
 
 
 
-export {getCardObject, 
+export {
+    getCardObject, 
     insertCardInsideList, 
     changeColorLikeButton,
     insertCardOnPage,
