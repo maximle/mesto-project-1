@@ -55,9 +55,22 @@ function getCardObject(initialData, userId=null, confirmDeleteCallback=null, par
         addEventButtonDelete('click', cardObject, '.photo-grid__element-container');
     }
 
+    checkMineLike({userId: userId, arrayLikesPeople: initialData.likes, cardObject: cardObject});
     addEventLikeButton(cardObject);
     addEventOpenImagePopup('click', popupImage, cardObject.cardImg, cardObject.cardName);   
     return cardObject;
+}
+
+
+function checkMineLike(settings={userId: null, arrayLikesPeople: null, cardObject: null}) {
+    if(settings.arrayLikesPeople.length) {
+        for(let i = 0; i < settings.arrayLikesPeople.length; i++) {
+            if(settings.arrayLikesPeople[i]['_id'] === settings.userId){
+                changeColorLikeButton(settings.cardObject);
+                break;
+            }
+        }
+    }
 }
 
 

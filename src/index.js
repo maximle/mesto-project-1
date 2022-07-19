@@ -11,9 +11,7 @@ import {
     userAbout,
 } from './components/modal.js';
 import { 
-    enableValidationAllForms,
-    checkValidityOfFields,
-    toggleButtonSubmitState,
+    FormValidator
  } from './components/validate.js';
 import {
     validationSettings, 
@@ -39,6 +37,8 @@ const popupEditProfile = document.querySelector('#editProfile');
 const popupEditAvatar = document.querySelector('#editAvatar');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
+console.log(formAddCard);
+const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
 const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
 const formEditAvatar = popupEditAvatar.querySelector('#formEditAvatar');
 
@@ -301,10 +301,9 @@ Promise.all([
             };
             openPopup({popup: popupAddCard});
             formAddCard.reset();
-            checkValidityOfFields(formAddCard, validationSettings);
-            toggleButtonSubmitState(formAddCard, validationSettings);
             addEventForClosePopup({objectHandler: objectHandler});
             addEventSubmitForForm({objectHandler: objectHandler});
+            cardPopupFromValidator.enableValidation();
 
         });
         
@@ -341,7 +340,7 @@ Promise.all([
         });
         
         
-        enableValidationAllForms(validationSettings);
+        // enableValidationAllForms(validationSettings);
 
         console.log('Все нормально загрузилось');
     })
