@@ -2,8 +2,8 @@ import {openPopup, addEventSubmitForForm, addEventForClosePopup } from "./modal.
 
 
 
-const popupConfirmDelete = document.querySelector('#confirmDelete');
-const buttonSubmitPopupConfirmDelete = popupConfirmDelete.querySelector('.form__save');
+// const popupConfirmDelete = document.querySelector('#confirmDelete');
+// const buttonSubmitPopupConfirmDelete = popupConfirmDelete.querySelector('.form__save');
 let primaryTextButton = '';
 
 
@@ -14,8 +14,8 @@ export const userObject = {
     avatar: '',
     '_id': ''
 };
-export const cardItemsList = document.querySelector('.photo-grid__items');
-export const popupImage = document.querySelector('#openImage');
+// export const cardItemsList = document.querySelector('.photo-grid__items');
+// export const popupImage = document.querySelector('#openImage');
 
 
 
@@ -32,10 +32,10 @@ export const validationSettings = {
     }
 }
 
-export function getCloneNode(template, desiredNode) {
-    const photoGridItemTemplate = document.querySelector(template).content;
-    return photoGridItemTemplate.querySelector(desiredNode).cloneNode(true);
-}
+// export function getCloneNode(template, desiredNode) {
+//     const photoGridItemTemplate = document.querySelector(template).content;
+//     return photoGridItemTemplate.querySelector(desiredNode).cloneNode(true);
+// }
 
 
 
@@ -47,41 +47,41 @@ export function getArrayInputsOfForm(formElement, validationSettings) {
     }
 }
 
-export function checkPromiseResponse(response) {
-    if(response.ok) {
-        return response.json();
-    } else {
-        return Promise.reject(`Ошибка: ${response.status} - ${response.statusText}`)
-    }
-}
+// export function checkPromiseResponse(response) {
+//     if(response.ok) {
+//         return response.json();
+//     } else {
+//         return Promise.reject(`Ошибка: ${response.status} - ${response.statusText}`)
+//     }
+// }
 
 
 
-export function checkLoadImageFromServer(cardObject) {
-    return new Promise(function(resolve, reject) {
-        const image = document.createElement('img');
-        image.src = cardObject.cardImg.src;
-        image.onerror = function() {
-            reject(cardObject);
-        };
-        image.onload = function() {
-            resolve(cardObject);
-        };
-    });
-  }
+// export function checkLoadImageFromServer(cardObject) {
+//     return new Promise(function(resolve, reject) {
+//         const image = document.createElement('img');
+//         image.src = cardObject.cardImg.src;
+//         image.onerror = function() {
+//             reject(cardObject);
+//         };
+//         image.onload = function() {
+//             resolve(cardObject);
+//         };
+//     });
+//   }
 
-export function addEventForConfirmDelete(cardElement, cardObject) {
-    const objectHandler = {
-        popup: popupConfirmDelete,
-        buttonSubmit: buttonSubmitPopupConfirmDelete,
-        handleEvent: cardObject.confirmDeleteCallback, 
-        cardElement: cardElement, 
-        cardObject: cardObject,
-    }
-    addEventSubmitForForm({objectHandler: objectHandler});
-    addEventForClosePopup({objectHandler: objectHandler});
-    openPopup({popup: popupConfirmDelete});
-}
+// export function addEventForConfirmDelete(cardElement, cardObject) {
+//     const objectHandler = {
+//         popup: popupConfirmDelete,
+//         buttonSubmit: buttonSubmitPopupConfirmDelete,
+//         handleEvent: cardObject.confirmDeleteCallback, 
+//         cardElement: cardElement, 
+//         cardObject: cardObject,
+//     }
+//     addEventSubmitForForm({objectHandler: objectHandler});
+//     addEventForClosePopup({objectHandler: objectHandler});
+//     openPopup({popup: popupConfirmDelete});
+// }
 
 export function changeButtonTextDuringLoading(settings={
     button: null,
