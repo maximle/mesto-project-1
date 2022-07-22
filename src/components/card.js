@@ -71,7 +71,7 @@ class Card {
     }
 
     _addEventLikeButton() {
-        this._card.likeButton.addEventListener('click', this._likeCard);
+        this._card.likeButton.addEventListener('click', this._likeCard.bind(this));
     }
 
     _likeCard(evt) {
@@ -82,9 +82,9 @@ class Card {
             headers.method = 'PUT';
         }
 
-        this._api.getDataOnRequestToServer({target: `cards/likes/${this.cardObject.cardId}`, headers: headers})
+        this._api.getDataOnRequestToServer({target: `cards/likes/${this._card.cardId}`, headers: headers})
             .then(card => {
-                this._card.likes.textContent = card.likes.length;
+                this._card.likes.textContent = this._card.likes.length;
                 this._changeColorLikeButton();
             })
             .catch(error => {
