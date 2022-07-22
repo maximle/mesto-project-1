@@ -76,8 +76,10 @@ const config = {
     headers: {
         authorization: 'e4d16501-e8d2-438e-96b5-6b9c94c85c98',
         'Content-Type': 'application/json'
-    }
-    }
+    },
+    method: 'GET',
+    body: null
+}
 
 const cards = [];
 
@@ -92,20 +94,27 @@ class UserInfo {
     }
 
     updateAvatar({link}) {
-        this._apiObject.getDataOnRequestToServer({target: 'users/me/avatar', headers: {
-            method: 'PATCH',
-            body: JSON.stringify(
-                {
-                avatar: `${link}`,
+        console.log(link);
+        return (
+            this._apiObject.getDataOnRequestToServer({target: 'users/me/avatar', config1: {
+                method: 'PATCH',
+                body: JSON.stringify(
+                    {
+                        avatar: link
+                    }
+                )
+            }
             })
-        }
-    })
+        )
+        
 
     }
 
     getUserInfo() {
         return (
-            this._apiObject.getDataOnRequestToServer({target: 'users/me'})
+            this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
+                method: 'GET'
+            }})
             .then(user => {
                 this._avatarSelector.src = user.avatar;
                 this._nameSelector.textContent = user.name;
@@ -124,16 +133,18 @@ class UserInfo {
         }
 
     setUserInfo({name, about}) {
+        console.log(name, about);
         return (
-            this._apiObject.getDataOnRequestToServer({target: 'users/me', headers: {
+            this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
                 method: 'PATCH',
                 body: JSON.stringify(
                     {
-                    name: `${name}`,
-                    about: `${about}`
+                    name: name,
+                    about: about
                 })
             }})
                 .then(updatedUser => {
+                    console.log(updatedUser);
                     this._nameSelector.textContent = updatedUser.name;
                     this._aboutSelector.textContent = updatedUser.about;
     
@@ -159,7 +170,9 @@ const popupWithFormAddCard = new PopupWithForm({selectorPopup: popupAddCard, cal
 const popupWithFormEditProfile = new PopupWithForm({selectorPopup: popupEditProfile, callbackSubmitForm: handleProfileEditFormSubmit});
 const popupWithFormEditAvatar = new PopupWithForm({selectorPopup: popupEditAvatar, callbackSubmitForm: handleEditAvatarFormSubmit});
 
-const listCards = api.getDataOnRequestToServer({target: 'cards'})
+const listCards = api.getDataOnRequestToServer({target: 'cards', config1: {
+    method: 'GET'
+}})
     .then(res => {
         res.forEach(card => {
             const cardObject = new Card({
@@ -226,8 +239,9 @@ function handleProfileEditFormSubmit(evt) {
         loadingText: loadingText,
         primaryText: this.buttonSubmit.textContent,
     });
-    setTimeout(() => {   // DOM не успевает перерисоваться              
-        user.setUserInfo({
+      // DOM не успевает перерисоваться  
+                 
+    user.setUserInfo({
             name: this.formElement.elements.name.value,
             about: this.formElement.elements.description.value,})
         .then(res => {
@@ -240,7 +254,7 @@ function handleProfileEditFormSubmit(evt) {
         .finally(() => {
             changeButtonTextDuringLoading({button: this.buttonSubmit});
         })
-    }, 1);
+    
 }
 
 function handleEditAvatarFormSubmit(evt) {
@@ -252,12 +266,13 @@ function handleEditAvatarFormSubmit(evt) {
         primaryText: this.buttonSubmit.textContent,
     });
 
-    setTimeout(() => {   // DOM не успевает перерисоваться  
+      // DOM не успевает перерисоваться  
         
-        updateAvatar({link: inputLinkToAvatar.value})
+    user.updateAvatar({link: inputLinkToAvatar.value})
         .then(userAvatar => {
+            console.log(userAvatar);
             profileAvatar.src = userAvatar.avatar;
-            closePopup({objectHandler: this});
+            popupWithFormEditAvatar.closePopup({objectHandler: this});
         })
         .catch(error => {
             console.log(error);
@@ -266,7 +281,7 @@ function handleEditAvatarFormSubmit(evt) {
             changeButtonTextDuringLoading({button: this.buttonSubmit});
         })
         
-    }, 1);
+    
     
 }
 
@@ -281,11 +296,23 @@ function addCardOnPage(evt) {
     
     setTimeout(() => {
         
-        addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
+        addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}}, config)
         .then(card => {
-            const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
-            insertCardInsideList(cardObject, cardItemsList);
-            closePopup({objectHandler: this});
+            console.log(card);
+            // const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
+            // insertCardInsideList(cardObject, cardItemsList);
+            const cards = [];
+            const cardObject = new Card({
+                userId: user['_id'], 
+                params: params, 
+                api: api, 
+                popupOpenImage: popupWithImageObject, 
+                popupWithForm: popupConfirmDeleteObject
+            });
+            cards.push(cardObject.getCard({initialData: card}));
+            
+            const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
+            section.appendCardOnPage();
         })
         .catch(error => {
             console.log(error);
@@ -299,21 +326,22 @@ function addCardOnPage(evt) {
 
 function addCardOnServer(settings={
     information: {
-        name: '', link: ''
-    }}
+        name: '', 
+        link: ''
+    }, config}
     ) {
-        const configForRequest = configTemplate;
-        configForRequest.options.method = 'POST';
-        configForRequest.options.body = JSON.stringify(
+        
+        config.method = 'POST';
+        config.body = JSON.stringify(
             {
             name: `${settings.information.name}`,
             link: `${settings.information.link}`
         }
         );
         return(
-            getDataOnRequestToServer({
-                configForRequest: configForRequest,
-                targetLink: 'cards',
+            api.getDataOnRequestToServer({
+                target: 'cards',
+                config1: config
             })
         );
         

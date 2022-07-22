@@ -20,11 +20,16 @@ class Api {
         }
     }
 
+
     _requestPromiseFromURL() {
         console.log(this._config.headers);
         if(this._config.baseUrl && this._config.cohortId && this._config.headers.authorization) {
             return (
-                fetch(`${this._config.baseUrl}/${this._config.cohortId}/${this._target}`, {headers: this._config.headers})
+                fetch(`${this._config.baseUrl}/${this._config.cohortId}/${this._target}`, {
+                    method: this._config.method,
+                    headers: this._config.headers,
+                    body: this._config.body
+                })
             );
         } else {
             console.log('Не хватает свойств, переданных функции.');
@@ -55,8 +60,10 @@ class Api {
         this._cardObject = cardObject;
     }
 
-    getDataOnRequestToServer({target, headers}) {
-        this._config.headers = Object.assign(this._config.headers, headers);
+    getDataOnRequestToServer({target, config1}) {
+        console.log(config1, 'config1');
+        this._config.method = config1.method;
+        this._config.body = config1.body;
         this._target = target;
         return (
             this._requestPromiseFromURL()
