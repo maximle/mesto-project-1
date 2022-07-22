@@ -2,13 +2,11 @@ import './index.css';
 
 
 import { 
-    openPopup, 
-    addEventSubmitForForm, 
-    addEventForClosePopup,
-    fillInitialValuesFields,
-    closePopup,
-    userName,
-    userAbout,
+    Section,
+    PopupWithImage,
+    PopupWithForm,
+    Popup,
+    insertCardOnPage
 } from './components/modal.js';
 import { 
     FormValidator
@@ -16,25 +14,22 @@ import {
 import {
     validationSettings, 
     userObject, 
-    cardItemsList,
     changeButtonTextDuringLoading
 } from './components/utils.js';
 import { 
-    config, 
-    configTemplate,
-    getDataOnRequestToServer,
+    Api
 } from './components/api.js';
 import { 
-    getCardObject, 
-    insertCardInsideList,
-    insertCardOnPage, 
     removeCard,
+    Card,
 } from './components/card.js';
 
 
 const popupAddCard = document.querySelector('#addCard');
 const popupEditProfile = document.querySelector('#editProfile');
 const popupEditAvatar = document.querySelector('#editAvatar');
+const popupImage = document.querySelector('#openImage');
+const popupConfirmDelete = document.querySelector('#confirmDelete');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
 console.log(formAddCard);
@@ -56,14 +51,177 @@ const inputSourceImg = formAddCard.elements.description;
 const inputNameCard = formAddCard.elements.name;
 
 const profileAvatar = document.querySelector('.profile-section__avatar');
+const cardItemsList = document.querySelector('.photo-grid__items');
+
+const userName = document.querySelector('.profile-section__name');
+const userAbout = document.querySelector('.profile-section__text');
 
 const loadingText = 'Сохранение...';
 
+const params = {
+    template: '#photo-grid__item', 
+    node:'.photo-grid__element-container', 
+    classOfImage:'.photo-grid__image', 
+    classOfName:'.photo-grid__name', 
+    classOfLike:'.photo-grid__like-icon', 
+    classOfDelete:'.photo-grid__delete',
+    classOfLikes: '.photo-grid__likes', 
+    }
 
-function confirmDeleteCallback(evt) {
-    evt.preventDefault();
-    deleteCardFromServer({objectHandler: this});
-}
+const config = {
+    baseUrl: 'https://mesto.nomoreparties.co/v1',
+    cohortId: 'plus-cohort-13',
+    headers: {
+        authorization: 'e4d16501-e8d2-438e-96b5-6b9c94c85c98',
+        'Content-Type': 'application/json'
+    }
+    }
+
+const cards = [];
+
+
+class UserInfo {
+    constructor({nameSelector, aboutSelector, avatarSelector}, apiObject) {
+        this._nameSelector = nameSelector;
+        this._aboutSelector = aboutSelector;
+        this._avatarSelector = avatarSelector;
+        this._apiObject = apiObject;
+        this.user = {};
+    }
+
+    updateAvatar({link}) {
+        this._apiObject.getDataOnRequestToServer({target: 'users/me/avatar', headers: {
+            method: 'PATCH',
+            body: JSON.stringify(
+                {
+                avatar: `${link}`,
+            })
+        }
+    })
+
+    }
+
+    getUserInfo() {
+        return (
+            this._apiObject.getDataOnRequestToServer({target: 'users/me'})
+            .then(user => {
+                this._avatarSelector.src = user.avatar;
+                this._nameSelector.textContent = user.name;
+                this._aboutSelector.textContent = user.about;
+                this.user.avatar = user.avatar;
+                this.user.name = user.name;
+                this.user.description = user.about;
+                this.user['_id'] = user['_id'];
+                return this.user;
+                })
+            .catch(error => {
+                console.log(error);
+                return error;
+            })
+        );
+        }
+
+    setUserInfo({name, about}) {
+        this._apiObject.getDataOnRequestToServer({target: 'users/me', headers: {
+            method: 'PATCH',
+            body: JSON.stringify(
+                {
+                name: `${name}`,
+                about: `${about}`
+            }
+            )
+        }})
+            .then(updatedUser => {
+                this._nameSelector.textContent = updatedUser.name;
+                this._aboutSelector.textContent = updatedUser.about;
+
+                this.user.name = updatedUser.name;
+                this.user.description = updatedUser.about;
+                this.user.avatar = updatedUser.avatar;
+                this.user['_id'] = updatedUser['_id'];
+                console.log('Данные обновлены');
+                return updatedUser;
+            })
+            .catch(error => {
+                return error;
+            })
+        }
+    }
+
+const api = new Api({config});
+const user = new UserInfo({nameSelector: userName, aboutSelector: userAbout, avatarSelector: profileAvatar}, api);
+const popupWithImageObject = new PopupWithImage({selectorPopup: popupImage});
+const popupConfirmDeleteObject = new PopupWithForm({selectorPopup: popupConfirmDelete});
+const popupWithFormAddCard = new PopupWithForm({selectorPopup: popupAddCard, callbackSubmitForm: addCardOnPage});
+const popupWithFormEditProfile = new PopupWithForm({selectorPopup: popupEditProfile, callbackSubmitForm: handleProfileEditFormSubmit});
+const popupWithFormEditAvatar = new PopupWithForm({selectorPopup: popupEditAvatar, callbackSubmitForm: handleEditAvatarFormSubmit});
+
+const listCards = api.getDataOnRequestToServer({target: 'cards'})
+    .then(res => {
+        res.forEach(card => {
+            const cardObject = new Card({
+                userId: user['_id'], 
+                params: params, 
+                api: api, 
+                popupOpenImage: popupWithImageObject, 
+                popupWithForm: popupConfirmDeleteObject
+            });
+            cards.push(cardObject.getCard({initialData: card}));
+            })
+        const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
+        section.appendCardOnPage();
+        return true;
+    })
+    .catch(err => {
+        console.log(`Ошибка: ${err}`);
+        return false;
+    })
+
+
+console.log(popupWithFormAddCard._buttonClose);
+
+
+Promise.all([
+    user.getUserInfo(),
+    listCards,
+])
+    .then(arrayData => {
+        buttonAddCard.addEventListener('click', () => {
+            popupWithFormAddCard.openPopup({});
+            formAddCard.reset();
+            checkValidityOfFields(formAddCard, validationSettings);
+            toggleButtonSubmitState(formAddCard, validationSettings);
+        });
+        
+        
+        buttonEditProfile.addEventListener('click', () => {
+            popupWithFormEditProfile.openPopup({withInitialValuesFields: true});
+            checkValidityOfFields(formEditProfile, validationSettings);
+            toggleButtonSubmitState(formEditProfile, validationSettings);
+        });
+        
+        buttonEditAvatar.addEventListener('click', () => {
+            popupWithFormEditAvatar.openPopup({});
+            formEditAvatar.reset();
+            checkValidityOfFields(formEditAvatar, validationSettings);
+            toggleButtonSubmitState(formEditAvatar, validationSettings);
+        });
+        
+        
+        enableValidationAllForms(validationSettings);
+
+        console.log('Все нормально загрузилось');
+    })
+    .catch(errorArray => {
+        console.log('Ошибка загрузки', errorArray);
+    })
+
+
+
+// function confirmDeleteCallback(evt) {
+//     evt.preventDefault();
+//     deleteCardFromServer({objectHandler: this});
+// }
 
 function handleProfileEditFormSubmit(evt) {
     evt.preventDefault();
@@ -171,6 +329,7 @@ function addCardOnServer(settings={
 
 
 
+<<<<<<< HEAD
 function updateProfileInformation(settings={
     information: {
         name: '', description: ''
@@ -306,47 +465,189 @@ Promise.all([
             cardPopupFromValidator.enableValidation();
 
         });
-        
-        
-        buttonEditProfile.addEventListener('click', () => {
-            const objectHandler = {
-                popup: popupEditProfile,
-                formElement: formEditProfile, 
-                handleEvent: handleProfileEditFormSubmit, 
-                buttonSubmit: buttonSubmitFormEditProfile,
-            };
-            openPopup({popup: popupEditProfile});
-            fillInitialValuesFields(formEditProfile);
-            checkValidityOfFields(formEditProfile, validationSettings);
-            toggleButtonSubmitState(formEditProfile, validationSettings);
-            addEventForClosePopup({objectHandler: objectHandler});
-            addEventSubmitForForm({objectHandler: objectHandler});
+=======
+// function updateProfileInformation(settings={
+//     information: {
+//         name: '', description: ''
+//     }}
+//     ) {
 
-        });
+//         const configForRequest = configTemplate;
+//         configForRequest.options.method = 'PATCH';
+//         configForRequest.options.body = JSON.stringify(
+//             {
+//             name: `${settings.information.name}`,
+//             about: `${settings.information.description}`
+//         }
+//         );
+//         return(
+//             getDataOnRequestToServer({
+//                 configForRequest: configForRequest,
+//                 targetLink: 'users/me',
+//             })
+//             .then(updatedUser => {
+//                 userName.textContent = updatedUser.name;
+//                 userAbout.textContent = updatedUser.about;
+
+//                 userObject.name = updatedUser.name;
+//                 userObject.description = updatedUser.about;
+//                 userObject.avatar = updatedUser.avatar;
+//                 userObject['_id'] = updatedUser['_id'];
+//                 return updatedUser;
+//             })
+//             .catch(error => {
+//                 return error;
+//             })
+//         );
+// }
+
+
+// function deleteCardFromServer(settings={objectHandler: null}) {
+//     const configForRequest = configTemplate;
+//     configForRequest.options.method = 'DELETE';
+//     getDataOnRequestToServer({
+//         configForRequest: configForRequest,
+//         targetLink: `cards/${settings.objectHandler.cardObject.cardId}`,
+//     })
+//     .then(data => {
+//         console.log('Карточка удалена');
+//         removeCard(settings.objectHandler.cardElement);
+//         closePopup({objectHandler: settings.objectHandler});
+//         settings.objectHandler.buttonSubmit.removeEventListener('click', settings.objectHandler);
+//     })
+//     .catch(error => {
+//         console.log('Карточка не удалена', error);
+//     })
+//     }
+
+// function updateAvatar(settings={link: ''}) {
+//     const configForRequest = configTemplate;
+//     configForRequest.options.method = 'PATCH';
+//     configForRequest.options.body = JSON.stringify(
+//         {
+//         avatar: `${settings.link}`,
+//     }
+//     );
+//     return(
+//         getDataOnRequestToServer({
+//             configForRequest: configForRequest,
+//             targetLink: 'users/me/avatar',
+//         })
+//     );
+// }
+
+// function getUser(settings={idUser: false, isMe: false}) {
+//     const configForRequest = configTemplate;
+//     if(settings.isMe) {
+//         return (
+//             getDataOnRequestToServer({
+//                 configForRequest: configForRequest,
+//                 targetLink: 'users/me',
+//             })
+//             .then(user => {
+//                     profileAvatar.src = user.avatar;
+//                     userName.textContent = user.name;
+//                     userAbout.textContent = user.about;
+//                     userObject.avatar = user.avatar;
+//                     userObject.name = user.name;
+//                     userObject.description = user.about;
+//                     userObject['_id'] = user['_id'];
+//                     return user;
+//                 })
+//             .catch(error => {
+//                 console.log(error);
+//                 return error;
+//             })
+//         );
+//     }
+//   }
+
+// function getCards(settings={confirmDeleteCallback: null}) {           
+//     const configForRequest = configTemplate;
+//     return (
+//         getDataOnRequestToServer({
+//             configForRequest: configForRequest,
+//             targetLink: 'cards',
+//         })
+//         .then(arrayCards => {                    // Получаю массив карточек, которые нужно отрисовать и вызываю колбек ->
+//             arrayCards.forEach(card => {
+//                 insertCardOnPage({card: card, confirmDeleteCallback: settings.confirmDeleteCallback});
+//             });
+//             return arrayCards;
+//         })
+//         .catch(error => {
+//             console.log(error);
+//             return error;
+//         })
+//     );
+// }
+
+// Promise.all([
+//     getUser({config: config, isMe: true}),
+//     getCards({confirmDeleteCallback: confirmDeleteCallback}),
+// ])
+//     .then(arrayData => {
+//         buttonAddCard.addEventListener('click', () => {
+//             const objectHandler = {
+//                 popup: popupAddCard,
+//                 formElement: formAddCard, 
+//                 handleEvent: addCardOnPage, 
+//                 buttonSubmit: buttonSubmitFormAddCard,
+//             };
+//             openPopup({popup: popupAddCard});
+//             formAddCard.reset();
+//             checkValidityOfFields(formAddCard, validationSettings);
+//             toggleButtonSubmitState(formAddCard, validationSettings);
+//             addEventForClosePopup({objectHandler: objectHandler});
+//             addEventSubmitForForm({objectHandler: objectHandler});
+
+//         });
+>>>>>>> ca3cc1b7af36da9b9da0f4e77930142ee7b42fc4
         
-        buttonEditAvatar.addEventListener('click', () => {
-            const objectHandler = {
-                popup: popupEditAvatar,
-                formElement: formEditAvatar, 
-                handleEvent: handleEditAvatarFormSubmit, 
-                buttonSubmit: buttonSubmitFormEditAvatar,
-            };
-            openPopup({popup: popupEditAvatar});
-            formEditAvatar.reset();
-            checkValidityOfFields(formEditAvatar, validationSettings);
-            toggleButtonSubmitState(formEditAvatar, validationSettings);
-            addEventForClosePopup({objectHandler: objectHandler});
-            addEventSubmitForForm({objectHandler: objectHandler});
-        });
+        
+//         buttonEditProfile.addEventListener('click', () => {
+//             const objectHandler = {
+//                 popup: popupEditProfile,
+//                 formElement: formEditProfile, 
+//                 handleEvent: handleProfileEditFormSubmit, 
+//                 buttonSubmit: buttonSubmitFormEditProfile,
+//             };
+//             openPopup({popup: popupEditProfile});
+//             fillInitialValuesFields(formEditProfile);
+//             checkValidityOfFields(formEditProfile, validationSettings);
+//             toggleButtonSubmitState(formEditProfile, validationSettings);
+//             addEventForClosePopup({objectHandler: objectHandler});
+//             addEventSubmitForForm({objectHandler: objectHandler});
+
+//         });
+        
+//         buttonEditAvatar.addEventListener('click', () => {
+//             const objectHandler = {
+//                 popup: popupEditAvatar,
+//                 formElement: formEditAvatar, 
+//                 handleEvent: handleEditAvatarFormSubmit, 
+//                 buttonSubmit: buttonSubmitFormEditAvatar,
+//             };
+//             openPopup({popup: popupEditAvatar});
+//             formEditAvatar.reset();
+//             checkValidityOfFields(formEditAvatar, validationSettings);
+//             toggleButtonSubmitState(formEditAvatar, validationSettings);
+//             addEventForClosePopup({objectHandler: objectHandler});
+//             addEventSubmitForForm({objectHandler: objectHandler});
+//         });
         
         
+<<<<<<< HEAD
         // enableValidationAllForms(validationSettings);
+=======
+//         enableValidationAllForms(validationSettings);
+>>>>>>> ca3cc1b7af36da9b9da0f4e77930142ee7b42fc4
 
-        console.log('Все нормально загрузилось');
-    })
-    .catch(errorArray => {
-        console.log('Ошибка загрузки', errorArray);
-    })
+//         console.log('Все нормально загрузилось');
+//     })
+//     .catch(errorArray => {
+//         console.log('Ошибка загрузки', errorArray);
+//     })
 
 
 
