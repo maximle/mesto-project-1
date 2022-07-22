@@ -101,6 +101,8 @@ class Card {
     }
     
 
+
+
     getCard({initialData}) {
         this._initialData = initialData;
         this._makeCardObject();

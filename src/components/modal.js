@@ -169,7 +169,8 @@ class Section {
         
     }
 
-    appendCardOnPage() {  
+    appendCardOnPage() { 
+        console.log(this._data, 'asddsaggbbhntgn'); 
         this._data.forEach(card => {
             this._renderer(card)
                 .then(res => { 
