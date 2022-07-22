@@ -98,18 +98,24 @@ class PopupWithForm extends Popup {
         this._formElement = this._selectorPopup.querySelector('.form');
         this._cardElement = null;
         this._cardObject = null;
+        this._eventObject = {
+            handleEvent: this._callbackSubmitForm,
+            obj: this,
+            buttonSubmit: this._buttonSubmit,
+            formElement: this._formElement,
+        };
     }
 
     addEventSubmitForForm() {
         if(this._selectorPopup.id === 'confirmDelete') {
-            this._buttonSubmit.addEventListener('click', this._callbackSubmitForm);
+            this._buttonSubmit.addEventListener('click', this._eventObject);
         } else {
-            this._formElement.addEventListener('submit', this._callbackSubmitForm);
+            this._formElement.addEventListener('submit', this._eventObject);
         }
     }
 
     _removeFormListener() {
-        this._formElement.removeEventListener('submit', this._callbackSubmitForm);
+        this._formElement.removeEventListener('submit', this._eventObject);
     }
 
     _fillInitialValuesFields() {

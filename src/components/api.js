@@ -13,6 +13,7 @@ class Api {
 
     _checkPromiseResponse(response) {
         if(response.ok) {
+            
             return response.json();
         } else {
             return Promise.reject(`Ошибка: ${response.status} - ${response.statusText}`)
@@ -20,6 +21,7 @@ class Api {
     }
 
     _requestPromiseFromURL() {
+        console.log(this._config.headers);
         if(this._config.baseUrl && this._config.cohortId && this._config.headers.authorization) {
             return (
                 fetch(`${this._config.baseUrl}/${this._config.cohortId}/${this._target}`, {headers: this._config.headers})

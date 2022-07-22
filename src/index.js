@@ -122,30 +122,31 @@ class UserInfo {
         }
 
     setUserInfo({name, about}) {
-        this._apiObject.getDataOnRequestToServer({target: 'users/me', headers: {
-            method: 'PATCH',
-            body: JSON.stringify(
-                {
-                name: `${name}`,
-                about: `${about}`
+        return (
+            this._apiObject.getDataOnRequestToServer({target: 'users/me', headers: {
+                method: 'PATCH',
+                body: JSON.stringify(
+                    {
+                    name: `${name}`,
+                    about: `${about}`
+                })
+            }})
+                .then(updatedUser => {
+                    this._nameSelector.textContent = updatedUser.name;
+                    this._aboutSelector.textContent = updatedUser.about;
+    
+                    this.user.name = updatedUser.name;
+                    this.user.description = updatedUser.about;
+                    this.user.avatar = updatedUser.avatar;
+                    this.user['_id'] = updatedUser['_id'];
+                    console.log('Данные обновлены');
+                    return updatedUser;
+                })
+                .catch(error => {
+                    return error;
+                })
+                );
             }
-            )
-        }})
-            .then(updatedUser => {
-                this._nameSelector.textContent = updatedUser.name;
-                this._aboutSelector.textContent = updatedUser.about;
-
-                this.user.name = updatedUser.name;
-                this.user.description = updatedUser.about;
-                this.user.avatar = updatedUser.avatar;
-                this.user['_id'] = updatedUser['_id'];
-                console.log('Данные обновлены');
-                return updatedUser;
-            })
-            .catch(error => {
-                return error;
-            })
-        }
     }
 
 const api = new Api({config});
@@ -178,7 +179,6 @@ const listCards = api.getDataOnRequestToServer({target: 'cards'})
     })
 
 
-console.log(popupWithFormAddCard._buttonClose);
 
 
 Promise.all([
@@ -231,15 +231,12 @@ function handleProfileEditFormSubmit(evt) {
         primaryText: this.buttonSubmit.textContent,
     });
     setTimeout(() => {   // DOM не успевает перерисоваться              
-        updateProfileInformation({
-            information: {
-                name: this.formElement.elements.name.value,
-                description: this.formElement.elements.description.value,
-            }
-        })
+        user.setUserInfo({
+            name: this.formElement.elements.name.value,
+            about: this.formElement.elements.description.value,})
         .then(res => {
             console.log(res);
-            closePopup({objectHandler: this});
+            popupWithFormEditProfile.closePopup();
         })
         .catch(error => {
             console.log(error);
