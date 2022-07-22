@@ -16,53 +16,55 @@ class Popup {
     constructor({selectorPopup}) {
         this._selectorPopup = selectorPopup;
         this._buttonClose = this._selectorPopup.querySelector('.popup__close');
+        this._eventObjectCloseButton = {};
+        this._eventObjectCloseOverlay = {};
+        this._eventObjectCloseKey = {};
     }
 
     _addEventToKeyForClose() {
-        document.addEventListener('keydown', this._closePopupToKey);     
+        this._eventObjectCloseKey.handleEvent = this._closePopupToKey;
+        document.addEventListener('keydown', this._eventObjectCloseKey);     
     }
     
     _closePopupToKey(evt) {
         if (evt.key === 'Escape') {
             const popup = document.querySelector('.popup_opened');
             if(popup) {
-                this.closePopup();
+                this.obj.closePopup();
             }
         }
     }
 
     _addEventToOverlayForClose() {
-        this._selectorPopup.addEventListener('click', this._closePopupToOverlay);
+        this._eventObjectCloseOverlay.handleEvent = this._closePopupToOverlay;
+        this._selectorPopup.addEventListener('click', this._eventObjectCloseOverlay);
     }
     
     _closePopupToOverlay(evt) {
         if (!(evt.target.closest('.popup__container'))) {
-            this.closePopup();
+            this.obj.closePopup();
         }
     }
 
     _closePopupToButton(evt) {
-        // this.closePopup();
-        this._selectorPopup.classList.remove('popup_opened');
-        this._removeEventForCloseButton();
-        this._removeEventForCloseToOverlay();
-        this._removeEventForCloseToKey();
+        this.obj.closePopup();
     }
 
     _addEventForCloseButton() {
-        this._buttonClose.addEventListener('click', this._closePopupToButton);
+        this._eventObjectCloseButton.handleEvent = this._closePopupToButton;
+        this._buttonClose.addEventListener('click', this._eventObjectCloseButton);
     }
 
     _removeEventForCloseButton() {
-        this._buttonClose.removeEventListener('click', this._closePopupToButton);
+        this._buttonClose.removeEventListener('click', this._eventObjectCloseButton);
     }
     
     _removeEventForCloseToOverlay() {
-        this._selectorPopup.removeEventListener('click', this._closePopupToOverlay);
+        this._selectorPopup.removeEventListener('click', this._eventObjectCloseOverlay);
     }
     
     _removeEventForCloseToKey() {
-        document.removeEventListener('keydown', this._closePopupToKey);
+        document.removeEventListener('keydown', this._eventObjectCloseKey);
     }
 
     closePopup() {
@@ -74,6 +76,9 @@ class Popup {
 
     openPopup() {
         this._selectorPopup.classList.add('popup_opened');
+        this._eventObjectCloseButton.obj = this;
+        this._eventObjectCloseOverlay.obj = this;
+        this._eventObjectCloseKey.obj = this;
         this.setEventListener();
     }
 
@@ -137,7 +142,6 @@ class PopupWithImage extends Popup {
 
 
     openPopup() {
-        console.log(this.card);
         this._elementImageOfPopupImage.src = this.card.cardImg.src; 
         this._elementImageOfPopupImage.alt = this.card.cardImg.alt;  
         this._elementCaptionOfPopupImage.textContent = this.card.cardName.textContent; 
