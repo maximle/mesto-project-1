@@ -84,7 +84,7 @@ class Card {
 
         this._api.getDataOnRequestToServer({target: `cards/likes/${this._card.cardId}`, headers: headers})
             .then(card => {
-                this._card.likes.textContent = this._card.likes.length;
+                this._card.likes.textContent = card.likes.length;
                 this._changeColorLikeButton();
             })
             .catch(error => {
