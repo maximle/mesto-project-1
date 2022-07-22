@@ -9,10 +9,8 @@ import {
     insertCardOnPage
 } from './components/modal.js';
 import { 
-    enableValidationAllForms,
-    checkValidityOfFields,
-    toggleButtonSubmitState,
- } from './components/validate.js';
+    FormValidator
+} from './components/validate.js';
 import {
     validationSettings, 
     userObject, 
@@ -34,8 +32,12 @@ const popupImage = document.querySelector('#openImage');
 const popupConfirmDelete = document.querySelector('#confirmDelete');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
+console.log(formAddCard);
+const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
 const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
 const formEditAvatar = popupEditAvatar.querySelector('#formEditAvatar');
+const userPopupFromValidator = new FormValidator(formEditProfile, validationSettings);
+const avatarPopupFromValidator = new FormValidator(formEditAvatar, validationSettings);
 
 const buttonSubmitFormAddCard = formAddCard.querySelector('.form__save');
 const buttonSubmitFormEditProfile = formEditProfile.querySelector('.form__save');
@@ -189,22 +191,19 @@ Promise.all([
         buttonAddCard.addEventListener('click', () => {
             popupWithFormAddCard.openPopup({});
             formAddCard.reset();
-            checkValidityOfFields(formAddCard, validationSettings);
-            toggleButtonSubmitState(formAddCard, validationSettings);
+            cardPopupFromValidator.enableValidation();
         });
         
         
         buttonEditProfile.addEventListener('click', () => {
             popupWithFormEditProfile.openPopup({withInitialValuesFields: true});
-            checkValidityOfFields(formEditProfile, validationSettings);
-            toggleButtonSubmitState(formEditProfile, validationSettings);
+            userPopupFromValidator.enableValidation();
         });
         
         buttonEditAvatar.addEventListener('click', () => {
             popupWithFormEditAvatar.openPopup({});
             formEditAvatar.reset();
-            checkValidityOfFields(formEditAvatar, validationSettings);
-            toggleButtonSubmitState(formEditAvatar, validationSettings);
+            avatarPopupFromValidator.enableValidation();
         });
         
         
@@ -465,6 +464,7 @@ function addCardOnServer(settings={
 //             addEventSubmitForForm({objectHandler: objectHandler});
 
 //         });
+
         
         
 //         buttonEditProfile.addEventListener('click', () => {
@@ -498,8 +498,6 @@ function addCardOnServer(settings={
 //             addEventSubmitForForm({objectHandler: objectHandler});
 //         });
         
-        
-//         enableValidationAllForms(validationSettings);
 
 //         console.log('Все нормально загрузилось');
 //     })
