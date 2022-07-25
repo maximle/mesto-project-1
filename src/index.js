@@ -176,6 +176,7 @@ user.getUserInfo()
                         popupWithForm: popupConfirmDeleteObject
                     });
                     cards.push(cardObject.getCard({initialData: card}));
+                    console.log(cards);
                     })
                 const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
                 section.appendCardOnPage();
@@ -188,8 +189,7 @@ user.getUserInfo()
     })
     .then(res => {
         buttonAddCard.addEventListener('click', () => {
-            popupWithFormAddCard.openPopup({});
-            formAddCard.reset();
+            popupWithFormAddCard.openPopup({reset: true});
             cardPopupFromValidator.enableValidation();
         });
         
@@ -200,8 +200,7 @@ user.getUserInfo()
         });
         
         buttonEditAvatar.addEventListener('click', () => {
-            popupWithFormEditAvatar.openPopup({});
-            formEditAvatar.reset();
+            popupWithFormEditAvatar.openPopup({reset: true});
             avatarPopupFromValidator.enableValidation();
         });
         

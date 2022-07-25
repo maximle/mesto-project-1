@@ -133,12 +133,15 @@ class PopupWithForm extends Popup {
         super.closePopup();
     }
 
-    openPopup({withInitialValuesFields, cardObject}) {
+    openPopup({withInitialValuesFields, cardObject, reset}) {
         this._eventObject.cardObject = cardObject;
         this._eventObject.obj = this;
 
         if(withInitialValuesFields === true) {
             this._fillInitialValuesFields();
+        }
+        if(reset) {
+            this._formElement.reset();
         }
         this.addEventSubmitForForm();
         super.openPopup();
