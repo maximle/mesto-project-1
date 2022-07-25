@@ -1,8 +1,3 @@
-const listHandlersEventForClosePopup = {
-    closeButtonEvent: {},
-    overlayCloseEvent: {},
-    toKeyCloseEvent: {},
-};
 export const userName = document.querySelector('.profile-section__name');
 export const userAbout = document.querySelector('.profile-section__text');
 
@@ -93,6 +88,7 @@ class PopupWithForm extends Popup {
         this._formElement = this._selectorPopup.querySelector('.form');
         this._cardElement = null;
         this._cardObject = null;
+        this._primaryTextButton = '';
         this._eventObject = {
             handleEvent: this._callbackSubmitForm,
             buttonSubmit: this._buttonSubmit,
@@ -121,6 +117,15 @@ class PopupWithForm extends Popup {
     _fillInitialValuesFields() {
         this._formElement.elements.name.value = userName.textContent;
         this._formElement.elements.description.value = userAbout.textContent;
+    }
+
+    changeButtonTextDuringLoading({loadingText, primaryText}) {
+        if(loadingText) {
+            this._primaryTextButton = primaryText;
+            this._buttonSubmit.textContent = loadingText;
+        } else {
+            this._buttonSubmit.textContent = this._primaryTextButton;
+        }
     }
 
     closePopup() {

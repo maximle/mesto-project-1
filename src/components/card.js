@@ -1,5 +1,5 @@
 
-class Card {
+export default class Card {
     constructor({userId, params, api, popupOpenImage, popupWithForm}) {
         this._initialData = null;
         this._api = api;
@@ -106,7 +106,3 @@ class Card {
     }
 
 }
-
-export {
-    Card,
-};

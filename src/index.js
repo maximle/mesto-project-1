@@ -5,21 +5,13 @@ import {
     Section,
     PopupWithImage,
     PopupWithForm,
-    insertCardOnPage
+    insertCardOnPage,
+    userName,
+    userAbout,
 } from './components/modal.js';
-import { 
-    FormValidator
-} from './components/validate.js';
-import {
-    validationSettings, 
-    changeButtonTextDuringLoading
-} from './components/utils.js';
-import { 
-    Api
-} from './components/api.js';
-import { 
-    Card,
-} from './components/card.js';
+import FormValidator from './components/validate.js';
+import Api from './components/api.js';
+import Card from './components/card.js';
 
 
 const loadingText = 'Сохранение...';
@@ -84,9 +76,6 @@ const inputNameCard = formAddCard.elements.name;
 const profileAvatar = document.querySelector('.profile-section__avatar');
 const cardItemsList = document.querySelector('.photo-grid__items');
 
-const userName = document.querySelector('.profile-section__name');
-const userAbout = document.querySelector('.profile-section__text');
-
 const cards = [];
 
 
@@ -106,13 +95,8 @@ class UserInfo {
                 body: JSON.stringify(
                     {
                         avatar: link
-                    }
-                )
-            }
-            })
+                    })}})
         )
-        
-
     }
 
     getUserInfo() {
@@ -231,12 +215,7 @@ user.getUserInfo()
 
 function handleProfileEditFormSubmit(evt) {
     evt.preventDefault();
-    changeButtonTextDuringLoading({
-        button: this.buttonSubmit,
-        loadingText: loadingText,
-        primaryText: this.buttonSubmit.textContent,
-    });
-                 
+    popupWithFormEditProfile.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
     user.setUserInfo({
             name: this.formElement.elements.name.value,
             about: this.formElement.elements.description.value,})
@@ -247,20 +226,14 @@ function handleProfileEditFormSubmit(evt) {
             console.log(error);
         })
         .finally(() => {
-            changeButtonTextDuringLoading({button: this.buttonSubmit});
+            popupWithFormEditProfile.changeButtonTextDuringLoading({});
         })
     
 }
 
 function handleEditAvatarFormSubmit(evt) {
     evt.preventDefault();
-
-    changeButtonTextDuringLoading({
-        button: this.buttonSubmit,
-        loadingText: loadingText,
-        primaryText: this.buttonSubmit.textContent,
-    });
-        
+    popupWithFormEditAvatar.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
     user.updateAvatar({link: inputLinkToAvatar.value})
         .then(userAvatar => {
             profileAvatar.src = userAvatar.avatar;
@@ -270,7 +243,7 @@ function handleEditAvatarFormSubmit(evt) {
             console.log(error);
         })
         .finally(() => {
-            changeButtonTextDuringLoading({button: this.buttonSubmit});
+            popupWithFormEditAvatar.changeButtonTextDuringLoading({});
         })
         
     
@@ -279,13 +252,7 @@ function handleEditAvatarFormSubmit(evt) {
 
 function addCardOnPage(evt) {
     evt.preventDefault();
-    
-    changeButtonTextDuringLoading({
-        button: this.buttonSubmit,
-        loadingText: loadingText,
-        primaryText: this.buttonSubmit.textContent,
-    });
-    
+    popupWithFormAddCard.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
     setTimeout(() => {
         
         addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}}, config)
@@ -308,7 +275,7 @@ function addCardOnPage(evt) {
             console.log(error);
         })
         .finally(() => {
-            changeButtonTextDuringLoading({button: this.buttonSubmit});
+            popupWithFormAddCard.changeButtonTextDuringLoading({});
         })
     }, 1);
     
@@ -340,11 +307,7 @@ function addCardOnServer(settings={
 
 function deleteCardFromServer(evt) {
     evt.preventDefault();
-    changeButtonTextDuringLoading({
-        button: this.buttonSubmit,
-        loadingText: loadingText,
-        primaryText: this.buttonSubmit.textContent,
-    });
+    popupConfirmDeleteObject.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
     api.getDataOnRequestToServer({target: `cards/${this.cardObject._card.cardId}`, config1: {
         method: 'DELETE'
     }})
@@ -357,7 +320,7 @@ function deleteCardFromServer(evt) {
         console.log('Карточка не удалена', error);
     })
     .finally(() => {
-        changeButtonTextDuringLoading({button: this.buttonSubmit});
+        popupConfirmDeleteObject.changeButtonTextDuringLoading({});
     })
     }
 

@@ -1,5 +1,5 @@
 
-class Api {
+export default class Api {
     constructor({config}) {
         this._config = config;
         this.data = null;
@@ -56,9 +56,3 @@ class Api {
     }
 
 }
-
-  
-export {
-    Api,
-};
-  
