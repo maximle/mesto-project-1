@@ -100,13 +100,13 @@ class PopupWithForm extends Popup {
         this._cardObject = null;
         this._eventObject = {
             handleEvent: this._callbackSubmitForm,
-            obj: this,
             buttonSubmit: this._buttonSubmit,
             formElement: this._formElement,
         };
     }
 
     addEventSubmitForForm() {
+
         if(this._selectorPopup.id === 'confirmDelete') {
             this._buttonSubmit.addEventListener('click', this._eventObject);
         } else {
@@ -133,8 +133,10 @@ class PopupWithForm extends Popup {
         super.closePopup();
     }
 
-    openPopup({withInitialValuesFields}) {
-        
+    openPopup({withInitialValuesFields, cardObject}) {
+        this._eventObject.cardObject = cardObject;
+        this._eventObject.obj = this;
+
         if(withInitialValuesFields === true) {
             this._fillInitialValuesFields();
         }

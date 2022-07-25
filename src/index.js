@@ -365,12 +365,12 @@ function addCardOnServer(settings={
 
 function deleteCardFromServer(evt) {
     evt.preventDefault();
-    api.getDataOnRequestToServer({target: `cards/${this.obj._cardObject._card.cardId}`, config1: {
+    api.getDataOnRequestToServer({target: `cards/${this.cardObject._card.cardId}`, config1: {
         method: 'DELETE'
     }})
     .then(data => {
-        this.obj._cardObject.removeCard();
-        this.obj._cardObject._popupWithForm.closePopup();
+        this.cardObject.removeCard();
+        this.cardObject._popupWithForm.closePopup();
         console.log('Карточка удалена');
     })
     .catch(error => {

@@ -32,6 +32,7 @@ class Card {
         this._card.likes.textContent = this._initialData.likes.length;
         this._card.ownerId = this._initialData.owner['_id'];
         this._card.cardId = this._initialData['_id'];
+
     }
 
     // _addEventButtonDelete() {
@@ -52,8 +53,9 @@ class Card {
     _addEventButtonDelete() {
 
         if(this._card.ownerId === this._userId) {
+            this.cardElement = this._card.buttonDelete.closest(this._params.node);
             this._card.buttonDelete.classList.add('photo-grid__delete_active');
-            this._card.buttonDelete.addEventListener('click', this._popupWithForm.openPopup.bind(this._popupWithForm));        
+            this._card.buttonDelete.addEventListener('click', this._popupWithForm.openPopup.bind(this._popupWithForm, {cardObject: this}));        
         }
     }
 
