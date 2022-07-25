@@ -82,7 +82,7 @@ export default class Card {
     }
 
     _addEventOpenImagePopup() {
-        this._card.cardImg.addEventListener('click', this._popupOpenImage.openPopup.bind(this._popupOpenImage));
+        this._card.cardImg.addEventListener('click', this._popupOpenImage.openPopup.bind(this._popupOpenImage, {cardObject: this._card}));
     }
 
     removeCard() {
@@ -99,7 +99,6 @@ export default class Card {
         this._addEventButtonDelete();
         this._addEventLikeButton();
         if(this._popupOpenImage) {
-            this._popupOpenImage.card = this._card;
             this._addEventOpenImagePopup();
         }
         return this._card;

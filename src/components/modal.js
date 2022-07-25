@@ -151,16 +151,15 @@ class PopupWithForm extends Popup {
 class PopupWithImage extends Popup {
     constructor({selectorPopup}) {
         super({selectorPopup: selectorPopup});
-        this.card = null;
         this._elementImageOfPopupImage = this._selectorPopup.querySelector('.popup__image');
         this._elementCaptionOfPopupImage = this._selectorPopup.querySelector('.popup__image-caption');
     }
 
 
-    openPopup() {
-        this._elementImageOfPopupImage.src = this.card.cardImg.src; 
-        this._elementImageOfPopupImage.alt = this.card.cardImg.alt;  
-        this._elementCaptionOfPopupImage.textContent = this.card.cardName.textContent; 
+    openPopup({cardObject}) {
+        this._elementImageOfPopupImage.src = cardObject.cardImg.src; 
+        this._elementImageOfPopupImage.alt = cardObject.cardImg.alt;  
+        this._elementCaptionOfPopupImage.textContent = cardObject.cardName.textContent; 
         super.openPopup();
     }
 
