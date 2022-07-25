@@ -365,6 +365,11 @@ function addCardOnServer(settings={
 
 function deleteCardFromServer(evt) {
     evt.preventDefault();
+    changeButtonTextDuringLoading({
+        button: this.buttonSubmit,
+        loadingText: loadingText,
+        primaryText: this.buttonSubmit.textContent,
+    });
     api.getDataOnRequestToServer({target: `cards/${this.cardObject._card.cardId}`, config1: {
         method: 'DELETE'
     }})
@@ -375,6 +380,9 @@ function deleteCardFromServer(evt) {
     })
     .catch(error => {
         console.log('Карточка не удалена', error);
+    })
+    .finally(() => {
+        changeButtonTextDuringLoading({button: this.buttonSubmit});
     })
     }
 
