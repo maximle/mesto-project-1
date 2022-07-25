@@ -114,6 +114,7 @@ class UserInfo {
                 method: 'GET'
             }})
             .then(user => {
+                
                 this._avatarSelector.src = user.avatar;
                 this._nameSelector.textContent = user.name;
                 this._aboutSelector.textContent = user.about;
@@ -121,6 +122,7 @@ class UserInfo {
                 this.user.name = user.name;
                 this.user.description = user.about;
                 this.user['_id'] = user['_id'];
+
                 return this.user;
                 })
             .catch(error => {
@@ -166,37 +168,34 @@ const popupWithFormAddCard = new PopupWithForm({selectorPopup: popupAddCard, cal
 const popupWithFormEditProfile = new PopupWithForm({selectorPopup: popupEditProfile, callbackSubmitForm: handleProfileEditFormSubmit});
 const popupWithFormEditAvatar = new PopupWithForm({selectorPopup: popupEditAvatar, callbackSubmitForm: handleEditAvatarFormSubmit});
 
-const listCards = api.getDataOnRequestToServer({target: 'cards', config1: {
-    method: 'GET'
-}})
+
+
+user.getUserInfo()
     .then(res => {
-        res.forEach(card => {
-            const cardObject = new Card({
-                userId: user['_id'], 
-                params: params, 
-                api: api, 
-                popupOpenImage: popupWithImageObject, 
-                popupWithForm: popupConfirmDeleteObject
-            });
-            cards.push(cardObject.getCard({initialData: card}));
+        api.getDataOnRequestToServer({target: 'cards', config1: {
+            method: 'GET'
+        }})
+            .then(res => {
+                res.forEach(card => {
+                    const cardObject = new Card({
+                        userId: user.user['_id'], 
+                        params: params, 
+                        api: api, 
+                        popupOpenImage: popupWithImageObject, 
+                        popupWithForm: popupConfirmDeleteObject
+                    });
+                    cards.push(cardObject.getCard({initialData: card}));
+                    })
+                const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
+                section.appendCardOnPage();
+                return true;
             })
-        const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
-        section.appendCardOnPage();
-        return true;
+            .catch(err => {
+                console.log(`Ошибка отрисовки всех карточек: ${err}`);
+                return false;
+            })
     })
-    .catch(err => {
-        console.log(`Ошибка: ${err}`);
-        return false;
-    })
-
-
-
-
-Promise.all([
-    user.getUserInfo(),
-    listCards,
-])
-    .then(arrayData => {
+    .then(res => {
         buttonAddCard.addEventListener('click', () => {
             popupWithFormAddCard.openPopup({});
             formAddCard.reset();
@@ -227,6 +226,31 @@ Promise.all([
 //     evt.preventDefault();
 //     deleteCardFromServer({objectHandler: this});
 // }
+
+
+
+// const listCards = api.getDataOnRequestToServer({target: 'cards', config1: {
+//     method: 'GET'
+// }})
+//     .then(res => {
+//         res.forEach(card => {
+//             const cardObject = new Card({
+//                 userId: user.user['_id'], 
+//                 params: params, 
+//                 api: api, 
+//                 popupOpenImage: popupWithImageObject, 
+//                 popupWithForm: popupConfirmDeleteObject
+//             });
+//             cards.push(cardObject.getCard({initialData: card}));
+//             })
+//         const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
+//         section.appendCardOnPage();
+//         return true;
+//     })
+//     .catch(err => {
+//         console.log(`Ошибка: ${err}`);
+//         return false;
+//     })
 
 function handleProfileEditFormSubmit(evt) {
     evt.preventDefault();
@@ -293,7 +317,7 @@ function addCardOnPage(evt) {
             // insertCardInsideList(cardObject, cardItemsList);
             const cards = [];
             const cardObject = new Card({
-                userId: user['_id'], 
+                userId: user.user['_id'], 
                 params: params, 
                 api: api, 
                 popupOpenImage: popupWithImageObject, 
@@ -337,6 +361,7 @@ function addCardOnServer(settings={
         );
         
     }
+
 
 
 

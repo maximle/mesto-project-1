@@ -1,10 +1,3 @@
-import {
-    checkLoadImageFromServer, 
-    userObject, 
-} from './utils.js';
-
-import {configTemplate, getDataOnRequestToServer} from './api.js';
-
 
 class Card {
     constructor({userId, params, api, popupOpenImage, popupWithForm}) {
@@ -43,6 +36,7 @@ class Card {
 
     _addEventButtonDelete() {
         if(this._card.ownerId === this._userId) {
+            
             this._card.buttonDelete.classList.add('photo-grid__delete_active');
             this._card.buttonDelete.addEventListener('click', function(evt) {
                 const currentButtonDelete = evt.target;
