@@ -80,14 +80,14 @@ class Card {
     }
 
     _likeCard(evt) {
-        const headers = {};
+        const config1 = {};
         if(evt.target.classList.contains('photo-grid__like-icon_active')) {
-            headers.method = 'DELETE';
+            config1.method = 'DELETE';
         } else {
-            headers.method = 'PUT';
+            config1.method = 'PUT';
         }
 
-        this._api.getDataOnRequestToServer({target: `cards/likes/${this._card.cardId}`, headers: headers})
+        this._api.getDataOnRequestToServer({target: `cards/likes/${this._card.cardId}`, config1: config1})
             .then(card => {
                 this._card.likes.textContent = card.likes.length;
                 this._changeColorLikeButton();
