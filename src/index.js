@@ -5,7 +5,6 @@ import {
     Section,
     PopupWithImage,
     PopupWithForm,
-    Popup,
     insertCardOnPage
 } from './components/modal.js';
 import { 
@@ -13,14 +12,12 @@ import {
 } from './components/validate.js';
 import {
     validationSettings, 
-    userObject, 
     changeButtonTextDuringLoading
 } from './components/utils.js';
 import { 
     Api
 } from './components/api.js';
 import { 
-    removeCard,
     Card,
 } from './components/card.js';
 
@@ -32,15 +29,11 @@ const popupImage = document.querySelector('#openImage');
 const popupConfirmDelete = document.querySelector('#confirmDelete');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
-const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
 const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
 const formEditAvatar = popupEditAvatar.querySelector('#formEditAvatar');
+const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
 const userPopupFromValidator = new FormValidator(formEditProfile, validationSettings);
 const avatarPopupFromValidator = new FormValidator(formEditAvatar, validationSettings);
-
-const buttonSubmitFormAddCard = formAddCard.querySelector('.form__save');
-const buttonSubmitFormEditProfile = formEditProfile.querySelector('.form__save');
-const buttonSubmitFormEditAvatar = formEditAvatar.querySelector('.form__save');
 
 const buttonAddCard = document.querySelector('.profile-section__add');
 const buttonEditProfile = document.querySelector('.profile-section__edit');
@@ -222,36 +215,6 @@ user.getUserInfo()
 
 
 
-// function confirmDeleteCallback(evt) {
-//     evt.preventDefault();
-//     deleteCardFromServer({objectHandler: this});
-// }
-
-
-
-// const listCards = api.getDataOnRequestToServer({target: 'cards', config1: {
-//     method: 'GET'
-// }})
-//     .then(res => {
-//         res.forEach(card => {
-//             const cardObject = new Card({
-//                 userId: user.user['_id'], 
-//                 params: params, 
-//                 api: api, 
-//                 popupOpenImage: popupWithImageObject, 
-//                 popupWithForm: popupConfirmDeleteObject
-//             });
-//             cards.push(cardObject.getCard({initialData: card}));
-//             })
-//         const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
-//         section.appendCardOnPage();
-//         return true;
-//     })
-//     .catch(err => {
-//         console.log(`Ошибка: ${err}`);
-//         return false;
-//     })
-
 function handleProfileEditFormSubmit(evt) {
     evt.preventDefault();
     changeButtonTextDuringLoading({
@@ -313,8 +276,6 @@ function addCardOnPage(evt) {
         
         addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}}, config)
         .then(card => {
-            // const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
-            // insertCardInsideList(cardObject, cardItemsList);
             const cards = [];
             const cardObject = new Card({
                 userId: user.user['_id'], 
@@ -385,191 +346,4 @@ function deleteCardFromServer(evt) {
         changeButtonTextDuringLoading({button: this.buttonSubmit});
     })
     }
-
-
-
-
-
-// function updateProfileInformation(settings={
-//     information: {
-//         name: '', description: ''
-//     }}
-//     ) {
-
-//         const configForRequest = configTemplate;
-//         configForRequest.options.method = 'PATCH';
-//         configForRequest.options.body = JSON.stringify(
-//             {
-//             name: `${settings.information.name}`,
-//             about: `${settings.information.description}`
-//         }
-//         );
-//         return(
-//             getDataOnRequestToServer({
-//                 configForRequest: configForRequest,
-//                 targetLink: 'users/me',
-//             })
-//             .then(updatedUser => {
-//                 userName.textContent = updatedUser.name;
-//                 userAbout.textContent = updatedUser.about;
-
-//                 userObject.name = updatedUser.name;
-//                 userObject.description = updatedUser.about;
-//                 userObject.avatar = updatedUser.avatar;
-//                 userObject['_id'] = updatedUser['_id'];
-//                 return updatedUser;
-//             })
-//             .catch(error => {
-//                 return error;
-//             })
-//         );
-// }
-
-
-// function deleteCardFromServer(settings={objectHandler: null}) {
-//     const configForRequest = configTemplate;
-//     configForRequest.options.method = 'DELETE';
-//     getDataOnRequestToServer({
-//         configForRequest: configForRequest,
-//         targetLink: `cards/${settings.objectHandler.cardObject.cardId}`,
-//     })
-//     .then(data => {
-//         console.log('Карточка удалена');
-//         removeCard(settings.objectHandler.cardElement);
-//         closePopup({objectHandler: settings.objectHandler});
-//         settings.objectHandler.buttonSubmit.removeEventListener('click', settings.objectHandler);
-//     })
-//     .catch(error => {
-//         console.log('Карточка не удалена', error);
-//     })
-//     }
-
-// function updateAvatar(settings={link: ''}) {
-//     const configForRequest = configTemplate;
-//     configForRequest.options.method = 'PATCH';
-//     configForRequest.options.body = JSON.stringify(
-//         {
-//         avatar: `${settings.link}`,
-//     }
-//     );
-//     return(
-//         getDataOnRequestToServer({
-//             configForRequest: configForRequest,
-//             targetLink: 'users/me/avatar',
-//         })
-//     );
-// }
-
-// function getUser(settings={idUser: false, isMe: false}) {
-//     const configForRequest = configTemplate;
-//     if(settings.isMe) {
-//         return (
-//             getDataOnRequestToServer({
-//                 configForRequest: configForRequest,
-//                 targetLink: 'users/me',
-//             })
-//             .then(user => {
-//                     profileAvatar.src = user.avatar;
-//                     userName.textContent = user.name;
-//                     userAbout.textContent = user.about;
-//                     userObject.avatar = user.avatar;
-//                     userObject.name = user.name;
-//                     userObject.description = user.about;
-//                     userObject['_id'] = user['_id'];
-//                     return user;
-//                 })
-//             .catch(error => {
-//                 console.log(error);
-//                 return error;
-//             })
-//         );
-//     }
-//   }
-
-// function getCards(settings={confirmDeleteCallback: null}) {           
-//     const configForRequest = configTemplate;
-//     return (
-//         getDataOnRequestToServer({
-//             configForRequest: configForRequest,
-//             targetLink: 'cards',
-//         })
-//         .then(arrayCards => {                    // Получаю массив карточек, которые нужно отрисовать и вызываю колбек ->
-//             arrayCards.forEach(card => {
-//                 insertCardOnPage({card: card, confirmDeleteCallback: settings.confirmDeleteCallback});
-//             });
-//             return arrayCards;
-//         })
-//         .catch(error => {
-//             console.log(error);
-//             return error;
-//         })
-//     );
-// }
-
-// Promise.all([
-//     getUser({config: config, isMe: true}),
-//     getCards({confirmDeleteCallback: confirmDeleteCallback}),
-// ])
-//     .then(arrayData => {
-//         buttonAddCard.addEventListener('click', () => {
-//             const objectHandler = {
-//                 popup: popupAddCard,
-//                 formElement: formAddCard, 
-//                 handleEvent: addCardOnPage, 
-//                 buttonSubmit: buttonSubmitFormAddCard,
-//             };
-//             openPopup({popup: popupAddCard});
-//             formAddCard.reset();
-//             checkValidityOfFields(formAddCard, validationSettings);
-//             toggleButtonSubmitState(formAddCard, validationSettings);
-//             addEventForClosePopup({objectHandler: objectHandler});
-//             addEventSubmitForForm({objectHandler: objectHandler});
-
-//         });
-
-        
-        
-//         buttonEditProfile.addEventListener('click', () => {
-//             const objectHandler = {
-//                 popup: popupEditProfile,
-//                 formElement: formEditProfile, 
-//                 handleEvent: handleProfileEditFormSubmit, 
-//                 buttonSubmit: buttonSubmitFormEditProfile,
-//             };
-//             openPopup({popup: popupEditProfile});
-//             fillInitialValuesFields(formEditProfile);
-//             checkValidityOfFields(formEditProfile, validationSettings);
-//             toggleButtonSubmitState(formEditProfile, validationSettings);
-//             addEventForClosePopup({objectHandler: objectHandler});
-//             addEventSubmitForForm({objectHandler: objectHandler});
-
-//         });
-        
-//         buttonEditAvatar.addEventListener('click', () => {
-//             const objectHandler = {
-//                 popup: popupEditAvatar,
-//                 formElement: formEditAvatar, 
-//                 handleEvent: handleEditAvatarFormSubmit, 
-//                 buttonSubmit: buttonSubmitFormEditAvatar,
-//             };
-//             openPopup({popup: popupEditAvatar});
-//             formEditAvatar.reset();
-//             checkValidityOfFields(formEditAvatar, validationSettings);
-//             toggleButtonSubmitState(formEditAvatar, validationSettings);
-//             addEventForClosePopup({objectHandler: objectHandler});
-//             addEventSubmitForForm({objectHandler: objectHandler});
-//         });
-        
-
-//         console.log('Все нормально загрузилось');
-//     })
-//     .catch(errorArray => {
-//         console.log('Ошибка загрузки', errorArray);
-//     })
-
-
-
-
-
-
 
