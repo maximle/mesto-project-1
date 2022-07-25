@@ -22,7 +22,6 @@ class Api {
 
 
     _requestPromiseFromURL() {
-        console.log(this._config.headers);
         if(this._config.baseUrl && this._config.cohortId && this._config.headers.authorization) {
             return (
                 fetch(`${this._config.baseUrl}/${this._config.cohortId}/${this._target}`, {
@@ -61,7 +60,6 @@ class Api {
     }
 
     getDataOnRequestToServer({target, config1}) {
-        console.log(config1, 'config1');
         this._config.method = config1.method;
         this._config.body = config1.body;
         this._target = target;

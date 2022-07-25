@@ -32,7 +32,6 @@ const popupImage = document.querySelector('#openImage');
 const popupConfirmDelete = document.querySelector('#confirmDelete');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
-console.log(formAddCard);
 const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
 const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
 const formEditAvatar = popupEditAvatar.querySelector('#formEditAvatar');
@@ -94,7 +93,6 @@ class UserInfo {
     }
 
     updateAvatar({link}) {
-        console.log(link);
         return (
             this._apiObject.getDataOnRequestToServer({target: 'users/me/avatar', config1: {
                 method: 'PATCH',
@@ -133,7 +131,6 @@ class UserInfo {
         }
 
     setUserInfo({name, about}) {
-        console.log(name, about);
         return (
             this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
                 method: 'PATCH',
@@ -144,7 +141,6 @@ class UserInfo {
                 })
             }})
                 .then(updatedUser => {
-                    console.log(updatedUser);
                     this._nameSelector.textContent = updatedUser.name;
                     this._aboutSelector.textContent = updatedUser.about;
     
@@ -239,13 +235,11 @@ function handleProfileEditFormSubmit(evt) {
         loadingText: loadingText,
         primaryText: this.buttonSubmit.textContent,
     });
-      // DOM не успевает перерисоваться  
                  
     user.setUserInfo({
             name: this.formElement.elements.name.value,
             about: this.formElement.elements.description.value,})
         .then(res => {
-            console.log(res);
             popupWithFormEditProfile.closePopup();
         })
         .catch(error => {
@@ -265,12 +259,9 @@ function handleEditAvatarFormSubmit(evt) {
         loadingText: loadingText,
         primaryText: this.buttonSubmit.textContent,
     });
-
-      // DOM не успевает перерисоваться  
         
     user.updateAvatar({link: inputLinkToAvatar.value})
         .then(userAvatar => {
-            console.log(userAvatar);
             profileAvatar.src = userAvatar.avatar;
             popupWithFormEditAvatar.closePopup({objectHandler: this});
         })
@@ -298,7 +289,6 @@ function addCardOnPage(evt) {
         
         addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}}, config)
         .then(card => {
-            console.log(card);
             // const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
             // insertCardInsideList(cardObject, cardItemsList);
             const cards = [];
@@ -313,6 +303,7 @@ function addCardOnPage(evt) {
             
             const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
             section.appendCardOnPage();
+            popupWithFormAddCard.closePopup();
         })
         .catch(error => {
             console.log(error);
