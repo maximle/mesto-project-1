@@ -3,28 +3,6 @@ let primaryTextButton = '';
 
 
 
-export const userObject = {
-    name: '',
-    description: '',
-    avatar: '',
-    '_id': ''
-};
-
-
-
-
-export const validationSettings = {
-    formSelector: '.form',
-    inputSelector: '.form__input-text',
-    submitButtonSelector: '.form__save',
-    inputErrorClass: 'form__input-text_invalid',
-    errorId: null,
-    errorClassActive: 'form__title-error_active',
-
-    set setErrorId(inputId) {
-        this.errorId = `#${inputId}-error`;
-    }
-}
 
 export function getArrayInputsOfForm(formElement, validationSettings) {
     if(formElement.querySelector(validationSettings.inputSelector)) {
