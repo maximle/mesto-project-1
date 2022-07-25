@@ -35,25 +35,25 @@ class Api {
         }
     }
 
-    _deleteCardFromServer() {
-        this._headers.method = 'DELETE';
-        this.getDataOnRequestToServer({target: `cards/${this._cardObject._card.cardId}`})
-        .then(data => {
-            console.log('Карточка удалена');
-            this._cardObject.removeCard();
-            this._cardObject._popupWithForm.closePopup();
-        })
-        .catch(error => {
-            console.log('Карточка не удалена', error);
-        })
-        }
+    // _deleteCardFromServer() {
+    //     this._headers.method = 'DELETE';
+    //     this.getDataOnRequestToServer({target: `cards/${this._cardObject._card.cardId}`})
+    //     .then(data => {
+    //         console.log('Карточка удалена');
+    //         this._cardObject.removeCard();
+    //         this._cardObject._popupWithForm.closePopup();
+    //     })
+    //     .catch(error => {
+    //         console.log('Карточка не удалена', error);
+    //     })
+    //     }
 
     
 
-    confirmDeleteCallback(evt) {
-        evt.preventDefault();
-        this._deleteCardFromServer();
-    }
+    // confirmDeleteCallback(evt) {
+    //     evt.preventDefault();
+    //     this._deleteCardFromServer();
+    // }
 
     setCardObject({cardObject}) {
         this._cardObject = cardObject;

@@ -163,7 +163,7 @@ class UserInfo {
 const api = new Api({config});
 const user = new UserInfo({nameSelector: userName, aboutSelector: userAbout, avatarSelector: profileAvatar}, api);
 const popupWithImageObject = new PopupWithImage({selectorPopup: popupImage});
-const popupConfirmDeleteObject = new PopupWithForm({selectorPopup: popupConfirmDelete});
+const popupConfirmDeleteObject = new PopupWithForm({selectorPopup: popupConfirmDelete, callbackSubmitForm: deleteCardFromServer});
 const popupWithFormAddCard = new PopupWithForm({selectorPopup: popupAddCard, callbackSubmitForm: addCardOnPage});
 const popupWithFormEditProfile = new PopupWithForm({selectorPopup: popupEditProfile, callbackSubmitForm: handleProfileEditFormSubmit});
 const popupWithFormEditAvatar = new PopupWithForm({selectorPopup: popupEditAvatar, callbackSubmitForm: handleEditAvatarFormSubmit});
@@ -360,6 +360,22 @@ function addCardOnServer(settings={
             })
         );
         
+    }
+
+
+function deleteCardFromServer(evt) {
+    evt.preventDefault();
+    api.getDataOnRequestToServer({target: `cards/${this.obj._cardObject._card.cardId}`, config1: {
+        method: 'DELETE'
+    }})
+    .then(data => {
+        this.obj._cardObject.removeCard();
+        this.obj._cardObject._popupWithForm.closePopup();
+        console.log('Карточка удалена');
+    })
+    .catch(error => {
+        console.log('Карточка не удалена', error);
+    })
     }
 
 

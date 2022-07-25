@@ -115,7 +115,12 @@ class PopupWithForm extends Popup {
     }
 
     _removeFormListener() {
-        this._formElement.removeEventListener('submit', this._eventObject);
+        if(this._selectorPopup.id === 'confirmDelete') {
+            this._buttonSubmit.removeEventListener('click', this._eventObject);
+        } else {
+            this._formElement.removeEventListener('submit', this._eventObject);
+        }
+        
     }
 
     _fillInitialValuesFields() {

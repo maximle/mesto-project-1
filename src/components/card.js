@@ -34,20 +34,29 @@ class Card {
         this._card.cardId = this._initialData['_id'];
     }
 
-    _addEventButtonDelete() {
-        if(this._card.ownerId === this._userId) {
-            
-            this._card.buttonDelete.classList.add('photo-grid__delete_active');
-            this._card.buttonDelete.addEventListener('click', function(evt) {
-                const currentButtonDelete = evt.target;
-                this.cardElement = currentButtonDelete.closest(this._params.node);
-                this._api.setCardObject({cardObject: this})
-                this._popupWithForm.openPopup();
+    // _addEventButtonDelete() {
 
-                addEventForConfirmDelete(cardElement, cardObj);       //////////////////////////////////////////////////////
-            });        
+    //     if(this._card.ownerId === this._userId) {
+    //         this._card.buttonDelete.classList.add('photo-grid__delete_active');
+    //         this._card.buttonDelete.addEventListener('click', function(evt) {
+    //             const currentButtonDelete = evt.target;
+    //             this.cardElement = currentButtonDelete.closest(this._params.node);
+    //             this._api.setCardObject({cardObject: this})
+    //             this._popupWithForm.openPopup();
+
+    //             addEventForConfirmDelete(cardElement, cardObj);       //////////////////////////////////////////////////////
+    //         });        
+    //     }
+    // }
+
+    _addEventButtonDelete() {
+
+        if(this._card.ownerId === this._userId) {
+            this._card.buttonDelete.classList.add('photo-grid__delete_active');
+            this._card.buttonDelete.addEventListener('click', this._popupWithForm.openPopup.bind(this._popupWithForm));        
         }
     }
+
 
     _checkMineLike() {
         if(this._initialData.likes.length) {
