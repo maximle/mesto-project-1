@@ -1,62 +1,50 @@
 import './index.css';
-import FormValidator from './components/FormValidator.js';
-import Api from './components/Api.js';
-import Card from './components/Card.js';
-import { UserInfo } from './components/UserInfo.js';
-import { Section } from './components/Section.js';
-import { insertCardOnPage, userName, userAbout } from './components/Popup.js';
-import { PopupWithImage } from './components/PopupWithImage.js';
-import { PopupWithForm } from './components/PopupWithForm.js';
-
-const loadingText = 'Сохранение...';
-
-const validationSettings = {
-    formSelector: '.form',
-    inputSelector: '.form__input-text',
-    submitButtonSelector: '.form__save',
-    inputErrorClass: 'form__input-text_invalid',
-    errorId: null,
-    errorClassActive: 'form__title-error_active',
-
-    set setErrorId(inputId) {
-        this.errorId = `#${inputId}-error`;
-    }
-}
 
 
-const params = {
-    template: '#photo-grid__item', 
-    node:'.photo-grid__element-container', 
-    classOfImage:'.photo-grid__image', 
-    classOfName:'.photo-grid__name', 
-    classOfLike:'.photo-grid__like-icon', 
-    classOfDelete:'.photo-grid__delete',
-    classOfLikes: '.photo-grid__likes', 
-    }
+import { 
+    openPopup, 
+    addEventSubmitForForm, 
+    addEventForClosePopup,
+    fillInitialValuesFields,
+    closePopup,
+    userName,
+    userAbout,
+} from './components/modal.js';
+import { 
+    enableValidationAllForms,
+    checkValidityOfFields,
+    toggleButtonSubmitState,
+ } from './components/validate.js';
+import {
+    validationSettings, 
+    userObject, 
+    cardItemsList,
+    changeButtonTextDuringLoading
+} from './components/utils.js';
+import { 
+    config, 
+    configTemplate,
+    getDataOnRequestToServer,
+} from './components/api.js';
+import { 
+    getCardObject, 
+    insertCardInsideList,
+    insertCardOnPage, 
+    removeCard,
+} from './components/card.js';
 
-const config = {
-    baseUrl: 'https://mesto.nomoreparties.co/v1',
-    cohortId: 'plus-cohort-13',
-    headers: {
-        authorization: 'e4d16501-e8d2-438e-96b5-6b9c94c85c98',
-        'Content-Type': 'application/json'
-    },
-    method: 'GET',
-    body: null
-}
 
 const popupAddCard = document.querySelector('#addCard');
 const popupEditProfile = document.querySelector('#editProfile');
 const popupEditAvatar = document.querySelector('#editAvatar');
-const popupImage = document.querySelector('#openImage');
-const popupConfirmDelete = document.querySelector('#confirmDelete');
 
 const formAddCard = popupAddCard.querySelector('#formAddCard');
 const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
 const formEditAvatar = popupEditAvatar.querySelector('#formEditAvatar');
-const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
-const userPopupFromValidator = new FormValidator(formEditProfile, validationSettings);
-const avatarPopupFromValidator = new FormValidator(formEditAvatar, validationSettings);
+
+const buttonSubmitFormAddCard = formAddCard.querySelector('.form__save');
+const buttonSubmitFormEditProfile = formEditProfile.querySelector('.form__save');
+const buttonSubmitFormEditAvatar = formEditAvatar.querySelector('.form__save');
 
 const buttonAddCard = document.querySelector('.profile-section__add');
 const buttonEditProfile = document.querySelector('.profile-section__edit');
@@ -68,133 +56,91 @@ const inputSourceImg = formAddCard.elements.description;
 const inputNameCard = formAddCard.elements.name;
 
 const profileAvatar = document.querySelector('.profile-section__avatar');
-const cardItemsList = document.querySelector('.photo-grid__items');
 
-const cards = [];
-
+const loadingText = 'Сохранение...';
 
 
-const api = new Api({config});
-const user = new UserInfo({nameSelector: userName, aboutSelector: userAbout, avatarSelector: profileAvatar}, api);
-const popupWithImageObject = new PopupWithImage({selectorPopup: popupImage});
-const popupConfirmDeleteObject = new PopupWithForm({selectorPopup: popupConfirmDelete, callbackSubmitForm: deleteCardFromServer});
-const popupWithFormAddCard = new PopupWithForm({selectorPopup: popupAddCard, callbackSubmitForm: addCardOnPage});
-const popupWithFormEditProfile = new PopupWithForm({selectorPopup: popupEditProfile, callbackSubmitForm: handleProfileEditFormSubmit});
-const popupWithFormEditAvatar = new PopupWithForm({selectorPopup: popupEditAvatar, callbackSubmitForm: handleEditAvatarFormSubmit});
-
-
-
-user.getUserInfo()
-    .then(res => {
-        api.getDataOnRequestToServer({target: 'cards', config1: {
-            method: 'GET'
-        }})
-            .then(res => {
-                res.forEach(card => {
-                    const cardObject = new Card({
-                        userId: user.user['_id'], 
-                        params: params, 
-                        api: api, 
-                        popupOpenImage: popupWithImageObject, 
-                        popupWithForm: popupConfirmDeleteObject
-                    });
-                    cards.push(cardObject.getCard({initialData: card}));
-                    console.log(cards);
-                    })
-                const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
-                section.appendCardOnPage();
-                return true;
-            })
-            .catch(err => {
-                console.log(`Ошибка отрисовки всех карточек: ${err}`);
-                return false;
-            })
-    })
-    .then(res => {
-        buttonAddCard.addEventListener('click', () => {
-            popupWithFormAddCard.openPopup({reset: true});
-            cardPopupFromValidator.enableValidation();
-        });
-        
-        
-        buttonEditProfile.addEventListener('click', () => {
-            popupWithFormEditProfile.openPopup({withInitialValuesFields: true});
-            userPopupFromValidator.enableValidation();
-        });
-        
-        buttonEditAvatar.addEventListener('click', () => {
-            popupWithFormEditAvatar.openPopup({reset: true});
-            avatarPopupFromValidator.enableValidation();
-        });
-        
-        console.log('Все нормально загрузилось');
-    })
-    .catch(errorArray => {
-        console.log('Ошибка загрузки', errorArray);
-    })
-
-
-    function handleProfileEditFormSubmit(evt) {
-        evt.preventDefault();
-        popupWithFormEditProfile.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
-        user.setUserInfo({
-                name: this.formElement.elements.name.value,
-                about: this.formElement.elements.description.value,})
-            .then(res => {
-                popupWithFormEditProfile.closePopup(evt);
-            })
-            .catch(error => {
-                console.log(error);
-            })
-            .finally(() => {
-                popupWithFormEditProfile.changeButtonTextDuringLoading({});
-            })
-        
-    }
-    
-    function handleEditAvatarFormSubmit(evt) {
-        evt.preventDefault();
-        popupWithFormEditAvatar.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
-        user.updateAvatar({link: inputLinkToAvatar.value})
-            .then(userAvatar => {
-                profileAvatar.src = userAvatar.avatar;
-                popupWithFormEditAvatar.closePopup(evt, {objectHandler: this});
-            })
-            .catch(error => {
-                console.log(error);
-            })
-            .finally(() => {
-                popupWithFormEditAvatar.changeButtonTextDuringLoading({});
-            }) 
-    }
-
-
-function addCardOnPage(evt) {
+function confirmDeleteCallback(evt) {
     evt.preventDefault();
-    popupWithFormAddCard.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
-    setTimeout(() => {
-        
-        addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}}, config)
-        .then(card => {
-            const cards = [];
-            const cardObject = new Card({
-                userId: user.user['_id'], 
-                params: params, 
-                api: api, 
-                popupOpenImage: popupWithImageObject, 
-                popupWithForm: popupConfirmDeleteObject
-            });
-            cards.push(cardObject.getCard({initialData: card}));
-            
-            const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
-            section.appendCardOnPage();
-            popupWithFormAddCard.closePopup(evt);
+    deleteCardFromServer({objectHandler: this});
+}
+
+function handleProfileEditFormSubmit(evt) {
+    evt.preventDefault();
+    changeButtonTextDuringLoading({
+        button: this.buttonSubmit,
+        loadingText: loadingText,
+        primaryText: this.buttonSubmit.textContent,
+    });
+    setTimeout(() => {   // DOM не успевает перерисоваться              
+        updateProfileInformation({
+            information: {
+                name: this.formElement.elements.name.value,
+                description: this.formElement.elements.description.value,
+            }
+        })
+        .then(res => {
+            console.log(res);
+            closePopup({objectHandler: this});
         })
         .catch(error => {
             console.log(error);
         })
         .finally(() => {
-            popupWithFormAddCard.changeButtonTextDuringLoading({});
+            changeButtonTextDuringLoading({button: this.buttonSubmit});
+        })
+    }, 1);
+}
+
+function handleEditAvatarFormSubmit(evt) {
+    evt.preventDefault();
+
+    changeButtonTextDuringLoading({
+        button: this.buttonSubmit,
+        loadingText: loadingText,
+        primaryText: this.buttonSubmit.textContent,
+    });
+
+    setTimeout(() => {   // DOM не успевает перерисоваться  
+        
+        updateAvatar({link: inputLinkToAvatar.value})
+        .then(userAvatar => {
+            profileAvatar.src = userAvatar.avatar;
+            closePopup({objectHandler: this});
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            changeButtonTextDuringLoading({button: this.buttonSubmit});
+        })
+        
+    }, 1);
+    
+}
+
+function addCardOnPage(evt) {
+    evt.preventDefault();
+    
+    changeButtonTextDuringLoading({
+        button: this.buttonSubmit,
+        loadingText: loadingText,
+        primaryText: this.buttonSubmit.textContent,
+    });
+    
+    setTimeout(() => {
+        
+        addCardOnServer({information: {name: inputNameCard.value, link: inputSourceImg.value}})
+        .then(card => {
+            const cardObject = getCardObject(card, userObject['_id'], confirmDeleteCallback);
+            insertCardInsideList(cardObject, cardItemsList);
+            closePopup({objectHandler: this});
+        })
+        .catch(error => {
+            console.log(error);
+        })
+        .finally(() => {
+            changeButtonTextDuringLoading({button: this.buttonSubmit});
         })
     }, 1);
     
@@ -202,44 +148,210 @@ function addCardOnPage(evt) {
 
 function addCardOnServer(settings={
     information: {
-        name: '', 
-        link: ''
-    }, config}
+        name: '', link: ''
+    }}
     ) {
-        
-        config.method = 'POST';
-        config.body = JSON.stringify(
+        const configForRequest = configTemplate;
+        configForRequest.options.method = 'POST';
+        configForRequest.options.body = JSON.stringify(
             {
             name: `${settings.information.name}`,
             link: `${settings.information.link}`
         }
         );
         return(
-            api.getDataOnRequestToServer({
-                target: 'cards',
-                config1: config
+            getDataOnRequestToServer({
+                configForRequest: configForRequest,
+                targetLink: 'cards',
             })
         );
         
     }
 
 
-function deleteCardFromServer(evt) {
-    evt.preventDefault();
-    popupConfirmDeleteObject.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
-    api.getDataOnRequestToServer({target: `cards/${this.cardObject._card.cardId}`, config1: {
-        method: 'DELETE'
-    }})
+
+
+function updateProfileInformation(settings={
+    information: {
+        name: '', description: ''
+    }}
+    ) {
+
+        const configForRequest = configTemplate;
+        configForRequest.options.method = 'PATCH';
+        configForRequest.options.body = JSON.stringify(
+            {
+            name: `${settings.information.name}`,
+            about: `${settings.information.description}`
+        }
+        );
+        return(
+            getDataOnRequestToServer({
+                configForRequest: configForRequest,
+                targetLink: 'users/me',
+            })
+            .then(updatedUser => {
+                userName.textContent = updatedUser.name;
+                userAbout.textContent = updatedUser.about;
+
+                userObject.name = updatedUser.name;
+                userObject.description = updatedUser.about;
+                userObject.avatar = updatedUser.avatar;
+                userObject['_id'] = updatedUser['_id'];
+                return updatedUser;
+            })
+            .catch(error => {
+                return error;
+            })
+        );
+}
+
+
+function deleteCardFromServer(settings={objectHandler: null}) {
+    const configForRequest = configTemplate;
+    configForRequest.options.method = 'DELETE';
+    getDataOnRequestToServer({
+        configForRequest: configForRequest,
+        targetLink: `cards/${settings.objectHandler.cardObject.cardId}`,
+    })
     .then(data => {
-        this.cardObject.removeCard();
-        this.cardObject._popupWithForm.closePopup(evt);
         console.log('Карточка удалена');
+        removeCard(settings.objectHandler.cardElement);
+        closePopup({objectHandler: settings.objectHandler});
+        settings.objectHandler.buttonSubmit.removeEventListener('click', settings.objectHandler);
     })
     .catch(error => {
         console.log('Карточка не удалена', error);
     })
-    .finally(() => {
-        popupConfirmDeleteObject.changeButtonTextDuringLoading({});
-    })
     }
+
+function updateAvatar(settings={link: ''}) {
+    const configForRequest = configTemplate;
+    configForRequest.options.method = 'PATCH';
+    configForRequest.options.body = JSON.stringify(
+        {
+        avatar: `${settings.link}`,
+    }
+    );
+    return(
+        getDataOnRequestToServer({
+            configForRequest: configForRequest,
+            targetLink: 'users/me/avatar',
+        })
+    );
+}
+
+function getUser(settings={idUser: false, isMe: false}) {
+    const configForRequest = configTemplate;
+    if(settings.isMe) {
+        return (
+            getDataOnRequestToServer({
+                configForRequest: configForRequest,
+                targetLink: 'users/me',
+            })
+            .then(user => {
+                    profileAvatar.src = user.avatar;
+                    userName.textContent = user.name;
+                    userAbout.textContent = user.about;
+                    userObject.avatar = user.avatar;
+                    userObject.name = user.name;
+                    userObject.description = user.about;
+                    userObject['_id'] = user['_id'];
+                    return user;
+                })
+            .catch(error => {
+                console.log(error);
+                return error;
+            })
+        );
+    }
+  }
+
+function getCards(settings={confirmDeleteCallback: null}) {           
+    const configForRequest = configTemplate;
+    return (
+        getDataOnRequestToServer({
+            configForRequest: configForRequest,
+            targetLink: 'cards',
+        })
+        .then(arrayCards => {                    // Получаю массив карточек, которые нужно отрисовать и вызываю колбек ->
+            arrayCards.forEach(card => {
+                insertCardOnPage({card: card, confirmDeleteCallback: settings.confirmDeleteCallback});
+            });
+            return arrayCards;
+        })
+        .catch(error => {
+            console.log(error);
+            return error;
+        })
+    );
+}
+
+Promise.all([
+    getUser({config: config, isMe: true}),
+    getCards({confirmDeleteCallback: confirmDeleteCallback}),
+])
+    .then(arrayData => {
+        buttonAddCard.addEventListener('click', () => {
+            const objectHandler = {
+                popup: popupAddCard,
+                formElement: formAddCard, 
+                handleEvent: addCardOnPage, 
+                buttonSubmit: buttonSubmitFormAddCard,
+            };
+            openPopup({popup: popupAddCard});
+            formAddCard.reset();
+            checkValidityOfFields(formAddCard, validationSettings);
+            toggleButtonSubmitState(formAddCard, validationSettings);
+            addEventForClosePopup({objectHandler: objectHandler});
+            addEventSubmitForForm({objectHandler: objectHandler});
+
+        });
+        
+        
+        buttonEditProfile.addEventListener('click', () => {
+            const objectHandler = {
+                popup: popupEditProfile,
+                formElement: formEditProfile, 
+                handleEvent: handleProfileEditFormSubmit, 
+                buttonSubmit: buttonSubmitFormEditProfile,
+            };
+            openPopup({popup: popupEditProfile});
+            fillInitialValuesFields(formEditProfile);
+            checkValidityOfFields(formEditProfile, validationSettings);
+            toggleButtonSubmitState(formEditProfile, validationSettings);
+            addEventForClosePopup({objectHandler: objectHandler});
+            addEventSubmitForForm({objectHandler: objectHandler});
+
+        });
+        
+        buttonEditAvatar.addEventListener('click', () => {
+            const objectHandler = {
+                popup: popupEditAvatar,
+                formElement: formEditAvatar, 
+                handleEvent: handleEditAvatarFormSubmit, 
+                buttonSubmit: buttonSubmitFormEditAvatar,
+            };
+            openPopup({popup: popupEditAvatar});
+            formEditAvatar.reset();
+            checkValidityOfFields(formEditAvatar, validationSettings);
+            toggleButtonSubmitState(formEditAvatar, validationSettings);
+            addEventForClosePopup({objectHandler: objectHandler});
+            addEventSubmitForForm({objectHandler: objectHandler});
+        });
+        
+        
+        enableValidationAllForms(validationSettings);
+
+        console.log('Все нормально загрузилось');
+    })
+    .catch(errorArray => {
+        console.log('Ошибка загрузки', errorArray);
+    })
+
+
+
+
+
+
 
