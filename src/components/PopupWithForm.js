@@ -16,6 +16,7 @@ export default class PopupWithForm extends Popup {
       };
   }
 
+  
   addEventSubmitForForm() {
 
       if(this._selectorPopup.id === 'confirmDelete') {
