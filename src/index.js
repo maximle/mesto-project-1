@@ -1,18 +1,12 @@
 import './index.css';
-
-
-import { 
-    Section,
-    PopupWithImage,
-    PopupWithForm,
-    insertCardOnPage,
-    userName,
-    userAbout,
-} from './components/modal.js';
-import FormValidator from './components/validate.js';
-import Api from './components/api.js';
-import Card from './components/card.js';
-
+import FormValidator from './components/FormValidator.js';
+import Api from './components/Api.js';
+import Card from './components/Card.js';
+import { UserInfo } from './components/UserInfo.js';
+import { Section } from './components/Section.js';
+import { insertCardOnPage, userName, userAbout } from './components/Popup.js';
+import { PopupWithImage } from './components/PopupWithImage.js';
+import { PopupWithForm } from './components/PopupWithForm.js';
 
 const loadingText = 'Сохранение...';
 
@@ -79,77 +73,6 @@ const cardItemsList = document.querySelector('.photo-grid__items');
 const cards = [];
 
 
-class UserInfo {
-    constructor({nameSelector, aboutSelector, avatarSelector}, apiObject) {
-        this._nameSelector = nameSelector;
-        this._aboutSelector = aboutSelector;
-        this._avatarSelector = avatarSelector;
-        this._apiObject = apiObject;
-        this.user = {};
-    }
-
-    updateAvatar({link}) {
-        return (
-            this._apiObject.getDataOnRequestToServer({target: 'users/me/avatar', config1: {
-                method: 'PATCH',
-                body: JSON.stringify(
-                    {
-                        avatar: link
-                    })}})
-        )
-    }
-
-    getUserInfo() {
-        return (
-            this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
-                method: 'GET'
-            }})
-            .then(user => {
-                
-                this._avatarSelector.src = user.avatar;
-                this._nameSelector.textContent = user.name;
-                this._aboutSelector.textContent = user.about;
-                this.user.avatar = user.avatar;
-                this.user.name = user.name;
-                this.user.description = user.about;
-                this.user['_id'] = user['_id'];
-
-                return this.user;
-                })
-            .catch(error => {
-                console.log(error);
-                return error;
-            })
-        );
-        }
-
-    setUserInfo({name, about}) {
-        return (
-            this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
-                method: 'PATCH',
-                body: JSON.stringify(
-                    {
-                    name: name,
-                    about: about
-                })
-            }})
-                .then(updatedUser => {
-                    this._nameSelector.textContent = updatedUser.name;
-                    this._aboutSelector.textContent = updatedUser.about;
-    
-                    this.user.name = updatedUser.name;
-                    this.user.description = updatedUser.about;
-                    this.user.avatar = updatedUser.avatar;
-                    this.user['_id'] = updatedUser['_id'];
-                    console.log('Данные обновлены');
-                    return updatedUser;
-                })
-                .catch(error => {
-                    return error;
-                })
-                );
-            }
-    }
 
 const api = new Api({config});
 const user = new UserInfo({nameSelector: userName, aboutSelector: userAbout, avatarSelector: profileAvatar}, api);
@@ -211,43 +134,40 @@ user.getUserInfo()
     })
 
 
-
-function handleProfileEditFormSubmit(evt) {
-    evt.preventDefault();
-    popupWithFormEditProfile.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
-    user.setUserInfo({
-            name: this.formElement.elements.name.value,
-            about: this.formElement.elements.description.value,})
-        .then(res => {
-            popupWithFormEditProfile.closePopup();
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        .finally(() => {
-            popupWithFormEditProfile.changeButtonTextDuringLoading({});
-        })
-    
-}
-
-function handleEditAvatarFormSubmit(evt) {
-    evt.preventDefault();
-    popupWithFormEditAvatar.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
-    user.updateAvatar({link: inputLinkToAvatar.value})
-        .then(userAvatar => {
-            profileAvatar.src = userAvatar.avatar;
-            popupWithFormEditAvatar.closePopup({objectHandler: this});
-        })
-        .catch(error => {
-            console.log(error);
-        })
-        .finally(() => {
-            popupWithFormEditAvatar.changeButtonTextDuringLoading({});
-        })
+    function handleProfileEditFormSubmit(evt) {
+        evt.preventDefault();
+        popupWithFormEditProfile.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
+        user.setUserInfo({
+                name: this.formElement.elements.name.value,
+                about: this.formElement.elements.description.value,})
+            .then(res => {
+                popupWithFormEditProfile.closePopup(evt);
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                popupWithFormEditProfile.changeButtonTextDuringLoading({});
+            })
         
+    }
     
-    
-}
+    function handleEditAvatarFormSubmit(evt) {
+        evt.preventDefault();
+        popupWithFormEditAvatar.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
+        user.updateAvatar({link: inputLinkToAvatar.value})
+            .then(userAvatar => {
+                profileAvatar.src = userAvatar.avatar;
+                popupWithFormEditAvatar.closePopup(evt, {objectHandler: this});
+            })
+            .catch(error => {
+                console.log(error);
+            })
+            .finally(() => {
+                popupWithFormEditAvatar.changeButtonTextDuringLoading({});
+            }) 
+    }
+
 
 function addCardOnPage(evt) {
     evt.preventDefault();
@@ -268,7 +188,7 @@ function addCardOnPage(evt) {
             
             const section = new Section({items: cards, renderer: insertCardOnPage}, cardItemsList);
             section.appendCardOnPage();
-            popupWithFormAddCard.closePopup();
+            popupWithFormAddCard.closePopup(evt);
         })
         .catch(error => {
             console.log(error);
@@ -312,7 +232,7 @@ function deleteCardFromServer(evt) {
     }})
     .then(data => {
         this.cardObject.removeCard();
-        this.cardObject._popupWithForm.closePopup();
+        this.cardObject._popupWithForm.closePopup(evt);
         console.log('Карточка удалена');
     })
     .catch(error => {
