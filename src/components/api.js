@@ -1,4 +1,3 @@
-
 export default class Api {
     constructor({config}) {
         this._config = config;

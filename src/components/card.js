@@ -1,4 +1,3 @@
-
 export default class Card {
     constructor({userId, params, api, popupOpenImage, popupWithForm}) {
         this._initialData = null;
