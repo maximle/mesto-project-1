@@ -1,59 +1,57 @@
-import {checkPromiseResponse} from './utils.js';
-
-
-
-const config = {
-    baseUrl: 'https://mesto.nomoreparties.co/v1',
-    cohortId: 'plus-cohort-13',
-    headers: {
-      authorization: 'e4d16501-e8d2-438e-96b5-6b9c94c85c98',
-      'Content-Type': 'application/json'
+export default class Api {
+    constructor({config}) {
+        this._config = config;
+        this.data = null;
+        this._target = null;
+        this._headers = null;
+        this._card = null;
+        this._cardElement = null;
     }
-  }
 
-  const configTemplate = {
-    config: {
-        baseUrl: config.baseUrl, 
-        cohortId: config.cohortId,
-    }, 
-    options: {
-        headers: config.headers,
-}};
-  
+    _checkPromiseResponse(response) {
+        if(response.ok) {
+            
+            return response.json();
+        } else {
+            return Promise.reject(`Ошибка: ${response.status} - ${response.statusText}`)
+        }
+    }
 
-function requestPromiseFromURL(settings={
-    config: {
-        baseUrl: null, 
-        cohortId: null,
-     }, 
-     options: {}}, 
-    target='') {
-    if(settings.config.baseUrl && settings.config.cohortId && settings.options.headers.authorization) {
+
+    _requestPromiseFromURL() {
+        if(this._config.baseUrl && this._config.cohortId && this._config.headers.authorization) {
+            return (
+                fetch(`${this._config.baseUrl}/${this._config.cohortId}/${this._target}`, {
+                    method: this._config.method,
+                    headers: this._config.headers,
+                    body: this._config.body
+                })
+            );
+        } else {
+            console.log('Не хватает свойств, переданных функции.');
+        }
+    }
+
+    setCardObject({cardObject}) {
+        this._cardObject = cardObject;
+    }
+
+    getDataOnRequestToServer({target, config1}) {
+        this._config.method = config1.method;
+        this._config.body = config1.body;
+        this._target = target;
         return (
-            fetch(`${settings.config.baseUrl}/${settings.config.cohortId}/${target}`, settings.options)
-        );
-    } else {
-        console.log('Не хватает свойств, переданных функции.');
+            this._requestPromiseFromURL()
+            .then(this._checkPromiseResponse)
+            .then(data => {
+                this.data = data;
+                return data;
+            })
+            .catch(error => {
+                console.log(error);
+                return false;
+            })
+        );  
     }
-}
 
-function getDataOnRequestToServer(settings={configForRequest: {}, targetLink: ''}) {
-    return (
-        requestPromiseFromURL(settings.configForRequest, settings.targetLink)
-        .then(checkPromiseResponse)
-        .then(data => {
-            return data;
-        })
-        .catch(error => {
-            console.log(error);
-            return false;
-        })
-    );  
 }
-
-export {
-    config, 
-    configTemplate,
-    getDataOnRequestToServer,
-};
-  
