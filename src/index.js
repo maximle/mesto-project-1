@@ -9,7 +9,6 @@ import { PopupWithImage } from './components/PopupWithImage.js';
 import { PopupWithForm } from './components/PopupWithForm.js';
 import { popupAddCard, popupEditProfile, popupEditAvatar, popupImage, popupConfirmDelete, formAddCard, formEditProfile, formEditAvatar, buttonAddCard, buttonEditProfile, buttonEditAvatar, inputLinkToAvatar, inputSourceImg, inputNameCard, profileAvatar, cardItemsList, cards, loadingText, validationSettings, params, config } from './utils/constants.js'
 
-
 const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
 const userPopupFromValidator = new FormValidator(formEditProfile, validationSettings);
 const avatarPopupFromValidator = new FormValidator(formEditAvatar, validationSettings);
