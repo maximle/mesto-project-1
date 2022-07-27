@@ -93,7 +93,6 @@ function handleProfileEditFormSubmit(evt) {
 function handleEditAvatarFormSubmit(evt) {
   evt.preventDefault();
   const inputValues = popupWithFormEditAvatar.getInputValues();
-  console
   popupWithFormEditAvatar.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
   api.getDataOnRequestToServer({target: 'users/me/avatar', config1: {
     method: 'PATCH',
