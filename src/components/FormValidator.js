@@ -5,7 +5,6 @@ export default class FormValidator {
         this.formElement = formElement;
     }
 
-    
     _showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
 
         this.errorElement = formElement.querySelector(`.${inputElement.id}-error`);

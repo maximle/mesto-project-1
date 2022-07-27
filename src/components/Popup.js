@@ -11,10 +11,8 @@ export default class Popup {
     }
     
     _removeEventListeners(evt) {
-        const popup = evt.target.closest('.popup');
-        console.log(evt.target, popup);
-        popup.removeEventListener('click', this.bound_closePopupToOverlay);
-        popup.querySelector('.popup__close').removeEventListener('click', this.boundClosePopup);
+        this._selectorPopup.removeEventListener('click', this.bound_closePopupToOverlay);
+        this._selectorPopup.querySelector('.popup__close').removeEventListener('click', this.boundClosePopup);
         document.removeEventListener('keydown', this.bound_closePopupToKey);
     }
 

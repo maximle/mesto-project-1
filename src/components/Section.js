@@ -5,10 +5,8 @@ class Section {
       this._container = container;
   }
 
-
   addItem({element}) {
-      this._container.prepend(element.cardItem);
-      
+      this._container.prepend(element.cardItem);   
   }
 
   appendCardOnPage() { 
