@@ -1,54 +1,26 @@
 export default class UserInfo {
-  constructor({nameSelector, aboutSelector, avatarSelector}, apiObject) {
+  constructor({nameSelector, aboutSelector, avatarSelector}) {
       this._nameSelector = nameSelector;
       this._aboutSelector = aboutSelector;
       this._avatarSelector = avatarSelector;
-      this._apiObject = apiObject;
-      this.user = {};
+      this.user;
   }
 
   updateAvatar({link}) {
     this._avatarSelector.src = link;
+    console.log('Аватар обновлен');
   }
-
-  getUserInfo() {
-      return (
-          this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
-              method: 'GET'
-          }})
-          .then(user => {
-              
-              this._avatarSelector.src = user.avatar;
-              this._nameSelector.textContent = user.name;
-              this._aboutSelector.textContent = user.about;
-              this.user.avatar = user.avatar;
-              this.user.name = user.name;
-              this.user.description = user.about;
-              this.user['_id'] = user['_id'];
-
-              return this.user;
-              })
-          .catch(error => {
-              console.log(error);
-              return error;
-          })
-      );
-      }
 
   setUserInfo({userInfo}) {          
     console.log(userInfo);
     this._nameSelector.textContent = userInfo.name;
     this._aboutSelector.textContent = userInfo.about;
     this._avatarSelector.src = userInfo.avatar;
-    this.user.name = userInfo.name;
-    this.user.description = userInfo.about;
-    this.user.avatar = userInfo.avatar;
-    this.user['_id'] = userInfo['_id'];
+    this.user = userInfo;
     console.log('Данные обновлены');
+    return userInfo
   }
 
 }
 
-export {
-  UserInfo
-}
+export { UserInfo }

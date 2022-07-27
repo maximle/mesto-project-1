@@ -16,7 +16,7 @@ export default class PopupWithForm extends Popup {
       };
   }
 
-  
+
   addEventSubmitForForm() {
 
       if(this._selectorPopup.id === 'confirmDelete') {
@@ -32,7 +32,7 @@ export default class PopupWithForm extends Popup {
       } else {
           this._formElement.removeEventListener('submit', this._eventObject);
       }
-      
+
   }
 
   _fillInitialValuesFields() {
@@ -43,14 +43,12 @@ export default class PopupWithForm extends Popup {
   getInputValues() {
     const formElements = this._formElement.elements;
     const inputValues = {};
-    console.log(formElements);
     for (let i = 0; i < formElements.length; i++) {
         if (formElements[i].nodeName === 'INPUT') {
             console.log(formElements[i].name.value);
             inputValues[formElements[i].name] = formElements[i].value;
         }
     }
-    console.log(inputValues);
     return inputValues
     }
 
@@ -64,7 +62,7 @@ export default class PopupWithForm extends Popup {
   }
 
   closePopup(evt) {
-      this._removeFormListener(); 
+      this._removeFormListener();
       super.closePopup(evt);
   }
 
