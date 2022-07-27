@@ -8,6 +8,7 @@ export default class Popup {
         this.boundClosePopup = this.closePopup.bind(this);
         this.bound_closePopupToKey = this._closePopupToKey.bind(this);
         this.bound_closePopupToOverlay = this._closePopupToOverlay.bind(this);
+        
     }
     
     _removeEventListeners(evt) {
@@ -34,11 +35,11 @@ export default class Popup {
     closePopup(evt) {
         this._selectorPopup.classList.remove('popup_opened');
         this._removeEventListeners(evt);
-        console.log(this);
+        // console.log(this);
     }
 
     openPopup() {
-        console.log(this);
+        // console.log(this);
         this._selectorPopup.classList.add('popup_opened');
         this.setEventListener();
     }

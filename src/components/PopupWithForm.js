@@ -40,6 +40,20 @@ export default class PopupWithForm extends Popup {
       this._formElement.elements.description.value = userAbout.textContent;
   }
 
+  getInputValues() {
+    const formElements = this._formElement.elements;
+    const inputValues = {};
+    console.log(formElements);
+    for (let i = 0; i < formElements.length; i++) {
+        if (formElements[i].nodeName === 'INPUT') {
+            console.log(formElements[i].name.value);
+            inputValues[formElements[i].name] = formElements[i].value;
+        }
+    }
+    console.log(inputValues);
+    return inputValues
+    }
+
   changeButtonTextDuringLoading({loadingText, primaryText}) {
       if(loadingText) {
           this._primaryTextButton = primaryText;

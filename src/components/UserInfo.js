@@ -8,14 +8,7 @@ export default class UserInfo {
   }
 
   updateAvatar({link}) {
-      return (
-          this._apiObject.getDataOnRequestToServer({target: 'users/me/avatar', config1: {
-              method: 'PATCH',
-              body: JSON.stringify(
-                  {
-                      avatar: link
-                  })}})
-      )
+    this._avatarSelector.src = link;
   }
 
   getUserInfo() {
@@ -42,35 +35,19 @@ export default class UserInfo {
       );
       }
 
-  setUserInfo({name, about}) {
-      return (
-          this._apiObject.getDataOnRequestToServer({target: 'users/me', config1: {
-              method: 'PATCH',
-              body: JSON.stringify(
-                  {
-                  name: name,
-                  about: about
-              })
-          }})
-              .then(updatedUser => {
-                  this._nameSelector.textContent = updatedUser.name;
-                  this._aboutSelector.textContent = updatedUser.about;
-  
-                  this.user.name = updatedUser.name;
-                  this.user.description = updatedUser.about;
-                  this.user.avatar = updatedUser.avatar;
-                  this.user['_id'] = updatedUser['_id'];
-                  console.log('Данные обновлены');
-                  return updatedUser;
-              })
-              .catch(error => {
-                  return error;
-              })
-              );
-          }
+  setUserInfo({userInfo}) {          
+    console.log(userInfo);
+    this._nameSelector.textContent = userInfo.name;
+    this._aboutSelector.textContent = userInfo.about;
+    this._avatarSelector.src = userInfo.avatar;
+    this.user.name = userInfo.name;
+    this.user.description = userInfo.about;
+    this.user.avatar = userInfo.avatar;
+    this.user['_id'] = userInfo['_id'];
+    console.log('Данные обновлены');
   }
 
-
+}
 
 export {
   UserInfo
