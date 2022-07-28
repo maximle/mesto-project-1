@@ -174,7 +174,7 @@ export default class Card {
         this.cardElement = null;
         this.card = {};
         this.cardsArray = [];
-    }
+    } 
 
     _getCloneNode() {
         const photoGridItemTemplate = document.querySelector(this._params.template).content;
