@@ -16,10 +16,6 @@ export default class PopupWithForm extends Popup {
       };
   }
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 71c7814fd39284acc20cef4620907b9caf93440b
   addEventSubmitForForm() {
 
       if(this._selectorPopup.id === 'confirmDelete') {
@@ -35,11 +31,6 @@ export default class PopupWithForm extends Popup {
       } else {
           this._formElement.removeEventListener('submit', this._eventObject);
       }
-<<<<<<< HEAD
-      
-=======
-
->>>>>>> 71c7814fd39284acc20cef4620907b9caf93440b
   }
 
   _fillInitialValuesFields() {
@@ -47,8 +38,6 @@ export default class PopupWithForm extends Popup {
       this._formElement.elements.description.value = userAbout.textContent;
   }
 
-<<<<<<< HEAD
-=======
   getInputValues() {
     const formElements = this._formElement.elements;
     const inputValues = {};
@@ -61,7 +50,6 @@ export default class PopupWithForm extends Popup {
     return inputValues
     }
 
->>>>>>> 71c7814fd39284acc20cef4620907b9caf93440b
   changeButtonTextDuringLoading({loadingText, primaryText}) {
       if(loadingText) {
           this._primaryTextButton = primaryText;
@@ -72,11 +60,7 @@ export default class PopupWithForm extends Popup {
   }
 
   closePopup(evt) {
-<<<<<<< HEAD
-      this._removeFormListener(); 
-=======
       this._removeFormListener();
->>>>>>> 71c7814fd39284acc20cef4620907b9caf93440b
       super.closePopup(evt);
   }
 
@@ -95,8 +79,4 @@ export default class PopupWithForm extends Popup {
   }
 }
 
-<<<<<<< HEAD
 export { PopupWithForm }
-=======
-export { PopupWithForm }
->>>>>>> 71c7814fd39284acc20cef4620907b9caf93440b
