@@ -5,7 +5,10 @@ export default class FormValidator {
         this.formElement = formElement;
     }
 
+<<<<<<< HEAD
     
+=======
+>>>>>>> 71c7814fd39284acc20cef4620907b9caf93440b
     _showInputError = (formElement, inputElement, errorMessage, validationConfig) => {
 
         this.errorElement = formElement.querySelector(`.${inputElement.id}-error`);
