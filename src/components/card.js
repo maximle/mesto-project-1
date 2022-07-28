@@ -181,6 +181,11 @@ export default class Card {
         return photoGridItemTemplate.querySelector(this._params.node).cloneNode(true);
     }
 
+    // _getCloneNode() {
+    //     const photoGridItemTemplate = document.querySelector(this._params.template).content;
+    //     return photoGridItemTemplate.querySelector(this._params.node).cloneNode(true);
+    // }
+
 
     _makeCardObject() {
         // const cardItem = this._getCloneNode();
