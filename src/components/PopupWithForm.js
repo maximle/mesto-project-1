@@ -43,7 +43,6 @@ export default class PopupWithForm extends Popup {
     const inputValues = {};
     for (let i = 0; i < formElements.length; i++) {
         if (formElements[i].nodeName === 'INPUT') {
-            console.log(formElements[i].name.value);
             inputValues[formElements[i].name] = formElements[i].value;
         }
     }
