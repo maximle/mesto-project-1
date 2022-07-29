@@ -18,44 +18,35 @@ export default class Card {
 
 
     _makeCardObject() {
-        // const cardItem = this._getCloneNode();
-        // const paramsForNewCard = this._params;
-        // const newCardObject = {
-        //     params: paramsForNewCard,
-        //     cardItem: cardItem,
-        //     cardImg: this.cardItem.querySelector(this.params.classOfImage),
-        //     cardName: this.cardItem.querySelector(this.params.classOfName),
-        //     likeButton: this.cardItem.querySelector(this.params.classOfLike),
-        //     buttonDelete: this.cardItem.querySelector(this.params.classOfDelete),
-        //     likes: this.cardItem.querySelector(this.params.classOfLikes),
-        //     ownerId: '',
-        //     cardId: '',
-        //     removeCard: function () {
-        //         const cardElement = this.buttonDelete.closest(this._params.node);
-        //         cardElement.remove();
-        //     }
-        // };
-        const newCardObject = {};
-        newCardObject.cardItem = this._getCloneNode();
-        newCardObject.cardImg = newCardObject.cardItem.querySelector(this._params.classOfImage);
-        newCardObject.cardName = newCardObject.cardItem.querySelector(this._params.classOfName);
-        newCardObject.likeButton = newCardObject.cardItem.querySelector(this._params.classOfLike);
-        newCardObject.buttonDelete = newCardObject.cardItem.querySelector(this._params.classOfDelete);
-        newCardObject.likes = newCardObject.cardItem.querySelector(this._params.classOfLikes);
-        newCardObject.ownerId = '';
-        newCardObject.cardId = '';
-        newCardObject.popupWithForm = this.popupWithForm;
-        const cardElement = newCardObject.buttonDelete.closest(this._params.node);
-        newCardObject.removeCard = function () {
-            cardElement.remove();
-        }
+        const cardItem = this._getCloneNode();
+        const newCardObject = {
+            set setInitialValues({cardItem, paramsForNewCard, popupWithForm, initialData}) {
+                this.cardItem = cardItem;
+                this.cardImg = cardItem.querySelector(paramsForNewCard.classOfImage);
+                this.cardName = cardItem.querySelector(paramsForNewCard.classOfName);
+                this.likeButton = cardItem.querySelector(paramsForNewCard.classOfLike);
+                this.buttonDelete = cardItem.querySelector(paramsForNewCard.classOfDelete);
+                this.likes = cardItem.querySelector(paramsForNewCard.classOfLikes);
+                this.popupWithForm = popupWithForm;
+                this.cardImg.src = initialData.link;
+                this.cardImg.alt = initialData.name;
+                this.cardName.textContent = initialData.name;
+                this.likes.textContent = initialData.likes.length;
+                this.ownerId = initialData.owner['_id'];
+                this.cardId = initialData['_id'];
+                this.removeCard = () => {
+                    this.buttonDelete.closest(paramsForNewCard.node).remove();
+                }
+            }
+        };
 
-        newCardObject.cardImg.src = this._initialData.link;
-        newCardObject.cardImg.alt = this._initialData.name;
-        newCardObject.cardName.textContent = this._initialData.name;
-        newCardObject.likes.textContent = this._initialData.likes.length;
-        newCardObject.ownerId = this._initialData.owner['_id'];
-        newCardObject.cardId = this._initialData['_id'];
+        newCardObject.setInitialValues = {
+            cardItem: cardItem, 
+            paramsForNewCard: this._params, 
+            popupWithForm: this.popupWithForm,
+            initialData: this._initialData,
+        };
+
         return newCardObject;
     }
 
