@@ -54,4 +54,52 @@ export default class Api {
         );  
     }
 
-}
+    getInitialCards() {
+        return this.getDataOnRequestToServer({target: 'cards', config1: {
+            method: 'GET'
+          }});
+    }
+
+    getUserInfo() {
+        return this.getDataOnRequestToServer({target: 'users/me', config1: {
+            method: 'GET'
+          }});
+    }
+
+    updateProfileInfo({inputValues}) {
+        return this.getDataOnRequestToServer({target: 'users/me', config1: {
+            method: 'PATCH',
+            body: JSON.stringify(
+              {
+              name: inputValues.name,
+              about: inputValues.description
+            })
+          }});
+    }
+
+    editProfileAvatar({inputValues}) {
+        return this.getDataOnRequestToServer({target: 'users/me/avatar', config1: {
+            method: 'PATCH',
+            body: JSON.stringify(
+              {
+                avatar: inputValues.link
+            })}});
+    }
+
+    addCardToServer({inputValues}) {
+        return this.getDataOnRequestToServer({target: 'cards', config1: {
+            method: 'POST',
+            body: JSON.stringify(
+              {
+                name: inputValues.name,
+                link: inputValues.description
+            })}});
+    }
+
+    deleteCardFromServer({cardId}) {
+        return this.getDataOnRequestToServer({target: `cards/${cardId}`, config1: {
+            method: 'DELETE'
+        }});
+    }
+
+} 
