@@ -214,8 +214,9 @@ export default class Card {
         newCardObject.likes = newCardObject.cardItem.querySelector(this._params.classOfLikes);
         newCardObject.ownerId = '';
         newCardObject.cardId = '';
+        newCardObject.popupWithForm = this.popupWithForm;
+        const cardElement = newCardObject.buttonDelete.closest(this._params.node);
         newCardObject.removeCard = function () {
-            const cardElement = newCardObject.buttonDelete.closest(this._params.node);
             cardElement.remove();
         }
 

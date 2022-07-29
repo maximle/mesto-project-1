@@ -141,7 +141,7 @@ function deleteCardFromServer(evt) {
     api.deleteCardFromServer({cardId: this.cardObject.cardId})
     .then(data => {
         this.cardObject.removeCard();
-        this.cardObject._popupWithForm.closePopup(evt);
+        this.cardObject.popupWithForm.closePopup(evt);
         console.log('Карточка удалена');
     })
     .catch(error => {
