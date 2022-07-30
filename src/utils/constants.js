@@ -1,12 +1,15 @@
-const popupAddCard = document.querySelector('#addCard');
-const popupEditProfile = document.querySelector('#editProfile');
-const popupEditAvatar = document.querySelector('#editAvatar');
-const popupImage = document.querySelector('#openImage');
-const popupConfirmDelete = document.querySelector('#confirmDelete');
+const userName = document.querySelector('.profile-section__name');
+const userAbout = document.querySelector('.profile-section__text');
 
-const formAddCard = popupAddCard.querySelector('#formAddCard');
-const formEditProfile = popupEditProfile.querySelector('#formEditPofile');
-const formEditAvatar = popupEditAvatar.querySelector('#formEditAvatar');
+const popupAddCardSelector = '#addCard';
+const popupEditProfileSelector = '#editProfile';
+const popupEditAvatarSelector = '#editAvatar';
+const popupImageSelector = '#openImage';
+const popupConfirmDeleteSelector = '#confirmDelete';
+
+const formAddCard = document.querySelector('#formAddCard');
+const formEditProfile = document.querySelector('#formEditPofile');
+const formEditAvatar = document.querySelector('#formEditAvatar');
 
 const buttonAddCard = document.querySelector('.profile-section__add');
 const buttonEditProfile = document.querySelector('.profile-section__edit');
@@ -37,13 +40,13 @@ const validationSettings = {
 }
 
 const params = {
-  template: '#photo-grid__item', 
-  node:'.photo-grid__element-container', 
-  classOfImage:'.photo-grid__image', 
-  classOfName:'.photo-grid__name', 
-  classOfLike:'.photo-grid__like-icon', 
+  template: '#photo-grid__item',
+  node:'.photo-grid__element-container',
+  classOfImage:'.photo-grid__image',
+  classOfName:'.photo-grid__name',
+  classOfLike:'.photo-grid__like-icon',
   classOfDelete:'.photo-grid__delete',
-  classOfLikes: '.photo-grid__likes', 
+  classOfLikes: '.photo-grid__likes',
 }
 
 const config = {
@@ -58,4 +61,4 @@ const config = {
 }
 
 
-export { popupAddCard, popupEditProfile, popupEditAvatar, popupImage, popupConfirmDelete, formAddCard, formEditProfile, formEditAvatar, buttonAddCard, buttonEditProfile, buttonEditAvatar, inputLinkToAvatar, inputSourceImg, inputNameCard, profileAvatar, cardItemsList, cards, loadingText, validationSettings, params, config }
+export { userName, userAbout, popupAddCardSelector, popupEditProfileSelector, popupEditAvatarSelector, popupImageSelector, popupConfirmDeleteSelector, formAddCard, formEditProfile, formEditAvatar, buttonAddCard, buttonEditProfile, buttonEditAvatar, inputLinkToAvatar, inputSourceImg, inputNameCard, profileAvatar, cardItemsList, cards, loadingText, validationSettings, params, config }

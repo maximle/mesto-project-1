@@ -5,13 +5,13 @@ class Section {
   }
 
   _addItem({element}) {
-      this._container.prepend(element.cardItem);   
+      this._container.prepend(element.cardItem);
   }
 
-  appendCardOnPage({arrayData}) { 
+  appendCardOnPage({arrayData}) {
       arrayData.forEach(card => {
           this._renderer(card)
-              .then(res => { 
+              .then(res => {
                   this._addItem({element: res});
               })
               .catch(err => {

@@ -10,7 +10,7 @@ export default class Api {
 
     _checkPromiseResponse(response) {
         if(response.ok) {
-            
+
             return response.json();
         } else {
             return Promise.reject(`Ошибка: ${response.status} - ${response.statusText}`)
@@ -51,7 +51,7 @@ export default class Api {
                 console.log(error);
                 return false;
             })
-        );  
+        );
     }
 
     getInitialCards() {
@@ -102,4 +102,4 @@ export default class Api {
         }});
     }
 
-} 
+}
