@@ -72,7 +72,8 @@ Promise.all([
           cardPopupFromValidator.resetValidation();
       })
       buttonEditProfile.addEventListener('click', () => {
-          popupWithFormEditProfile.openPopup({inputData: {name: userName.textContent, description: userAbout.textContent}});
+          const userInformation = user.getUserInfo();
+          popupWithFormEditProfile.openPopup({inputData: userInformation});
           userPopupFromValidator.resetValidation();
       })
       buttonEditAvatar.addEventListener('click', () => {
@@ -85,7 +86,7 @@ Promise.all([
         console.log('Ошибка загрузки', errorArray);
     })
 
-function handleProfileEditFormSubmit(evt) {
+function handleProfileEditFormSubmit({}, evt) {
   evt.preventDefault();
   const inputValues = popupWithFormEditProfile.getInputValues();
   popupWithFormEditProfile.renderLoading(true);
@@ -104,7 +105,7 @@ function handleProfileEditFormSubmit(evt) {
 
 }
 
-function handleEditAvatarFormSubmit(evt) {
+function handleEditAvatarFormSubmit({}, evt) {
   evt.preventDefault();
   const inputValues = popupWithFormEditAvatar.getInputValues();
   popupWithFormEditAvatar.renderLoading(true);
@@ -123,7 +124,7 @@ function handleEditAvatarFormSubmit(evt) {
 }
 
 
-function addCardOnPage(evt) {
+function addCardOnPage({}, evt) {
     evt.preventDefault();
     const inputValues = popupWithFormAddCard.getInputValues();
     popupWithFormAddCard.renderLoading(true);
@@ -145,14 +146,13 @@ function addCardOnPage(evt) {
   }
 
 
-function deleteCardFromServer(evt) {
+function deleteCardFromServer({cardObject}, evt) {
     evt.preventDefault();
     popupConfirmDeleteObject.renderLoading(true);
-    api.deleteCardFromServer({cardId: this.cardObject.cardId})
+    api.deleteCardFromServer({cardId: cardObject.cardId})
     .then(data => {
-        console.log(this, 'asd');
-        this.cardObject.removeCard();
-        this.cardObject.popupWithForm.closePopup(evt);
+        cardObject.removeCard();
+        cardObject.popupWithForm.closePopup(evt);
         console.log('Карточка удалена');
     })
     .catch(error => {

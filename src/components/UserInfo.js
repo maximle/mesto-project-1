@@ -14,6 +14,13 @@ export default class UserInfo {
     console.log('Данные обновлены');
   }
 
+  getUserInfo() {
+    return {
+      name: this._nameSelector.textContent,
+      description: this._aboutSelector.textContent, 
+    }
+  }
+
 }
 
 export { UserInfo }
