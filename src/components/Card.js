@@ -9,7 +9,7 @@ export default class Card {
         this.cardElement = null;
         this.card = {};
         this.cardsArray = [];
-    } 
+    }
 
     _getCloneNode() {
         const photoGridItemTemplate = document.querySelector(this._params.template).content;
@@ -41,8 +41,8 @@ export default class Card {
         };
 
         newCardObject.setInitialValues = {
-            cardItem: cardItem, 
-            paramsForNewCard: this._params, 
+            cardItem: cardItem,
+            paramsForNewCard: this._params,
             popupWithForm: this.popupWithForm,
             initialData: this._initialData,
         };
@@ -53,7 +53,7 @@ export default class Card {
     _addEventButtonDelete(card) {
         if(card.ownerId === this._userId) {
             card.buttonDelete.classList.add('photo-grid__delete_active');
-            card.buttonDelete.addEventListener('click', this.popupWithForm.openPopup.bind(this.popupWithForm, {cardObject: card}));        
+            card.buttonDelete.addEventListener('click', this.popupWithForm.openPopup.bind(this.popupWithForm, {cardObject: card}));
         }
     }
 
@@ -62,7 +62,7 @@ export default class Card {
         if(this._initialData.likes.length) {
             for(let i = 0; i < this._initialData.likes.length; i++) {
                 if(this._initialData.likes[i]['_id'] === this._userId){
-                    
+
                     this._changeColorLikeButton(card);
                     break;
                 }
@@ -100,20 +100,10 @@ export default class Card {
         card.cardImg.addEventListener('click', this.popupOpenImage.openPopup.bind(this.popupOpenImage, {cardObject: card}));
     }
 
-    
+
     setUserId({userId}) {
         this._userId = userId;
     }
-
-    getCardsArray({initialDataArray}) {
-        initialDataArray.forEach(card => {
-            const cardObject = this.getCard({initialData: card});
-            this.cardsArray.push(cardObject);
-        });
-        return this.cardsArray;
-    }
-
- 
 
     getCard({initialData}) {
         this._initialData = initialData;

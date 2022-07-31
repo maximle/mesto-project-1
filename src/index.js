@@ -4,27 +4,28 @@ import Api from './components/Api.js';
 import Card from './components/Card.js';
 import { UserInfo } from './components/UserInfo.js';
 import { Section } from './components/Section.js';
-import { insertCardOnPage, userName, userAbout } from './components/Popup.js';
 import { PopupWithImage } from './components/PopupWithImage.js';
 import { PopupWithForm } from './components/PopupWithForm.js';
-import { 
-    popupAddCard, 
-    popupEditProfile, 
-    popupEditAvatar, 
-    popupImage, 
-    popupConfirmDelete, 
-    formAddCard, 
-    formEditProfile, 
-    formEditAvatar, 
-    buttonAddCard, 
-    buttonEditProfile, 
-    buttonEditAvatar, 
-    profileAvatar, 
-    cardItemsList, 
-    loadingText, 
-    validationSettings, 
-    params, 
-    config 
+import {
+    popupAddCardSelector,
+    popupEditProfileSelector,
+    popupEditAvatarSelector,
+    popupImageSelector,
+    popupConfirmDeleteSelector,
+    formAddCard,
+    formEditProfile,
+    formEditAvatar,
+    buttonAddCard,
+    buttonEditProfile,
+    buttonEditAvatar,
+    profileAvatar,
+    cardItemsList,
+    loadingText,
+    validationSettings,
+    params,
+    config,
+    userName,
+    userAbout
 } from './utils/constants.js'
 
 const cardPopupFromValidator = new FormValidator(formAddCard, validationSettings);
@@ -36,11 +37,11 @@ avatarPopupFromValidator.enableValidation();
 
 const api = new Api({config});
 const user = new UserInfo({nameSelector: userName, aboutSelector: userAbout, avatarSelector: profileAvatar});
-const popupWithImageObject = new PopupWithImage({selectorPopup: popupImage});
-const popupConfirmDeleteObject = new PopupWithForm({selectorPopup: popupConfirmDelete, callbackSubmitForm: deleteCardFromServer});
-const popupWithFormAddCard = new PopupWithForm({selectorPopup: popupAddCard, callbackSubmitForm: addCardOnPage});
-const popupWithFormEditProfile = new PopupWithForm({selectorPopup: popupEditProfile, callbackSubmitForm: handleProfileEditFormSubmit});
-const popupWithFormEditAvatar = new PopupWithForm({selectorPopup: popupEditAvatar, callbackSubmitForm: handleEditAvatarFormSubmit});
+const popupWithImageObject = new PopupWithImage({popupSelector: popupImageSelector});
+const popupConfirmDeleteObject = new PopupWithForm({popupSelector: popupConfirmDeleteSelector, callbackSubmitForm: deleteCardFromServer});
+const popupWithFormAddCard = new PopupWithForm({popupSelector: popupAddCardSelector, callbackSubmitForm: addCardOnPage});
+const popupWithFormEditProfile = new PopupWithForm({popupSelector: popupEditProfileSelector, callbackSubmitForm: handleProfileEditFormSubmit});
+const popupWithFormEditAvatar = new PopupWithForm({popupSelector: popupEditAvatarSelector, callbackSubmitForm: handleEditAvatarFormSubmit});
 const section = new Section({renderer: insertCardOnPage}, cardItemsList);
 const cardObject = new Card({
     params: params,
@@ -56,18 +57,27 @@ Promise.all([
     api.getInitialCards()
   ])
     .then (([profileInfo, cardsArr]) => {
+      console.log(profileInfo);
       user.setUserInfo({userInfo: profileInfo});
       cardObject.setUserId({userId: profileInfo['_id']});
-      const cards = cardObject.getCardsArray({initialDataArray: cardsArr});
+      // const cards = cardObject.getCardsArray({initialDataArray: cardsArr});
+      const cards = [];
+      console.log(cardsArr);
+      cardsArr.forEach(card => {
+        cards.push(cardObject.getCard({initialData: card}));
+      });
       section.appendCardOnPage({arrayData: cards});
       buttonAddCard.addEventListener('click', () => {
-          popupWithFormAddCard.openPopup({reset: true});
+          popupWithFormAddCard.openPopup({});
+          cardPopupFromValidator.resetValidation();
       })
       buttonEditProfile.addEventListener('click', () => {
-          popupWithFormEditProfile.openPopup({withInitialValuesFields: true});
+          popupWithFormEditProfile.openPopup({inputData: {name: userName.textContent, description: userAbout.textContent}});
+          userPopupFromValidator.resetValidation();
       })
       buttonEditAvatar.addEventListener('click', () => {
-          popupWithFormEditAvatar.openPopup({reset: true});
+          popupWithFormEditAvatar.openPopup({});
+          avatarPopupFromValidator.resetValidation();
       })
         console.log('Все нормально загрузилось');
       })
@@ -78,7 +88,7 @@ Promise.all([
 function handleProfileEditFormSubmit(evt) {
   evt.preventDefault();
   const inputValues = popupWithFormEditProfile.getInputValues();
-  popupWithFormEditProfile.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
+  popupWithFormEditProfile.renderLoading(true);
 
   api.updateProfileInfo({inputValues: inputValues})
     .then(updatedUserInfo => {
@@ -89,7 +99,7 @@ function handleProfileEditFormSubmit(evt) {
       console.log(error);
     })
     .finally(() => {
-      popupWithFormEditProfile.changeButtonTextDuringLoading({});
+      popupWithFormEditProfile.renderLoading(false);
     })
 
 }
@@ -97,18 +107,18 @@ function handleProfileEditFormSubmit(evt) {
 function handleEditAvatarFormSubmit(evt) {
   evt.preventDefault();
   const inputValues = popupWithFormEditAvatar.getInputValues();
-  popupWithFormEditAvatar.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
+  popupWithFormEditAvatar.renderLoading(true);
 
   api.editProfileAvatar({inputValues: inputValues})
     .then(updatedAvatarLink => {
-      user.updateAvatar({link: updatedAvatarLink.avatar});
+      user.setUserInfo({userInfo: updatedAvatarLink});
       popupWithFormEditAvatar.closePopup(evt);
     })
     .catch(error => {
     console.log(error);
     })
     .finally(() => {
-      popupWithFormEditAvatar.changeButtonTextDuringLoading({});
+      popupWithFormEditAvatar.renderLoading(false);
     })
 }
 
@@ -116,10 +126,11 @@ function handleEditAvatarFormSubmit(evt) {
 function addCardOnPage(evt) {
     evt.preventDefault();
     const inputValues = popupWithFormAddCard.getInputValues();
-    popupWithFormAddCard.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
+    popupWithFormAddCard.renderLoading(true);
     setTimeout(() => {
         api.addCardToServer({inputValues: inputValues})
         .then(card => {
+            console.log(card);
             const cardObj = cardObject.getCard({initialData: card})
             section.appendCardOnPage({arrayData: [cardObj]});
             popupWithFormAddCard.closePopup(evt);
@@ -128,18 +139,18 @@ function addCardOnPage(evt) {
             console.log(error);
         })
         .finally(() => {
-            popupWithFormAddCard.changeButtonTextDuringLoading({});
+            popupWithFormAddCard.renderLoading(false);
         })
     }, 1);
-
-}
+  }
 
 
 function deleteCardFromServer(evt) {
     evt.preventDefault();
-    popupConfirmDeleteObject.changeButtonTextDuringLoading({loadingText: loadingText, primaryText: this.buttonSubmit.textContent});
+    popupConfirmDeleteObject.renderLoading(true);
     api.deleteCardFromServer({cardId: this.cardObject.cardId})
     .then(data => {
+        console.log(this, 'asd');
         this.cardObject.removeCard();
         this.cardObject.popupWithForm.closePopup(evt);
         console.log('Карточка удалена');
@@ -148,6 +159,31 @@ function deleteCardFromServer(evt) {
         console.log('Карточка не удалена', error);
     })
     .finally(() => {
-        popupConfirmDeleteObject.changeButtonTextDuringLoading({});
+      popupConfirmDeleteObject.renderLoading(false);
     })
-    }
+}
+
+function insertCardOnPage(card) {
+  return (
+      checkLoadImageFromServer(card)
+      .then(res => {
+          return res;
+      })
+      .catch(err => {
+          console.log(`Картинка не загрузилась. ${err}`);
+      }));
+}
+
+function checkLoadImageFromServer(cardObject) {
+  return new Promise(function(resolve, reject) {
+  const image = document.createElement('img');
+
+  image.src = cardObject.cardImg.src;
+  image.onerror = function() {
+      reject(cardObject);
+  };
+  image.onload = function() {
+      resolve(cardObject);
+  };
+});
+}

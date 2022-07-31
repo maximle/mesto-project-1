@@ -1,7 +1,7 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const {CleanWebpackPlugin} = require('clean-webpack-plugin');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin'); 
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
 module.exports = {
     entry: {main: './src/index.js'},
@@ -12,16 +12,16 @@ module.exports = {
     },
     mode: 'development',
     devServer: {
-        static: path.resolve(__dirname, './dist'), 
+        static: path.resolve(__dirname, './dist'),
         compress: true,
-        port: 8080, 
-        open: true 
+        port: 8080,
+        open: true
       },
       module: {
-        rules: [ 
+        rules: [
           {
             test: /\.js$/,
-            use: 'babel-loader',  
+            use: 'babel-loader',
             exclude: '/node_modules/'
           },
           {
